@@ -1,5 +1,6 @@
 package marinalucentini.Unitutor.student;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,16 +10,22 @@ import marinalucentini.Unitutor.community.Post;
 import marinalucentini.Unitutor.course.StudentCourse;
 import marinalucentini.Unitutor.role.Role;
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Student {
+@JsonIgnoreProperties({"password", "role", "authorities", "enabled", "accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
+public class Student implements UserDetails {
     @Id
     @GeneratedValue
     private UUID id;
@@ -51,5 +58,32 @@ private List<Role> roles;
         this.email = email;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }
