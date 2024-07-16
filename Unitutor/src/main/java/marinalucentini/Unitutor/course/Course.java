@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
+import marinalucentini.Unitutor.subject.Subject;
 
 import java.util.List;
 import java.util.UUID;
@@ -20,6 +21,9 @@ public class Course {
 private String name;
 @ManyToOne
     private StudentCard studentCard;
-@OneToMany
+@OneToMany (mappedBy = "course")
     private List<StudentCourse> studentCourseList;
+@OneToMany (mappedBy = "course")
+    private List<Subject> subjectList;
+
 }
