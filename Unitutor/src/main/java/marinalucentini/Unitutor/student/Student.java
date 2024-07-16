@@ -28,6 +28,7 @@ public class Student {
     private String email;
     private String password;
 private LocalDate dateOfBirth;
+private String urlAvatar;
 @ManyToMany
 @JoinTable(name = "role_student",
         joinColumns = @JoinColumn(name = "student_id", nullable = false),
@@ -42,4 +43,13 @@ private List<Role> roles;
     private List<Post> postList;
 @OneToMany (mappedBy = "student")
     private List<Comment> commentList;
+
+    public Student(String name, String surname, String username, String email, String password, LocalDate dateOfBirth) {
+        this.name = name;
+        this.surname = surname;
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.dateOfBirth = dateOfBirth;
+    }
 }
