@@ -23,4 +23,8 @@ private UUID id;
     private String name;
     @ManyToMany(mappedBy = "roles")
     private List<Student> studentsList;
+
+    public Role(String name) {
+        this.name = name;
+    }
 }
