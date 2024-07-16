@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import marinalucentini.Unitutor.role.Role;
+import marinalucentini.Unitutor.studentCard.StudentCard;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -30,4 +31,6 @@ private LocalDate dateOfBirth;
         inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false)
 )
 private List<Role> roles;
+@OneToOne
+    private StudentCard studentCard;
 }
