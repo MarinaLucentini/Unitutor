@@ -1,13 +1,13 @@
 package marinalucentini.Unitutor.student;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import marinalucentini.Unitutor.role.Role;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -24,4 +24,10 @@ public class Student {
     private String email;
     private String password;
 private LocalDate dateOfBirth;
+@ManyToMany
+@JoinTable(name = "role_student",
+        joinColumns = @JoinColumn(name = "student_id", nullable = false),
+        inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false)
+)
+private List<Role> roles;
 }
