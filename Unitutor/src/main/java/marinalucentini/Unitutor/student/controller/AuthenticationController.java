@@ -25,8 +25,6 @@ public class AuthenticationController {
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }
-
-
         return studentService.saveStudent(studentDTO);
     }
     @PostMapping("/login")

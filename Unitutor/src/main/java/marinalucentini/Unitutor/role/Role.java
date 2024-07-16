@@ -1,5 +1,6 @@
 package marinalucentini.Unitutor.role;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -21,6 +22,7 @@ public class Role {
     @GeneratedValue
 private UUID id;
     private String name;
+    @JsonIgnore
     @ManyToMany(mappedBy = "roles")
     private List<Student> studentsList;
 
