@@ -7,6 +7,7 @@ import lombok.Setter;
 import marinalucentini.Unitutor.course.Course;
 import marinalucentini.Unitutor.exam.Exam;
 import marinalucentini.Unitutor.file.File;
+import marinalucentini.Unitutor.lesson.Lesson;
 import marinalucentini.Unitutor.professor.Professor;
 import marinalucentini.Unitutor.student.Student;
 
@@ -33,4 +34,6 @@ public class Subject {
     private List<Exam> examList;
     @OneToMany (mappedBy = "subject")
     private List<File> fileList;
+    @OneToMany (mappedBy = "subject")
+    private List<Lesson> lessonList;
 }

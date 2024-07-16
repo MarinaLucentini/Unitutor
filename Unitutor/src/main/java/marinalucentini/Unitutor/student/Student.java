@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import marinalucentini.Unitutor.community.Comment;
+import marinalucentini.Unitutor.community.Post;
 import marinalucentini.Unitutor.course.StudentCourse;
 import marinalucentini.Unitutor.role.Role;
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
@@ -36,4 +38,8 @@ private List<Role> roles;
     private StudentCard studentCard;
 @OneToMany (mappedBy = "student")
     private List<StudentCourse> studentCourseList;
+@OneToMany (mappedBy = "student")
+    private List<Post> postList;
+@OneToMany (mappedBy = "student")
+    private List<Comment> commentList;
 }
