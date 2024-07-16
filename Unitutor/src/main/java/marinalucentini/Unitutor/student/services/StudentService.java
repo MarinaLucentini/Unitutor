@@ -40,6 +40,7 @@ public class StudentService {
         Role userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new NotFoundException("Ruolo USER non trovato"));
         student.setRoles(Collections.singletonList(userRole));
+        studentRepository.save(student);
         return response;
     }
     public Student findById(UUID id){

@@ -21,7 +21,7 @@ import java.util.UUID;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
-    private jwtTool jwtTools;
+    private JwtTool jwtTools;
     @Autowired
     private StudentService studentService;
     @Override

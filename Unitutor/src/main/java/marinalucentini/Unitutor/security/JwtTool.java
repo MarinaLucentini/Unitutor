@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class jwtTool {
+public class JwtTool {
     @Value("${jwt.secret}")
     private String secret;
     public String createToken(Student student){
