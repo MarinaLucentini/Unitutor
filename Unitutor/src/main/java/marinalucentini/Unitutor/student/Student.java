@@ -4,8 +4,9 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import marinalucentini.Unitutor.course.StudentCourse;
 import marinalucentini.Unitutor.role.Role;
-import marinalucentini.Unitutor.studentCard.StudentCard;
+import marinalucentini.Unitutor.student.studentCard.StudentCard;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -33,4 +34,6 @@ private LocalDate dateOfBirth;
 private List<Role> roles;
 @OneToOne
     private StudentCard studentCard;
+@OneToMany (mappedBy = "student")
+    private List<StudentCourse> studentCourseList;
 }
