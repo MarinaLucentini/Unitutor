@@ -1,14 +1,14 @@
 package marinalucentini.Unitutor.subject;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import marinalucentini.Unitutor.course.Course;
+import marinalucentini.Unitutor.professor.Professor;
+import marinalucentini.Unitutor.student.Student;
 
+import java.util.List;
 import java.util.SimpleTimeZone;
 import java.util.UUID;
 
@@ -25,4 +25,6 @@ public class Subject {
     private int cfu;
     @ManyToOne
     private Course course;
+    @ManyToMany(mappedBy = "subjectList")
+    private List<Professor> professorList;
 }
