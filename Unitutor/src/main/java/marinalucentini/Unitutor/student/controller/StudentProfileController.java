@@ -2,7 +2,7 @@ package marinalucentini.Unitutor.student.controller;
 
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.student.Student;
-import marinalucentini.Unitutor.student.payload.StudentPayload;
+
 import marinalucentini.Unitutor.student.payload.StudentUploadPasswordPayload;
 import marinalucentini.Unitutor.student.payload.StudentUploadUsernamePayload;
 import marinalucentini.Unitutor.student.services.StudentService;
@@ -19,7 +19,7 @@ import java.io.IOException;
 @RequestMapping("/profile")
 public class StudentProfileController {
     @Autowired
-    StudentService studentService;
+   private StudentService studentService;
     @GetMapping
     public Student getProfile(@AuthenticationPrincipal Student currentAuthenticatedUser){
         return currentAuthenticatedUser;
@@ -32,7 +32,7 @@ public class StudentProfileController {
         }
        return studentService.uploadPassword(currentAuthenticatedUser.getId(), passwordPayload.password() );
     }
- // 2 aggiungere immagine profilo
+ // 2 aggiungere e modificare immagine profilo
 @PatchMapping("/avatar")
     public String uploadImage(@AuthenticationPrincipal Student currentAuthenticatedUser, @RequestParam("avatar") MultipartFile image) throws IOException{
         return studentService.uploadImage(currentAuthenticatedUser.getId(), image);
@@ -50,7 +50,8 @@ public class StudentProfileController {
     public String deleteUser(@AuthenticationPrincipal Student student){
         return studentService.findByIdAndDelete(student.getId());
 }
-// 5 modificare immagine profilo
+
+
 
 
 }
