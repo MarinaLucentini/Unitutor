@@ -4,6 +4,7 @@ import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.student.Student;
 import marinalucentini.Unitutor.student.payload.StudentPayload;
 import marinalucentini.Unitutor.student.payload.StudentUploadPasswordPayload;
+import marinalucentini.Unitutor.student.payload.StudentUploadUsernamePayload;
 import marinalucentini.Unitutor.student.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -37,7 +38,18 @@ public class StudentProfileController {
         return studentService.uploadImage(currentAuthenticatedUser.getId(), image);
 }
     // 3 modificare username
+    @PatchMapping("/username")
+    public String uploadUsername(@AuthenticationPrincipal Student currentAutheticatedUser, @RequestBody @Validated StudentUploadUsernamePayload studentUploadUsernamePayload, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            throw new BadRequestException(bindingResult.getAllErrors());
+        }
+        return studentService.uploadUsername(currentAutheticatedUser.getId(), studentUploadUsernamePayload.username());
+    }
     // 4 cancellare profilo
+@DeleteMapping
+    public String deleteUser(@AuthenticationPrincipal Student student){
+        return studentService.findByIdAndDelete(student.getId());
+}
 // 5 modificare immagine profilo
 
 

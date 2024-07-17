@@ -74,6 +74,17 @@ StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
         studentRepository.save(student);
         return "Immagine del profilo aggiornata correttamente";
     }
+    public String uploadUsername(UUID id, String username){
+        Student student = findById(id);
+        student.setUsername(username);
+        studentRepository.save(student);
+        return "Lo username dell'utente è stato correttamente modificato in: " + username;
+    }
+    public String findByIdAndDelete(UUID id){
+        Student student = findById(id);
+        studentRepository.delete(student);
+        return "L'utente è stato cancellato correttamente";
+    }
     public Student findById(UUID id){
         return studentRepository.findById(id).orElseThrow(()-> new NotFoundException(id));
     }
