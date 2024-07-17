@@ -25,5 +25,6 @@ public class ConfigurationRole {
             Role newRole = new Role(roleName);
             roleRepository.save(newRole);
         }
+
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class RoleService {
@@ -68,8 +69,8 @@ public class RoleService {
         return "Il ruolo " + roleAssignPayload.name() + " è stato rimosso dall'utente " + roleAssignPayload.username();
     }
     public String updateRole(RoleUpdatePayload roleUpdatePayload){
-        Role oldRole = findByName(roleUpdatePayload.oldRole());
-        Role newRole = findByName(roleUpdatePayload.newRole());
+        Role oldRole = findByName(roleUpdatePayload.oldRole().toUpperCase());
+        Role newRole = findByName(roleUpdatePayload.newRole().toUpperCase());
         Student student = studentService.findByUsername(roleUpdatePayload.username());
         List<Role> roleList = student.getRoles();
         if (roleList == null || !roleList.contains(oldRole)) {
@@ -87,6 +88,21 @@ public class RoleService {
         return "Il ruolo " + roleUpdatePayload.oldRole() + " è stato aggiornato a " + roleUpdatePayload.newRole() + " per l'utente " + roleUpdatePayload.username();
     }
     public Role findByName(String name){
-        return roleRepository.findByName(name).orElseThrow(()-> new NotFoundException("Il ruolo non è stato trovato"));
+        return roleRepository.findByName(name).orElseThrow(()-> new NotFoundException("Il ruolo " + name + " non è stato trovato"));
+    }
+    public String deleteRole(RolePayload rolePayload){
+        Role roleToRemove = findByName(rolePayload.name().toUpperCase());
+        if(roleToRemove == null){
+            throw new BadRequestException("Il ruolo " + rolePayload.name() + " non è presente nel db");
+        }
+        List<Student> studentsWithRole = studentRepository.findAll().stream()
+                .filter(student -> student.getRoles().contains(roleToRemove))
+                .collect(Collectors.toList());
+        for (Student student : studentsWithRole) {
+            student.getRoles().remove(roleToRemove);
+            studentRepository.save(student);
+        }
+        roleRepository.delete(roleToRemove);
+        return "Il ruolo " + rolePayload.name() + " è stato corretamente eliminato dal db";
     }
 }

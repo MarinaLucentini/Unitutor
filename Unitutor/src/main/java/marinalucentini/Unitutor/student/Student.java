@@ -36,7 +36,7 @@ public class Student implements UserDetails {
     private String password;
 private LocalDate dateOfBirth;
 private String urlAvatar;
-@ManyToMany
+@ManyToMany(fetch = FetchType.EAGER)
 @JoinTable(name = "role_student",
         joinColumns = @JoinColumn(name = "student_id", nullable = false),
         inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false)

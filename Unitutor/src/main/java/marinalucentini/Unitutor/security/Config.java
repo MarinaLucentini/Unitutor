@@ -50,4 +50,5 @@ public class Config {
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
+
 }
