@@ -8,7 +8,6 @@ import marinalucentini.Unitutor.student.Student;
 import marinalucentini.Unitutor.student.payload.StudentPayload;
 import marinalucentini.Unitutor.student.repositories.StudentRepository;
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
-import marinalucentini.Unitutor.student.studentCard.repository.StudentCardRepository;
 import marinalucentini.Unitutor.student.studentCard.services.StudentCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -55,6 +54,13 @@ StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
         studentCardService.save(studentCardSaved);
         return response;
     }
+    public String uploadPassword (UUID id, String password){
+        Student student = findById(id);
+        student.setPassword(bcrypt.encode(password));
+        studentRepository.save(student);
+        return "La password dell'utente " + student.getUsername() + " è stata correttamente modificata";
+
+    }
     public Student findById(UUID id){
         return studentRepository.findById(id).orElseThrow(()-> new NotFoundException(id));
     }
@@ -64,4 +70,5 @@ StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
     public Student findByUsername(String username){
         return studentRepository.findByUsername(username).orElseThrow(()-> new NotFoundException("L'utente con lo username " + username + " non è stato trovato!"));
     }
+
 }

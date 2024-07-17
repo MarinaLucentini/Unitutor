@@ -1,5 +1,6 @@
 package marinalucentini.Unitutor.student.studentCard;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +21,9 @@ public class StudentCard {
     private UUID id;
 private String register;
 @OneToOne
+@JsonIgnore
     private Student student;
-@OneToMany (mappedBy = "studentCard")
+@OneToMany (mappedBy = "studentCard", fetch = FetchType.EAGER)
     private List<Course> courseList;
 
 }
