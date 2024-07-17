@@ -7,6 +7,9 @@ import marinalucentini.Unitutor.role.repository.RoleRepository;
 import marinalucentini.Unitutor.student.Student;
 import marinalucentini.Unitutor.student.payload.StudentPayload;
 import marinalucentini.Unitutor.student.repositories.StudentRepository;
+import marinalucentini.Unitutor.student.studentCard.StudentCard;
+import marinalucentini.Unitutor.student.studentCard.repository.StudentCardRepository;
+import marinalucentini.Unitutor.student.studentCard.services.StudentCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,9 +20,11 @@ import java.util.UUID;
 @Service
 public class StudentService {
     @Autowired
-    StudentRepository studentRepository;
+   private StudentRepository studentRepository;
     @Autowired
     private PasswordEncoder bcrypt;
+   @Autowired
+   private StudentCardService studentCardService;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -39,8 +44,15 @@ public class StudentService {
         student.setUrlAvatar("https://unsplash.com/it/foto/donna-in-camicia-nera-sorridente-lNNHyRbmm0o");
         Role userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new NotFoundException("Ruolo USER non trovato"));
+        StudentCard studentCard = new StudentCard();
+studentCardService.save(studentCard);
+StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
+        student.setStudentCard(studentCardSaved);
         student.setRoles(Collections.singletonList(userRole));
         studentRepository.save(student);
+        Student studentSaved = findById(student.getId());
+        studentCardSaved.setStudent(studentSaved);
+        studentCardService.save(studentCardSaved);
         return response;
     }
     public Student findById(UUID id){

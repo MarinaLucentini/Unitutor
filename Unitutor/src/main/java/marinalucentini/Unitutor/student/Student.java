@@ -1,5 +1,6 @@
 package marinalucentini.Unitutor.student;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -44,11 +45,14 @@ private String urlAvatar;
 private List<Role> roles;
 @OneToOne
     private StudentCard studentCard;
+@JsonIgnore
 @OneToMany (mappedBy = "student")
     private List<StudentCourse> studentCourseList;
 @OneToMany (mappedBy = "student")
+@JsonIgnore
     private List<Post> postList;
 @OneToMany (mappedBy = "student")
+@JsonIgnore
     private List<Comment> commentList;
 
     public Student(String name, String surname, String username, String email, String password, LocalDate dateOfBirth) {
