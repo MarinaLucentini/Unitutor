@@ -1,5 +1,7 @@
 package marinalucentini.Unitutor.student.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.exception.NotFoundException;
 import marinalucentini.Unitutor.role.Role;
@@ -12,7 +14,9 @@ import marinalucentini.Unitutor.student.studentCard.services.StudentCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.UUID;
 
@@ -24,6 +28,8 @@ public class StudentService {
     private PasswordEncoder bcrypt;
    @Autowired
    private StudentCardService studentCardService;
+    @Autowired
+    private Cloudinary cloudinaryUploader;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -60,6 +66,13 @@ StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
         studentRepository.save(student);
         return "La password dell'utente " + student.getUsername() + " è stata correttamente modificata";
 
+    }
+    public String uploadImage(UUID id, MultipartFile image) throws IOException{
+        Student student = findById(id);
+        String imageUrl = (String) cloudinaryUploader.uploader().upload(image.getBytes(), ObjectUtils.emptyMap()).get("url");
+        student.setUrlAvatar(imageUrl);
+        studentRepository.save(student);
+        return "Immagine del profilo aggiornata correttamente";
     }
     public Student findById(UUID id){
         return studentRepository.findById(id).orElseThrow(()-> new NotFoundException(id));

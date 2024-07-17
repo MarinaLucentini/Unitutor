@@ -1,9 +1,9 @@
-package marinalucentini.Unitutor.role;
+package marinalucentini.Unitutor.config;
 
 import jakarta.annotation.PostConstruct;
+import marinalucentini.Unitutor.role.Role;
 import marinalucentini.Unitutor.role.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Optional;

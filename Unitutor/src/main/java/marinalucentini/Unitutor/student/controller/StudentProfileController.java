@@ -10,6 +10,9 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/profile")
@@ -28,10 +31,14 @@ public class StudentProfileController {
         }
        return studentService.uploadPassword(currentAuthenticatedUser.getId(), passwordPayload.password() );
     }
- // 2 immagine profilo
+ // 2 aggiungere immagine profilo
+@PatchMapping("/avatar")
+    public String uploadImage(@AuthenticationPrincipal Student currentAuthenticatedUser, @RequestParam("avatar") MultipartFile image) throws IOException{
+        return studentService.uploadImage(currentAuthenticatedUser.getId(), image);
+}
     // 3 modificare username
     // 4 cancellare profilo
 // 5 modificare immagine profilo
-    // 6 creazione student card
+
 
 }
