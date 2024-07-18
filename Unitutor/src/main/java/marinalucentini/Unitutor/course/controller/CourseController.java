@@ -24,6 +24,6 @@ public class CourseController {
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }
-        return courseService.createNewCourse(body.name(), student.getStudentCard().getId());
+        return courseService.createNewCourse(body, student.getStudentCard().getId());
     }
 }

@@ -32,7 +32,9 @@ private String name;
 @OneToMany (mappedBy = "course")
     private List<Subject> subjectList;
 
-    public Course(String name) {
+    public Course(String name, int cfu, LocalDate enrollmentDate) {
         this.name = name;
+        this.cfu = cfu;
+        this.enrollmentDate = enrollmentDate;
     }
 }
