@@ -8,6 +8,7 @@ import lombok.Setter;
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
 import marinalucentini.Unitutor.subject.Subject;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,11 +21,14 @@ public class Course {
     @GeneratedValue
     private UUID id;
 private String name;
+    private int cfu;
+    private LocalDate enrollmentDate;
+    private int graduationGrade;
+
 @JsonIgnore
-@ManyToOne
-    private StudentCard studentCard;
-@OneToMany (mappedBy = "course")
-    private List<StudentCourse> studentCourseList;
+@ManyToMany(mappedBy = "courseList")
+    private List<StudentCard> studentCard;
+
 @OneToMany (mappedBy = "course")
     private List<Subject> subjectList;
 

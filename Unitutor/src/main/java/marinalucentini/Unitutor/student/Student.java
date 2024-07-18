@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import marinalucentini.Unitutor.community.Comment;
 import marinalucentini.Unitutor.community.Post;
-import marinalucentini.Unitutor.course.StudentCourse;
 import marinalucentini.Unitutor.role.Role;
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
 import org.springframework.security.core.GrantedAuthority;
@@ -45,9 +44,7 @@ private String urlAvatar;
 private List<Role> roles;
 @OneToOne
     private StudentCard studentCard;
-@JsonIgnore
-@OneToMany (mappedBy = "student")
-    private List<StudentCourse> studentCourseList;
+
 @OneToMany (mappedBy = "student")
 @JsonIgnore
     private List<Post> postList;

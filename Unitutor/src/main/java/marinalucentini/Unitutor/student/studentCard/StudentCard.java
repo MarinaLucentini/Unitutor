@@ -23,7 +23,11 @@ private String register;
 @OneToOne
 @JsonIgnore
     private Student student;
-@OneToMany (mappedBy = "studentCard", fetch = FetchType.EAGER)
+@ManyToMany ( fetch = FetchType.EAGER)
+@JoinTable(name = "studentCard_course",
+        joinColumns = @JoinColumn(name = "studentCard_id", nullable = false),
+        inverseJoinColumns = @JoinColumn(name = "course_id", nullable = false)
+)
     private List<Course> courseList;
 
 }
