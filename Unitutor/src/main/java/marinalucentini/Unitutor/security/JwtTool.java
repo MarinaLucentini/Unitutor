@@ -16,7 +16,7 @@ public class JwtTool {
     public String createToken(Student student){
         return Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 ))
+                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 *7))
                 .subject(String.valueOf(student.getId()))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();

@@ -1,5 +1,6 @@
 package marinalucentini.Unitutor.course;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Course {
     @GeneratedValue
     private UUID id;
 private String name;
+@JsonIgnore
 @ManyToOne
     private StudentCard studentCard;
 @OneToMany (mappedBy = "course")
@@ -26,4 +28,7 @@ private String name;
 @OneToMany (mappedBy = "course")
     private List<Subject> subjectList;
 
+    public Course(String name) {
+        this.name = name;
+    }
 }

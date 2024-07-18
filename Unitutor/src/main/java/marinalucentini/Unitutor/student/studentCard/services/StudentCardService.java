@@ -19,4 +19,5 @@ public class StudentCardService {
         studentCardRepository.save(studentCard);
         return "Il libretto è stato correttamente salvato nel db";
     }
+
 }
