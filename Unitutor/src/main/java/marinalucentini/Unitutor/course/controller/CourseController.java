@@ -3,6 +3,7 @@ package marinalucentini.Unitutor.course.controller;
 import marinalucentini.Unitutor.course.Course;
 import marinalucentini.Unitutor.course.payload.DeleteCoursePayload;
 import marinalucentini.Unitutor.course.payload.NewCoursePayload;
+import marinalucentini.Unitutor.course.payload.UploadCoursePayload;
 import marinalucentini.Unitutor.course.services.CourseService;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.student.Student;
@@ -39,13 +40,18 @@ public class CourseController {
         }
         return courseService.findAndDelete(body.name(), student.getStudentCard().getId());
 }
-    //3 modifica dei cfu, data di iscrizione, voto di laurea
+    //3 modifica dei cfu, data di iscrizione
+    @PutMapping("/update")
+    public String updateCourse(@AuthenticationPrincipal Student student, @RequestBody @Validated UploadCoursePayload body, BindingResult bindingResult){
+        if(bindingResult.hasErrors()){
+            throw  new BadRequestException(bindingResult.getAllErrors());
+        }
+        return courseService.findAndUpdate(body, student.getStudentCard().getId());
+    }
 
 
 
-    //4 modifica della matricola o del codice dello studente
 
-    // 5 visualizzazione di tutti i corsi presenti nel database
 
 
 }

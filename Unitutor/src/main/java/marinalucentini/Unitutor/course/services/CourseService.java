@@ -2,6 +2,7 @@ package marinalucentini.Unitutor.course.services;
 
 import marinalucentini.Unitutor.course.Course;
 import marinalucentini.Unitutor.course.payload.NewCoursePayload;
+import marinalucentini.Unitutor.course.payload.UploadCoursePayload;
 import marinalucentini.Unitutor.course.repositories.CourseRepository;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.exception.NotFoundException;
@@ -73,6 +74,9 @@ public String createNewCourse(NewCoursePayload coursePayload, UUID id) {
 public Course findByName(String name){
     return courseRepository.findByName(name).orElseThrow(()-> new NotFoundException("Il corso " + name + " non è stato trovato nel db"));
 }
+public Course findById(UUID id){
+    return courseRepository.findById(id).orElseThrow(()-> new NotFoundException("Il corso non è stato trovato nel db"));
+}
     //2 cencellazione del corso dal libretto e dal db
 public String findAndDelete(String name, UUID id){
     StudentCard studentCard = studentCardService.findById(id);
@@ -100,6 +104,30 @@ public Page<Course> getCourses(int pageNumber, int pageSize, String sortBy) {
     Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
     return courseRepository.findAll(pageable);
 }
+//4 modifica corso
+    public String findAndUpdate(UploadCoursePayload body, UUID id){
+        StudentCard studentCard = studentCardService.findById(id);
+        Course course = studentCard.getCourseList().stream()
+                .filter(c -> c.getName().equalsIgnoreCase(body.name()))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Il corso " + body.name() + " non è stato trovato nella lista dei corsi dello studente"));
+    if(body.cfu() != 0){
+    course.setCfu(body.cfu());
+    }
+    if(body.endDate() != null){
+    course.setEndDate(body.endDate());
+    }
+    if(body.graduationGrade() != 0){
+
+    course.setGraduationGrade(body.graduationGrade());
+    }
+    if(body.dateEnrollment() != null){
+
+    course.setEnrollmentDate(body.dateEnrollment());
+    }
+    courseRepository.save(course);
+    return "Il corso " + course.getName() + " è stato correttamente modificato";
+    }
 
 
 }

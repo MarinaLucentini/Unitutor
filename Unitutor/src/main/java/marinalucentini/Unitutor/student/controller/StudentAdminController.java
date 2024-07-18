@@ -37,4 +37,5 @@ return studentService.findByIdAndDelete(userId);
     public Page<Course> getAllCourses(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy) {
         return courseService.getCourses(page, size, sortBy);
     }
+    //3 modifica della matricola o del codice dello studente
 }
