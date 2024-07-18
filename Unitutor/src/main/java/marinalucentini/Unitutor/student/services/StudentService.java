@@ -12,6 +12,10 @@ import marinalucentini.Unitutor.student.repositories.StudentRepository;
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
 import marinalucentini.Unitutor.student.studentCard.services.StudentCardService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,7 +50,7 @@ public class StudentService {
         );
         String response = "Lo studente "  + studentDTO.username() + " è stato correttamente inserito nel db";
       Student student = new Student(studentDTO.name(), studentDTO.surname(), studentDTO.username(), studentDTO.email(),bcrypt.encode(studentDTO.password()), studentDTO.dateOfBirth());
-        student.setUrlAvatar("https://unsplash.com/it/foto/donna-in-camicia-nera-sorridente-lNNHyRbmm0o");
+        student.setUrlAvatar("https://unsplash.com/it/foto/person-holding-notepad-and-pen-flat-lay-photography-flRm0z3MEoA");
         Role userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new NotFoundException("Ruolo USER non trovato"));
         StudentCard studentCard = new StudentCard();
@@ -84,6 +88,11 @@ StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
         Student student = findById(id);
         studentRepository.delete(student);
         return "L'utente è stato cancellato correttamente";
+    }
+    public Page<Student> getUsers(int pageNumber, int pageSize, String sortBy) {
+        if (pageSize > 100) pageSize = 100;
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
+        return studentRepository.findAll(pageable);
     }
     public Student findById(UUID id){
         return studentRepository.findById(id).orElseThrow(()-> new NotFoundException(id));

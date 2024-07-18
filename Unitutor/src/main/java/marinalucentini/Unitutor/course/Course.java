@@ -24,12 +24,14 @@ private String name;
     private int cfu;
     private LocalDate enrollmentDate;
     private int graduationGrade;
+    private LocalDate endDate;
+
 
 @JsonIgnore
 @ManyToMany(mappedBy = "courseList")
     private List<StudentCard> studentCard;
 
-@OneToMany (mappedBy = "course")
+@OneToMany (mappedBy = "course", fetch =FetchType.EAGER)
     private List<Subject> subjectList;
 
     public Course(String name, int cfu, LocalDate enrollmentDate) {

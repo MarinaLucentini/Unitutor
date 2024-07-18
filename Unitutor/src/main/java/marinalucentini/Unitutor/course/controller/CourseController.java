@@ -1,12 +1,16 @@
 package marinalucentini.Unitutor.course.controller;
 
+import marinalucentini.Unitutor.course.Course;
+import marinalucentini.Unitutor.course.payload.DeleteCoursePayload;
 import marinalucentini.Unitutor.course.payload.NewCoursePayload;
 import marinalucentini.Unitutor.course.services.CourseService;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.student.Student;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.SecurityProperties;
+
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -26,4 +30,22 @@ public class CourseController {
         }
         return courseService.createNewCourse(body, student.getStudentCard().getId());
     }
+    // 2 cancellazione del corso dalla lista
+@DeleteMapping("/delete")
+    public String deleteCourse(@AuthenticationPrincipal Student student, @RequestBody @Validated DeleteCoursePayload body, BindingResult bindingResult){
+
+        if(bindingResult.hasErrors()){
+            throw new BadRequestException(bindingResult.getAllErrors());
+        }
+        return courseService.findAndDelete(body.name(), student.getStudentCard().getId());
+}
+    //3 modifica dei cfu, data di iscrizione, voto di laurea
+
+
+
+    //4 modifica della matricola o del codice dello studente
+
+    // 5 visualizzazione di tutti i corsi presenti nel database
+
+
 }

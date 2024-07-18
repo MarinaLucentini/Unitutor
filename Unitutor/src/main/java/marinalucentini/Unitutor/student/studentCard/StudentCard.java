@@ -19,10 +19,10 @@ public class StudentCard {
     @Id
     @GeneratedValue
     private UUID id;
-private String register;
 @OneToOne
 @JsonIgnore
     private Student student;
+private String register;
 @ManyToMany ( fetch = FetchType.EAGER)
 @JoinTable(name = "studentCard_course",
         joinColumns = @JoinColumn(name = "studentCard_id", nullable = false),
