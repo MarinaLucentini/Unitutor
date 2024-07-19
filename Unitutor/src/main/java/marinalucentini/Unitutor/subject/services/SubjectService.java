@@ -7,6 +7,7 @@ import marinalucentini.Unitutor.exception.NotFoundException;
 import marinalucentini.Unitutor.student.Student;
 import marinalucentini.Unitutor.student.services.StudentService;
 import marinalucentini.Unitutor.subject.Subject;
+import marinalucentini.Unitutor.subject.payloads.DeleteSubjectPayload;
 import marinalucentini.Unitutor.subject.payloads.NewSubjectPayload;
 import marinalucentini.Unitutor.subject.payloads.UpdateSubjectPayload;
 import marinalucentini.Unitutor.subject.repository.SubjectRepository;
@@ -72,5 +73,22 @@ if(updateSubjectPayload.subjectGrade() != 0){
 }
         subjectRepository.save(existingSubject);
         return "La materia " + updateSubjectPayload.name() + " è stata correttamente aggiornata";
+    }
+    // cancellazione della materia
+    public String deleteSubject (UUID id, DeleteSubjectPayload deleteSubjectPayload){
+        Student student = studentService.findById(id);
+        Subject existingSubject = student.getStudentCard().getCourseStudentCards().stream()
+                .flatMap(courseStudentCard -> courseStudentCard.getSubjectList().stream())
+                .filter(subject1 -> subject1.getName().equalsIgnoreCase(deleteSubjectPayload.name()))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("La materia " + deleteSubjectPayload.name() + " non è stata trovata"));
+        student.getStudentCard().getCourseStudentCards().forEach(courseStudentCard ->
+                courseStudentCard.getSubjectList().removeIf(subject -> subject.getId().equals(existingSubject.getId()))
+        );
+        student.getStudentCard().getCourseStudentCards().forEach(courseStudentCard ->
+                courseStudentCardRepository.save(courseStudentCard)
+        );
+        subjectRepository.delete(existingSubject);
+        return "La materia " + deleteSubjectPayload.name() + " è stata correttamente eliminata";
     }
 }
