@@ -9,6 +9,7 @@ import marinalucentini.Unitutor.student.studentCard.StudentCard;
 import marinalucentini.Unitutor.subject.Subject;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -21,22 +22,12 @@ public class Course {
     @GeneratedValue
     private UUID id;
 private String name;
-    private int cfu;
-    private LocalDate enrollmentDate;
-    private int graduationGrade;
-    private LocalDate endDate;
 
-
-@JsonIgnore
 @ManyToMany(mappedBy = "courseList")
-    private List<StudentCard> studentCard;
+private List<CourseStudentCard> courseStudentCard = new ArrayList<>();
 
-@OneToMany (mappedBy = "course", fetch =FetchType.EAGER)
-    private List<Subject> subjectList;
-
-    public Course(String name, int cfu, LocalDate enrollmentDate) {
+    public Course(String name) {
         this.name = name;
-        this.cfu = cfu;
-        this.enrollmentDate = enrollmentDate;
+
     }
 }

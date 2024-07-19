@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import marinalucentini.Unitutor.course.Course;
+import marinalucentini.Unitutor.course.CourseStudentCard;
 import marinalucentini.Unitutor.exam.Exam;
 import marinalucentini.Unitutor.file.File;
 import marinalucentini.Unitutor.lesson.Lesson;
@@ -27,7 +28,7 @@ public class Subject {
     private int subjectGrade;
     private int cfu;
     @ManyToOne
-    private Course course;
+    private CourseStudentCard course;
     @ManyToMany(mappedBy = "subjectList")
     private List<Professor> professorList;
     @OneToMany (mappedBy = "subject")

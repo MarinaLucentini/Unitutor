@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import marinalucentini.Unitutor.course.Course;
+import marinalucentini.Unitutor.course.CourseStudentCard;
 import marinalucentini.Unitutor.student.Student;
 
 import java.util.List;
@@ -23,11 +24,9 @@ public class StudentCard {
 @JsonIgnore
     private Student student;
 private String register;
-@ManyToMany ( fetch = FetchType.EAGER)
-@JoinTable(name = "studentCard_course",
-        joinColumns = @JoinColumn(name = "studentCard_id", nullable = false),
-        inverseJoinColumns = @JoinColumn(name = "course_id", nullable = false)
-)
-    private List<Course> courseList;
+@OneToMany (mappedBy = "studentCard", fetch = FetchType.EAGER)
+private List<CourseStudentCard> courseStudentCards;
+
+
 
 }

@@ -1,9 +1,11 @@
 package marinalucentini.Unitutor.course.services;
 
 import marinalucentini.Unitutor.course.Course;
+import marinalucentini.Unitutor.course.CourseStudentCard;
 import marinalucentini.Unitutor.course.payload.NewCoursePayload;
 import marinalucentini.Unitutor.course.payload.UploadCoursePayload;
 import marinalucentini.Unitutor.course.repositories.CourseRepository;
+import marinalucentini.Unitutor.course.repositories.CourseStudentCardRepository;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.exception.NotFoundException;
 import marinalucentini.Unitutor.student.Student;
@@ -28,25 +30,54 @@ public class CourseService {
     CourseRepository courseRepository;
     @Autowired
     StudentCardService studentCardService;
+    @Autowired
+    CourseStudentCardRepository courseStudentCardRepository;
 // 1.1 creazione del corso ed associarlo al libretto
 public String createNewCourse(NewCoursePayload coursePayload, UUID id) {
     StudentCard studentCard = studentCardService.findById(id);
-    Course existingCourse;
-    try {
-        existingCourse = findByName(coursePayload.name());
-    } catch (NotFoundException e) {
-        existingCourse = null;
-    }
+    Course existingCourse = courseRepository.findByName(coursePayload.name()).orElse(null);
 
     if (existingCourse != null) {
 
-        boolean courseExist = studentCard.getCourseList().stream()
-                .anyMatch(course -> course.getName().equalsIgnoreCase(coursePayload.name()));
+        boolean courseExist = studentCard.getCourseStudentCards().stream()
+                .anyMatch(courseStudentCard -> courseStudentCard.getCourseList().stream()
+                        .anyMatch(course -> course.getName().equalsIgnoreCase(coursePayload.name())));
 
         if (!courseExist) {
 
-            existingCourse.getStudentCard().add(studentCard);
-            studentCard.getCourseList().add(existingCourse);
+            Optional<CourseStudentCard> existingCourseStudentCardOpt = studentCard.getCourseStudentCards().stream()
+                    .filter(courseStudentCard -> courseStudentCard.getCourseList().stream()
+                            .anyMatch(course -> course.getName().equalsIgnoreCase(coursePayload.name())))
+                    .findFirst();
+
+            CourseStudentCard newCourseStudentCard;
+
+            if (existingCourseStudentCardOpt.isPresent()) {
+                newCourseStudentCard = existingCourseStudentCardOpt.get();
+            } else {
+                newCourseStudentCard = new CourseStudentCard(coursePayload.dateEnrollment());
+                if (coursePayload.cfu() != 0) {
+                    newCourseStudentCard.setCfu(coursePayload.cfu());
+                }
+                if (coursePayload.register() != null) {
+                    studentCard.setRegister(coursePayload.register());
+                }
+                newCourseStudentCard.setStudentCard(studentCard);
+                studentCard.getCourseStudentCards().add(newCourseStudentCard);
+
+
+                courseStudentCardRepository.save(newCourseStudentCard);
+            }
+
+
+            if (!newCourseStudentCard.getCourseList().contains(existingCourse)) {
+                newCourseStudentCard.getCourseList().add(existingCourse);
+            }
+            if (existingCourse.getCourseStudentCard() == null || !existingCourse.getCourseStudentCard().equals(newCourseStudentCard)) {
+                existingCourse.getCourseStudentCard().add(newCourseStudentCard);
+            }
+
+
             courseRepository.save(existingCourse);
 
             return "Il corso " + coursePayload.name() + " esiste già nel db ed è stato associato allo studente " + studentCard.getStudent().getUsername();
@@ -54,18 +85,27 @@ public String createNewCourse(NewCoursePayload coursePayload, UUID id) {
             throw new BadRequestException("Il corso " + coursePayload.name() + " è già stato associato allo studente");
         }
     } else {
-        Course newCourse = new Course(coursePayload.name(),
-                coursePayload.cfu() != 0 ? coursePayload.cfu() : 0,
-                coursePayload.dateEnrollment());
-        if(coursePayload.register() != null){
+
+        Course newCourse = new Course(coursePayload.name());
+        CourseStudentCard newCourseStudentCard = new CourseStudentCard(coursePayload.dateEnrollment());
+
+        if (coursePayload.cfu() != 0) {
+            newCourseStudentCard.setCfu(coursePayload.cfu());
+        }
+        if (coursePayload.register() != null) {
             studentCard.setRegister(coursePayload.register());
         }
+        newCourseStudentCard.setStudentCard(studentCard);
+        newCourseStudentCard.setCourseList(new ArrayList<>(List.of(newCourse)));
+        newCourse.getCourseStudentCard().add(newCourseStudentCard);
 
-        List<StudentCard> studentCards = new ArrayList<>();
-        newCourse.setStudentCard(studentCards);
-        newCourse.getStudentCard().add(studentCard);
-        studentCard.getCourseList().add(newCourse);
+
+        studentCard.getCourseStudentCards().add(newCourseStudentCard);
+
         courseRepository.save(newCourse);
+
+        courseStudentCardRepository.save(newCourseStudentCard);
+
 
         return "Il corso " + coursePayload.name() + " è stato correttamente inserito nel db e associato allo studente " + studentCard.getStudent().getUsername();
     }
@@ -78,26 +118,44 @@ public Course findById(UUID id){
     return courseRepository.findById(id).orElseThrow(()-> new NotFoundException("Il corso non è stato trovato nel db"));
 }
     //2 cencellazione del corso dal libretto e dal db
-public String findAndDelete(String name, UUID id){
-    StudentCard studentCard = studentCardService.findById(id);
-    Course course = findByName(name);
-    boolean courseExistsInStudentCard = studentCard.getCourseList().stream()
-            .anyMatch(course1 -> course1.getName().equalsIgnoreCase(name));
-String response = "";
-    if (courseExistsInStudentCard) {
-        studentCard.getCourseList().remove(course);
-        course.getStudentCard().remove(studentCard);
-        if (course.getStudentCard().isEmpty()) {
-            courseRepository.delete(course);
-         response = "Il corso " + name + " è stato rimosso dalla lista dei corsi dello studente e dal database";
+    public String findAndDelete(String name, UUID studentCardId) {
+        StudentCard studentCard = studentCardService.findById(studentCardId);
+        Course course = findByName(name);
+
+        boolean courseExistsInStudentCard = studentCard.getCourseStudentCards().stream()
+                .anyMatch(courseStudentCard -> courseStudentCard.getCourseList().stream()
+                        .anyMatch(c -> c.getName().equalsIgnoreCase(name)));
+
+        if (courseExistsInStudentCard) {
+
+            CourseStudentCard courseStudentCard = studentCard.getCourseStudentCards().stream()
+                    .filter(csc -> csc.getCourseList().stream()
+                            .anyMatch(c -> c.getName().equalsIgnoreCase(name)))
+                    .findFirst()
+                    .orElseThrow(() -> new NotFoundException("Nessun CourseStudentCard associato trovato."));
+
+
+            courseStudentCard.getCourseList().remove(course);
+
+
+            if (courseStudentCard.getCourseList().isEmpty()) {
+                studentCard.getCourseStudentCards().remove(courseStudentCard);
+                courseStudentCardRepository.delete(courseStudentCard);
+            }
+
+
+            if (course.getCourseStudentCard().isEmpty()) {
+                courseRepository.delete(course);
+            }
+
+            studentCardService.save(studentCard);
+
+            return "Il corso " + name + " è stato rimosso dalla lista dei corsi dello studente";
+        } else {
+            throw new NotFoundException("Il corso " + name + " non è associato a questo studente.");
         }
-        studentCardService.save(studentCard);
-        response = "Il corso " + name + " è stato rimosso dalla lista dei corsi dello studente";
-        return response;
-    } else {
-        throw new NotFoundException("Il corso " + name + " non è associato a questo studente.");
     }
-}
+
 // 3 visualizzazione di tutti i corsi
 public Page<Course> getCourses(int pageNumber, int pageSize, String sortBy) {
     if (pageSize > 100) pageSize = 100;
@@ -105,29 +163,38 @@ public Page<Course> getCourses(int pageNumber, int pageSize, String sortBy) {
     return courseRepository.findAll(pageable);
 }
 //4 modifica corso
-    public String findAndUpdate(UploadCoursePayload body, UUID id){
+    public String findAndUpdate(UploadCoursePayload body, UUID id) {
         StudentCard studentCard = studentCardService.findById(id);
-        Course course = studentCard.getCourseList().stream()
+
+
+        CourseStudentCard courseStudentCard = studentCard.getCourseStudentCards().stream()
+                .filter(csc -> csc.getCourseList().stream().anyMatch(course -> course.getName().equalsIgnoreCase(body.name())))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Il corso " + body.name() + " non è stato trovato nella lista dei corsi dello studente"));
+
+        Course course = courseStudentCard.getCourseList().stream()
                 .filter(c -> c.getName().equalsIgnoreCase(body.name()))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Il corso " + body.name() + " non è stato trovato nella lista dei corsi dello studente"));
-    if(body.cfu() != 0){
-    course.setCfu(body.cfu());
-    }
-    if(body.endDate() != null){
-    course.setEndDate(body.endDate());
-    }
-    if(body.graduationGrade() != 0){
-
-    course.setGraduationGrade(body.graduationGrade());
-    }
-    if(body.dateEnrollment() != null){
-
-    course.setEnrollmentDate(body.dateEnrollment());
-    }
-    courseRepository.save(course);
-    return "Il corso " + course.getName() + " è stato correttamente modificato";
-    }
 
 
+        if (body.cfu() != 0) {
+            courseStudentCard.setCfu(body.cfu());
+        }
+        if (body.endDate() != null) {
+            courseStudentCard.setEndDate(body.endDate());
+        }
+        if (body.graduationGrade() != 0) {
+            courseStudentCard.setGraduationGrade(body.graduationGrade());
+        }
+        if (body.dateEnrollment() != null) {
+            courseStudentCard.setEnrollmentDate(body.dateEnrollment());
+        }
+
+
+        courseStudentCardRepository.save(courseStudentCard);
+
+        return "Il corso " + course.getName() + " è stato correttamente modificato";
+
+    }
 }
