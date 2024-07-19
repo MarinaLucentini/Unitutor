@@ -8,6 +8,7 @@ import marinalucentini.Unitutor.student.Student;
 import marinalucentini.Unitutor.student.services.StudentService;
 import marinalucentini.Unitutor.subject.Subject;
 import marinalucentini.Unitutor.subject.payloads.NewSubjectPayload;
+import marinalucentini.Unitutor.subject.payloads.UpdateSubjectPayload;
 import marinalucentini.Unitutor.subject.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class SubjectService {
     public Subject findById(UUID id){
         return subjectRepository.findById(id).orElseThrow(()-> new NotFoundException("La materia non è stata trovata"));
     }
+    // creazione nuova materia
     public String saveNewSubject(UUID id, NewSubjectPayload newSubjectPayload){
         Student student = studentService.findById(id);
         CourseStudentCard courseStudentCard = student.getStudentCard().getCourseStudentCards().stream()
@@ -50,5 +52,25 @@ if(existSubject){
         courseStudentCardRepository.save(courseStudentCard);
 
         return "La materia " + newSubjectPayload.name() + " è stata correttamente salvata nel corso " + newSubjectPayload.courseName();
+    }
+    // modifica materia
+    public String updateSubject(UUID id, UpdateSubjectPayload updateSubjectPayload){
+        Student student = studentService.findById(id);
+        Subject existingSubject = student.getStudentCard().getCourseStudentCards().stream()
+                .flatMap(courseStudentCard -> courseStudentCard.getSubjectList().stream())
+                .filter(subject1 -> subject1.getName().equalsIgnoreCase(updateSubjectPayload.name()))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("La materia " + updateSubjectPayload.name() + " non è stata trovata"));
+if(updateSubjectPayload.newName() !=null){
+    existingSubject.setName(updateSubjectPayload.newName());
+}
+if(updateSubjectPayload.cfu() != 0){
+    existingSubject.setCfu(updateSubjectPayload.cfu());
+}
+if(updateSubjectPayload.subjectGrade() != 0){
+    existingSubject.setSubjectGrade(updateSubjectPayload.subjectGrade());
+}
+        subjectRepository.save(existingSubject);
+        return "La materia " + updateSubjectPayload.name() + " è stata correttamente aggiornata";
     }
 }
