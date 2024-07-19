@@ -1,5 +1,6 @@
 package marinalucentini.Unitutor.professor;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Professor {
     private UUID id;
     private String name;
     private String surname;
+    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "professor_subject",
             joinColumns = @JoinColumn(name = "professor_id", nullable = false),

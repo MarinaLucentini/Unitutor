@@ -1,5 +1,6 @@
 package marinalucentini.Unitutor.file;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -22,6 +23,7 @@ public class File {
 private String name;
 private String type;
 private String url;
+@JsonIgnore
 @ManyToOne
     private Subject subject;
 }

@@ -1,5 +1,6 @@
 package marinalucentini.Unitutor.subject;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,14 +28,19 @@ public class Subject {
     private String name;
     private int subjectGrade;
     private int cfu;
+    @JsonIgnore
     @ManyToOne
     private CourseStudentCard course;
-    @ManyToMany(mappedBy = "subjectList")
+    @ManyToMany(mappedBy = "subjectList", fetch = FetchType.EAGER)
     private List<Professor> professorList;
-    @OneToMany (mappedBy = "subject")
+    @OneToMany (mappedBy = "subject", fetch = FetchType.EAGER)
     private List<Exam> examList;
-    @OneToMany (mappedBy = "subject")
+    @OneToMany (mappedBy = "subject", fetch = FetchType.EAGER)
     private List<File> fileList;
-    @OneToMany (mappedBy = "subject")
+    @OneToMany (mappedBy = "subject", fetch = FetchType.EAGER)
     private List<Lesson> lessonList;
+
+    public Subject(String name) {
+        this.name = name;
+    }
 }

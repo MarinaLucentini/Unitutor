@@ -1,5 +1,6 @@
 package marinalucentini.Unitutor.lesson;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -22,6 +23,7 @@ public class Lesson {
     @GeneratedValue
     private UUID id;
     private LocalDateTime dateAndTime;
+    @JsonIgnore
     @ManyToOne
     private Subject subject;
 }
