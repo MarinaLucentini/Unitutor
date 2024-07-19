@@ -89,6 +89,14 @@ StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
         studentRepository.delete(student);
         return "L'utente è stato cancellato correttamente";
     }
+    public String uploadRegister(UUID id, String newRegister){
+        Student student = findById(id);
+
+                StudentCard studentCard = student.getStudentCard();
+        studentCard.setRegister(newRegister);
+        studentCardService.save(studentCard);
+        return "La matricola è stata correttamente modificata in " + newRegister;
+    }
     public Page<Student> getUsers(int pageNumber, int pageSize, String sortBy) {
         if (pageSize > 100) pageSize = 100;
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));

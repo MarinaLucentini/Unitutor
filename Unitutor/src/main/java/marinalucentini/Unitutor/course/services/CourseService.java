@@ -3,6 +3,7 @@ package marinalucentini.Unitutor.course.services;
 import marinalucentini.Unitutor.course.Course;
 import marinalucentini.Unitutor.course.CourseStudentCard;
 import marinalucentini.Unitutor.course.payload.NewCoursePayload;
+import marinalucentini.Unitutor.course.payload.ResponseCoursePayload;
 import marinalucentini.Unitutor.course.payload.UploadCoursePayload;
 import marinalucentini.Unitutor.course.repositories.CourseRepository;
 import marinalucentini.Unitutor.course.repositories.CourseStudentCardRepository;
@@ -157,10 +158,12 @@ public Course findById(UUID id){
     }
 
 // 3 visualizzazione di tutti i corsi
-public Page<Course> getCourses(int pageNumber, int pageSize, String sortBy) {
+public Page<ResponseCoursePayload> getCourses(int pageNumber, int pageSize, String sortBy) {
     if (pageSize > 100) pageSize = 100;
     Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
-    return courseRepository.findAll(pageable);
+    Page<Course> courses = courseRepository.findAll(pageable);
+
+    return courses.map(course -> new ResponseCoursePayload(course.getName(), course.getCourseStudentCard() != null ? course.getCourseStudentCard().size() : 0 ));
 }
 //4 modifica corso
     public String findAndUpdate(UploadCoursePayload body, UUID id) {
@@ -197,4 +200,5 @@ public Page<Course> getCourses(int pageNumber, int pageSize, String sortBy) {
         return "Il corso " + course.getName() + " è stato correttamente modificato";
 
     }
+
 }

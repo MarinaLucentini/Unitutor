@@ -22,7 +22,7 @@ public class Course {
     @GeneratedValue
     private UUID id;
 private String name;
-
+@JsonIgnore
 @ManyToMany(mappedBy = "courseList")
 private List<CourseStudentCard> courseStudentCard = new ArrayList<>();
 
