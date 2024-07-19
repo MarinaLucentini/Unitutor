@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import marinalucentini.Unitutor.subject.Subject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,5 +27,10 @@ public class Professor {
             joinColumns = @JoinColumn(name = "professor_id", nullable = false),
             inverseJoinColumns = @JoinColumn(name = "subject_id", nullable = false)
     )
-    private List<Subject> subjectList;
+    private List<Subject> subjectList = new ArrayList<>();
+
+    public Professor(String name, String surname) {
+        this.name = name;
+        this.surname = surname;
+    }
 }

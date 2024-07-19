@@ -76,7 +76,7 @@ StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
         String imageUrl = (String) cloudinaryUploader.uploader().upload(image.getBytes(), ObjectUtils.emptyMap()).get("url");
         student.setUrlAvatar(imageUrl);
         studentRepository.save(student);
-        return "Immagine del profilo aggiornata correttamente";
+        return "Immagine del profilo aggiornata correttamente!";
     }
     public String uploadUsername(UUID id, String username){
         Student student = findById(id);

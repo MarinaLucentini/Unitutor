@@ -35,7 +35,8 @@ public class SubjectService {
         Student student = studentService.findById(id);
         CourseStudentCard courseStudentCard = student.getStudentCard().getCourseStudentCards().stream()
                 .filter(courseStudentCard1 -> courseStudentCard1.getCourseList().stream()
-                        .anyMatch(course -> course.getName().equalsIgnoreCase(newSubjectPayload.courseName()))).findFirst().orElseThrow(()-> new NotFoundException("Il corso " + newSubjectPayload.courseName() + " non è stato trovato"));
+                        .anyMatch(course -> course.getName().equalsIgnoreCase(newSubjectPayload.courseName())))
+                .findFirst().orElseThrow(()-> new NotFoundException("Il corso " + newSubjectPayload.courseName() + " non è stato trovato"));
 
        boolean existSubject = courseStudentCard.getSubjectList().stream()
                .anyMatch(subject -> subject.getName().equalsIgnoreCase(newSubjectPayload.name()));
@@ -57,10 +58,12 @@ if(existSubject){
     // modifica materia
     public String updateSubject(UUID id, UpdateSubjectPayload updateSubjectPayload){
         Student student = studentService.findById(id);
-        Subject existingSubject = student.getStudentCard().getCourseStudentCards().stream()
-                .flatMap(courseStudentCard -> courseStudentCard.getSubjectList().stream())
-                .filter(subject1 -> subject1.getName().equalsIgnoreCase(updateSubjectPayload.name()))
-                .findFirst()
+        CourseStudentCard courseStudentCard = student.getStudentCard().getCourseStudentCards().stream()
+                .filter(courseStudentCard1 -> courseStudentCard1.getCourseList().stream()
+                        .anyMatch(course -> course.getName().equalsIgnoreCase(updateSubjectPayload.nameCourse())))
+                .findFirst().orElseThrow(()-> new NotFoundException("Il corso " + updateSubjectPayload.nameCourse() + " non è stato trovato"));
+        Subject existingSubject = courseStudentCard.getSubjectList().stream()
+                .filter(subject -> subject.getName().equalsIgnoreCase(updateSubjectPayload.name())).findFirst()
                 .orElseThrow(() -> new NotFoundException("La materia " + updateSubjectPayload.name() + " non è stata trovata"));
 if(updateSubjectPayload.newName() !=null){
     existingSubject.setName(updateSubjectPayload.newName());
@@ -77,17 +80,17 @@ if(updateSubjectPayload.subjectGrade() != 0){
     // cancellazione della materia
     public String deleteSubject (UUID id, DeleteSubjectPayload deleteSubjectPayload){
         Student student = studentService.findById(id);
-        Subject existingSubject = student.getStudentCard().getCourseStudentCards().stream()
-                .flatMap(courseStudentCard -> courseStudentCard.getSubjectList().stream())
-                .filter(subject1 -> subject1.getName().equalsIgnoreCase(deleteSubjectPayload.name()))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("La materia " + deleteSubjectPayload.name() + " non è stata trovata"));
-        student.getStudentCard().getCourseStudentCards().forEach(courseStudentCard ->
-                courseStudentCard.getSubjectList().removeIf(subject -> subject.getId().equals(existingSubject.getId()))
-        );
-        student.getStudentCard().getCourseStudentCards().forEach(courseStudentCard ->
-                courseStudentCardRepository.save(courseStudentCard)
-        );
+        CourseStudentCard courseStudentCard = student.getStudentCard().getCourseStudentCards().stream()
+                .filter(courseStudentCard1 -> courseStudentCard1.getCourseList().stream()
+                        .anyMatch(course -> course.getName().equalsIgnoreCase(deleteSubjectPayload.nameCourse())))
+                .findFirst().orElseThrow(()-> new NotFoundException("Il corso " + deleteSubjectPayload.nameCourse() + " non è stato trovato"));
+        Subject existingSubject = courseStudentCard.getSubjectList().stream()
+                .filter(subject -> subject.getName().equalsIgnoreCase(deleteSubjectPayload.name())).findFirst()
+                .orElseThrow(() -> new NotFoundException("La materia " +deleteSubjectPayload.name() + " non è stata trovata"));
+        courseStudentCard.getSubjectList().removeIf(subject -> subject.getId().equals(existingSubject.getId()));
+
+                courseStudentCardRepository.save(courseStudentCard);
+
         subjectRepository.delete(existingSubject);
         return "La materia " + deleteSubjectPayload.name() + " è stata correttamente eliminata";
     }

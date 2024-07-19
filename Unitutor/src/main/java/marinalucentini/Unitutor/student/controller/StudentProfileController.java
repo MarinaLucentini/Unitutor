@@ -3,6 +3,7 @@ package marinalucentini.Unitutor.student.controller;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.student.Student;
 
+import marinalucentini.Unitutor.student.payload.StudentResponse;
 import marinalucentini.Unitutor.student.payload.StudentUploadPasswordPayload;
 import marinalucentini.Unitutor.student.payload.StudentUploadUsernamePayload;
 import marinalucentini.Unitutor.student.services.StudentService;
@@ -21,8 +22,9 @@ public class StudentProfileController {
     @Autowired
    private StudentService studentService;
     @GetMapping
-    public Student getProfile(@AuthenticationPrincipal Student currentAuthenticatedUser){
-        return currentAuthenticatedUser;
+    public StudentResponse getProfile(@AuthenticationPrincipal Student currentAuthenticatedUser){
+
+        return   new StudentResponse(currentAuthenticatedUser.getName(), currentAuthenticatedUser.getSurname(), currentAuthenticatedUser.getUsername(), currentAuthenticatedUser.getEmail(), currentAuthenticatedUser.getDateOfBirth(), currentAuthenticatedUser.getUrlAvatar(), currentAuthenticatedUser.getRoles(), currentAuthenticatedUser.getStudentCard());
     }
 // 1 modificare password
     @PatchMapping("/password")

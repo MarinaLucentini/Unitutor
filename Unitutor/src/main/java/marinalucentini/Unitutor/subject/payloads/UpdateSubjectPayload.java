@@ -7,6 +7,8 @@ public record UpdateSubjectPayload(
         String name,
         int subjectGrade,
 int cfu,
-        String newName
+        String newName,
+        @NotEmpty(message = "Il campo nome corso è obbligatorio")
+        String nameCourse
 ) {
 }

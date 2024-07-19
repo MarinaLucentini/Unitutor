@@ -13,6 +13,7 @@ import marinalucentini.Unitutor.lesson.Lesson;
 import marinalucentini.Unitutor.professor.Professor;
 import marinalucentini.Unitutor.student.Student;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.SimpleTimeZone;
 import java.util.UUID;
@@ -32,13 +33,13 @@ public class Subject {
     @ManyToOne
     private CourseStudentCard course;
     @ManyToMany(mappedBy = "subjectList", fetch = FetchType.EAGER)
-    private List<Professor> professorList;
+    private List<Professor> professorList = new ArrayList<>();
     @OneToMany (mappedBy = "subject", fetch = FetchType.EAGER)
-    private List<Exam> examList;
+    private List<Exam> examList = new ArrayList<>();
     @OneToMany (mappedBy = "subject", fetch = FetchType.EAGER)
-    private List<File> fileList;
+    private List<File> fileList = new ArrayList<>();
     @OneToMany (mappedBy = "subject", fetch = FetchType.EAGER)
-    private List<Lesson> lessonList;
+    private List<Lesson> lessonList = new ArrayList<>();
 
     public Subject(String name) {
         this.name = name;
