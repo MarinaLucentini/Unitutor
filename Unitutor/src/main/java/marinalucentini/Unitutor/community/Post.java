@@ -18,10 +18,18 @@ public class Post {
     @Id
     @GeneratedValue
     private UUID id;
+    private String title;
+
     private String content;
     private LocalDate insertionDate;
     @ManyToOne
     private Student student;
-    @OneToMany (mappedBy = "post")
+    @OneToMany (mappedBy = "post", fetch = FetchType.EAGER)
     private List<Comment> commentList;
+
+    public Post(String title, String content, LocalDate insertionDate) {
+        this.title = title;
+        this.content = content;
+        this.insertionDate = insertionDate;
+    }
 }

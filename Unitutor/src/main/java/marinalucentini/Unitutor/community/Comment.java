@@ -1,5 +1,6 @@
 package marinalucentini.Unitutor.community;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -20,9 +21,9 @@ public class Comment {
     @GeneratedValue
     private UUID id;
 private String content;
-private String rate;
 @ManyToOne
 private Student student;
+@JsonIgnore
 @ManyToOne
 private Post post;
 }
