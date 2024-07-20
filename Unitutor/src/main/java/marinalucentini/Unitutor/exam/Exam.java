@@ -11,6 +11,7 @@ import lombok.Setter;
 import marinalucentini.Unitutor.subject.Subject;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.UUID;
 
@@ -22,9 +23,14 @@ public class Exam {
     @Id
     @GeneratedValue
     private UUID id;
-    private LocalDate date;
-    private LocalTime time;
+private LocalDateTime dateTime;
+private boolean pass;
+private int grade;
     @JsonIgnore
     @ManyToOne
     private Subject subject;
+
+    public Exam(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 }
