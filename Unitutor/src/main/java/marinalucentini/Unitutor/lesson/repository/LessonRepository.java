@@ -9,5 +9,5 @@ import java.util.UUID;
 
 @Repository
 public interface LessonRepository extends JpaRepository<Lesson, UUID> {
-    Optional<Lesson> findByName (String name);
+
 }
