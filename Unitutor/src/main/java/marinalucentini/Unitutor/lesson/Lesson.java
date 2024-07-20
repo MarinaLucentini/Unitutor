@@ -26,4 +26,8 @@ public class Lesson {
     @JsonIgnore
     @ManyToOne
     private Subject subject;
+
+    public Lesson(LocalDateTime dateAndTime) {
+        this.dateAndTime = dateAndTime;
+    }
 }
