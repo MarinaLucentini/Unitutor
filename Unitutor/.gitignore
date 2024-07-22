@@ -34,3 +34,4 @@ build/
 env.properties
 .idea/
 Marina_credentials.csv
+src/main/resources/unitutor-48d0d-firebase-adminsdk-vaiop-d446df303d.json

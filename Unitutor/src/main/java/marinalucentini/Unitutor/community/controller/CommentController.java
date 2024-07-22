@@ -39,6 +39,6 @@ public class CommentController {
     public String deleteComment(@AuthenticationPrincipal Student student, @PathVariable UUID commentId){
     return commentService.deleteComment(student.getId(), commentId);
     }
-    // 4 visualizzare i commenti del post?
+
 
 }

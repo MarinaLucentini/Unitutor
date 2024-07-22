@@ -26,4 +26,10 @@ private String url;
 @JsonIgnore
 @ManyToOne
     private Subject subject;
+
+    public File(String name, String type, String url) {
+        this.name = name;
+        this.type = type;
+        this.url = url;
+    }
 }

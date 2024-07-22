@@ -118,6 +118,11 @@
 			<version>2.26.20</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.google.firebase</groupId>
+			<artifactId>firebase-admin</artifactId>
+			<version>9.0.0</version>
+		</dependency>
 
 
 </dependencies>
