@@ -1,5 +1,10 @@
 package marinalucentini.Unitutor.student.controller;
 
+import marinalucentini.Unitutor.community.Post;
+import marinalucentini.Unitutor.community.payload.ResponseCommentPayload;
+import marinalucentini.Unitutor.community.payload.ResponsePostPayload;
+import marinalucentini.Unitutor.community.services.CommentService;
+import marinalucentini.Unitutor.community.services.PostService;
 import marinalucentini.Unitutor.course.Course;
 import marinalucentini.Unitutor.course.payload.ResponseCoursePayload;
 import marinalucentini.Unitutor.course.services.CourseService;
@@ -16,7 +21,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admin")
@@ -25,7 +32,10 @@ public class StudentAdminController {
    private StudentService studentService;
     @Autowired
     private CourseService courseService;
-
+@Autowired
+private PostService postService;
+@Autowired
+private CommentService commentService;
     // 1 cancella profilo in base all'id
     @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -53,5 +63,38 @@ return studentService.findByIdAndDelete(userId);
         }
         return studentService.uploadRegister(userId, body.newRecord());
 
+    }
+    //4 visualizza un post tramite id
+    @GetMapping("/{postId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponsePostPayload getPost(@PathVariable UUID postId){
+        Post post = postService.findById(postId);
+        List<ResponseCommentPayload> comments = post.getCommentList().stream()
+                .map(comment -> new ResponseCommentPayload(
+                        comment.getId(),
+                        comment.getStudent().getUsername(),
+                        comment.getContent()
+                ))
+                .collect(Collectors.toList());
+
+        return new ResponsePostPayload(
+                post.getId(),
+                comments,
+                post.getTitle(),
+                post.getContent(),
+                post.getStudent().getUsername()
+        );
+    }
+    //5 cancella post tramite id
+    @DeleteMapping("/{postId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String deletePost(@PathVariable UUID postId){
+        return postService.findByIdAndDelete(postId);
+    }
+    // 6 cancella commento tramite id
+    @DeleteMapping("/{userId}/{commentId}")
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public String deleteComment(@PathVariable UUID userId, @PathVariable UUID commentId){
+        return commentService.deleteComment(userId, commentId);
     }
 }

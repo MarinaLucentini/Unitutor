@@ -26,4 +26,8 @@ private Student student;
 @JsonIgnore
 @ManyToOne
 private Post post;
+
+    public Comment(String content) {
+        this.content = content;
+    }
 }

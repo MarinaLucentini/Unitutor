@@ -2,6 +2,7 @@ package marinalucentini.Unitutor.community.services;
 
 import marinalucentini.Unitutor.community.Post;
 import marinalucentini.Unitutor.community.payload.NewPostPayload;
+import marinalucentini.Unitutor.community.payload.ResponseCommentPayload;
 import marinalucentini.Unitutor.community.payload.ResponsePostPayload;
 import marinalucentini.Unitutor.community.payload.UpdatePostPayload;
 import marinalucentini.Unitutor.community.repositories.PostRepository;
@@ -17,7 +18,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class PostService {
@@ -67,9 +70,33 @@ public class PostService {
         if (pageSize > 100) pageSize = 100;
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(sortBy));
         Page<Post> posts = postRepository.findAll(pageable);
-        return posts.map(post -> new ResponsePostPayload(post.getId(),   post.getCommentList(), post.getTitle(), post.getContent(), post.getStudent().getUsername()) );
+        return posts.map(post -> {
+            List<ResponseCommentPayload> comments = post.getCommentList().stream()
+                    .map(comment -> new ResponseCommentPayload(
+                            comment.getId(),
+                            comment.getStudent().getUsername(),
+                            comment.getContent()
+                    ))
+                    .collect(Collectors.toList());
+
+            return new ResponsePostPayload(
+                    post.getId(),
+                    comments,
+                    post.getTitle(),
+                    post.getContent(),
+                    post.getStudent().getUsername()
+            );
+        });
+    }
+    // cancella post tramite id
+    public String findByIdAndDelete (UUID id){
+        Post post = findById(id);
+        post.getStudent().getPostList().removeIf(post1 -> post1.getId().equals(id));
+        postRepository.delete(post);
+return "Il post è stato eliminato con successo";
     }
     public Post findById(UUID id){
         return postRepository.findById(id).orElseThrow(()-> new NotFoundException("Il post non è stato trovato"));
     }
+
 }
