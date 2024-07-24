@@ -2,6 +2,7 @@ package marinalucentini.Unitutor.file.controller;
 
 
 import marinalucentini.Unitutor.file.payload.TranscriptionFilePayload;
+import marinalucentini.Unitutor.file.payload.TranscriptionFileUploadPayload;
 import marinalucentini.Unitutor.file.services.AudioProcessingService;
 import marinalucentini.Unitutor.file.services.FileService;
 import marinalucentini.Unitutor.file.services.SpeechFlowService;
@@ -57,7 +58,7 @@ public class FileController {
     }
     // modifica file di testo estratto
     @PatchMapping("/{subjectId}/{transcriptionId}")
-    public String updateTranscription (@AuthenticationPrincipal Student student, @PathVariable UUID subjectId, @PathVariable UUID transcriptionId, @RequestBody TranscriptionFilePayload transcriptionFilePayload){
+    public String updateTranscription (@AuthenticationPrincipal Student student, @PathVariable UUID subjectId, @PathVariable UUID transcriptionId, @RequestBody TranscriptionFileUploadPayload transcriptionFilePayload){
 return audioProcessingService.updateProcessAudio(student.getId(), subjectId, transcriptionId, transcriptionFilePayload.text());
     }
     // cancellazione file audio

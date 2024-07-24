@@ -129,13 +129,15 @@
 			<artifactId>json</artifactId>
 			<version>20230227</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.textrazor/textrazor -->
 		<dependency>
 			<groupId>com.textrazor</groupId>
 			<artifactId>textrazor</artifactId>
-			<version>1.0.12</version>
+			<version>1.0.13</version>
 		</dependency>
 
-</dependencies>
+
+	</dependencies>
 
 	<build>
 		<plugins>

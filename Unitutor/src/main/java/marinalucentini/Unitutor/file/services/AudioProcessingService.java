@@ -1,9 +1,14 @@
 package marinalucentini.Unitutor.file.services;
 
+import com.textrazor.AnalysisException;
+import com.textrazor.NetworkException;
 import marinalucentini.Unitutor.config.FirebaseStorageService;
 import marinalucentini.Unitutor.exception.NotFoundException;
+import marinalucentini.Unitutor.file.Keyword;
 import marinalucentini.Unitutor.file.Transcription;
+import marinalucentini.Unitutor.file.payload.KeywordPayload;
 import marinalucentini.Unitutor.file.payload.TranscriptionFilePayload;
+import marinalucentini.Unitutor.file.repository.KeywordRepository;
 import marinalucentini.Unitutor.file.repository.TranscriptionRepository;
 import marinalucentini.Unitutor.student.Student;
 import marinalucentini.Unitutor.student.services.StudentService;
@@ -20,7 +25,11 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AudioProcessingService {
@@ -34,6 +43,10 @@ public class AudioProcessingService {
     private TranscriptionRepository transcriptionRepository;
     @Autowired
     private SubjectRepository subjectRepository;
+    @Autowired
+    private TextRazorService textRazorService;
+    @Autowired
+    private KeywordRepository keywordRepository;
     public String processAndSaveAudio(UUID userId, UUID subjectId, String fileName) throws IOException {
         String transcription;
         try {
@@ -52,8 +65,30 @@ public class AudioProcessingService {
         Transcription transcriptionEntry = new Transcription(subject, transcription);
 
         transcriptionRepository.save(transcriptionEntry);
+        try {
+            List<String> keywords = textRazorService.extractKeywords(transcription);
+            Set<String> uniqueKeywords = new HashSet<>(keywords);
+            for (String keyword : keywords) {
+                Keyword keywordEntry = new Keyword(transcriptionEntry, keyword);
+                keywordRepository.save(keywordEntry);
+                transcriptionEntry.getKeywordList().add(keywordEntry);
+            }
+        } catch (AnalysisException e) {
+            System.err.println("AnalysisException during keyword extraction" + e);
+
+            throw new RuntimeException("AnalysisException during keyword extraction", e);
+        } catch (NetworkException e) {
+            System.err.println("NetworkException during keyword extraction"+ e);
+
+            throw new RuntimeException("NetworkException during keyword extraction", e);
+        } catch (Exception e) {
+            System.err.println("Unexpected error during keyword extraction"+ e);
+
+            throw new RuntimeException("Unexpected error during keyword extraction", e);
+        }
         subject.getTranscriptions().add(transcriptionEntry);
         subjectRepository.save(subject);
+
 
         return "Il file audio è stato processato e il testo trascritto è stato salvato correttamente.";
     }
@@ -69,9 +104,24 @@ public class AudioProcessingService {
                 .findFirst().orElseThrow(()-> new NotFoundException("La trascrizione non è stata trovata"));
         if(text != null){
         transcription.setText(text);
+            keywordRepository.deleteAll(transcription.getKeywordList());
+            transcription.getKeywordList().clear();
+
+            try {
+                List<String> keywords = textRazorService.extractKeywords(text);
+                Set<String> uniqueKeywords = new HashSet<>(keywords);
+                for (String keyword : uniqueKeywords) {
+                    Keyword keywordEntry = new Keyword(transcription, keyword);
+                    keywordRepository.save(keywordEntry);
+                    transcription.getKeywordList().add(keywordEntry);
+                }
+            } catch (Exception e) {
+                throw new RuntimeException("Error during keyword extraction", e);
+            }
 
         }
         transcriptionRepository.save(transcription);
+
         return "La trascrizione è stata correttamente modificata";
     }
     public String findByIdAndDelete(UUID userId, UUID subjectId, UUID transcriptionId){
@@ -84,9 +134,12 @@ public class AudioProcessingService {
         Transcription transcription = subject.getTranscriptions().stream()
                 .filter(transcription1 -> transcription1.getId().equals(transcriptionId))
                 .findFirst().orElseThrow(()-> new NotFoundException("La trascrizione non è stata trovata"));
+        keywordRepository.deleteAll(transcription.getKeywordList());
+        transcription.getKeywordList().clear();
         subject.getTranscriptions().removeIf(transcription1 -> transcription1.getId().equals(transcriptionId));
         transcriptionRepository.delete(transcription);
         subjectRepository.save(subject);
+
         return "La trascrizione è stata correttamente cancellata";
     }
     public Page<TranscriptionFilePayload> getTranscriptionsBySubject(UUID subjectId, int pageNumber, int pageSize, String sortBy) {
@@ -96,11 +149,17 @@ public class AudioProcessingService {
 
         Page<Transcription> transcriptions = transcriptionRepository.findBySubjectId(subjectId, pageable);
 
-        return transcriptions.map(transcription -> new TranscriptionFilePayload(
+        return transcriptions.map(transcription -> {
+            List<KeywordPayload> keywordPayloads = transcription.getKeywordList().stream()
+                    .map(keyword -> new KeywordPayload(keyword.getKeyword()))
+                    .distinct()
+                    .collect(Collectors.toList());
 
-                transcription.getText()
-
-        ));
+            return new TranscriptionFilePayload(
+                    transcription.getText(),
+                    keywordPayloads
+            );
+        });
     }
 
 }

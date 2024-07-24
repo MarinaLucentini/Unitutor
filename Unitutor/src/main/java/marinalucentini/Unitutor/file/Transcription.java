@@ -9,6 +9,8 @@ import marinalucentini.Unitutor.student.Student;
 import marinalucentini.Unitutor.subject.Subject;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -26,7 +28,8 @@ public class Transcription {
     @Column(columnDefinition = "TEXT")
     private String text;
     private LocalDateTime timestamp;
-
+@OneToMany(mappedBy = "transcription", fetch = FetchType.EAGER)
+private List<Keyword> keywordList = new ArrayList<>();
     public Transcription(Subject subject, String text) {
         this.subject = subject;
         this.text = text;

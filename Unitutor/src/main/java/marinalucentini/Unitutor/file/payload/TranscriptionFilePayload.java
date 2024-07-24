@@ -1,6 +1,9 @@
 package marinalucentini.Unitutor.file.payload;
 
+import java.util.List;
+
 public record TranscriptionFilePayload(
-        String text
+        String text,
+        List<KeywordPayload> keywordPayloads
 ) {
 }
