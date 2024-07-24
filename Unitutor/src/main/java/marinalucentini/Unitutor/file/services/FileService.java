@@ -32,10 +32,7 @@ private SubjectRepository subjectRepository;
 private FirebaseStorageService firebaseStorageService;
     // salvataggio file audio
     public String saveFileAudio (UUID userId, UUID subjectId, MultipartFile audio) throws IOException {
-//        if (audio.getSize() > 10 * 1024 * 1024) {
-//            throw new MaxUploadSizeExceededException(10 * 1024 * 1024);
-//        }
-        // firebase con spring
+
       Student student = studentService.findById(userId);
         Subject subject =
       student.getStudentCard().getCourseStudentCards().stream()
@@ -52,5 +49,18 @@ private FirebaseStorageService firebaseStorageService;
     }
     public File findById(UUID id){
         return fileRepository.findById(id).orElseThrow(()-> new NotFoundException("Il file non è stato trovato"));
+    }
+    // cancella file dal db
+    public String deleteFileAudio(UUID userId, UUID subjectId, UUID fileId){
+        Student student = studentService.findById(userId);
+        Subject subject =
+                student.getStudentCard().getCourseStudentCards().stream()
+                        .flatMap(courseStudentCard -> courseStudentCard.getSubjectList().stream())
+                        .filter(subject1 -> subject1.getId().equals(subjectId)).findFirst()
+                        .orElseThrow(()-> new NotFoundException("La materia non è stata trovata"));
+        File file = subject.getFileList().stream().filter(file1 -> file1.equals(fileId)).findFirst().orElseThrow(()-> new NotFoundException("Il file non è stato trovato"));
+        subject.getFileList().removeIf(file1 -> file1.getId().equals(fileId));
+        fileRepository.delete(file);
+        return "Il file è stato correttamente eliminato dal database";
     }
 }

@@ -9,9 +9,11 @@ import marinalucentini.Unitutor.course.Course;
 import marinalucentini.Unitutor.course.CourseStudentCard;
 import marinalucentini.Unitutor.exam.Exam;
 import marinalucentini.Unitutor.file.File;
+
+import marinalucentini.Unitutor.file.Transcription;
 import marinalucentini.Unitutor.lesson.Lesson;
 import marinalucentini.Unitutor.professor.Professor;
-import marinalucentini.Unitutor.student.Student;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +42,8 @@ public class Subject {
     private List<File> fileList = new ArrayList<>();
     @OneToMany (mappedBy = "subject", fetch = FetchType.EAGER)
     private List<Lesson> lessonList = new ArrayList<>();
+    @OneToMany (mappedBy = "subject", fetch = FetchType.EAGER)
+    private List<Transcription> transcriptions = new ArrayList<>();
 
     public Subject(String name) {
         this.name = name;

@@ -2,8 +2,18 @@ package marinalucentini.Unitutor.subject.services;
 
 import marinalucentini.Unitutor.course.CourseStudentCard;
 import marinalucentini.Unitutor.course.repositories.CourseStudentCardRepository;
+import marinalucentini.Unitutor.exam.Exam;
+import marinalucentini.Unitutor.exam.repository.ExamRepository;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.exception.NotFoundException;
+import marinalucentini.Unitutor.file.File;
+import marinalucentini.Unitutor.file.Transcription;
+import marinalucentini.Unitutor.file.repository.FileRepository;
+import marinalucentini.Unitutor.file.repository.TranscriptionRepository;
+import marinalucentini.Unitutor.lesson.Lesson;
+import marinalucentini.Unitutor.lesson.repository.LessonRepository;
+import marinalucentini.Unitutor.professor.Professor;
+import marinalucentini.Unitutor.professor.repositories.ProfessorRepository;
 import marinalucentini.Unitutor.student.Student;
 import marinalucentini.Unitutor.student.services.StudentService;
 import marinalucentini.Unitutor.subject.Subject;
@@ -24,6 +34,16 @@ public class SubjectService {
     StudentService studentService;
     @Autowired
     CourseStudentCardRepository courseStudentCardRepository;
+    @Autowired
+    FileRepository fileRepository;
+    @Autowired
+    ExamRepository examRepository;
+    @Autowired
+    TranscriptionRepository transcriptionRepository;
+    @Autowired
+    LessonRepository lessonRepository;
+    @Autowired
+    ProfessorRepository professorRepository;
     public Subject findByName(String name){
         return subjectRepository.findByName(name).orElseThrow(()-> new NotFoundException("La materia " + name + " non è stata trovata"));
     }
@@ -90,6 +110,21 @@ if(updateSubjectPayload.subjectGrade() != 0){
         courseStudentCard.getSubjectList().removeIf(subject -> subject.getId().equals(existingSubject.getId()));
 
                 courseStudentCardRepository.save(courseStudentCard);
+        for (Professor professor : existingSubject.getProfessorList()){
+            professorRepository.delete(professor);
+        }
+        for (Exam exam : existingSubject.getExamList()){
+            examRepository.delete(exam);
+        }
+        for(Lesson lesson : existingSubject.getLessonList()){
+            lessonRepository.delete(lesson);
+        }
+        for (File file : existingSubject.getFileList()){
+            fileRepository.delete(file);
+        }
+        for (Transcription transcription : existingSubject.getTranscriptions()){
+            transcriptionRepository.delete(transcription);
+        }
 
         subjectRepository.delete(existingSubject);
         return "La materia " + deleteSubjectPayload.name() + " è stata correttamente eliminata";

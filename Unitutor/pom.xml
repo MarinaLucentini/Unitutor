@@ -124,6 +124,16 @@
 			<version>9.0.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20230227</version>
+		</dependency>
+		<dependency>
+			<groupId>com.textrazor</groupId>
+			<artifactId>textrazor</artifactId>
+			<version>1.0.12</version>
+		</dependency>
 
 </dependencies>
 

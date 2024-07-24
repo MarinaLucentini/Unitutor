@@ -7,11 +7,23 @@ import marinalucentini.Unitutor.course.payload.ResponseCoursePayload;
 import marinalucentini.Unitutor.course.payload.UploadCoursePayload;
 import marinalucentini.Unitutor.course.repositories.CourseRepository;
 import marinalucentini.Unitutor.course.repositories.CourseStudentCardRepository;
+import marinalucentini.Unitutor.exam.Exam;
+import marinalucentini.Unitutor.exam.repository.ExamRepository;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.exception.NotFoundException;
-import marinalucentini.Unitutor.student.Student;
+import marinalucentini.Unitutor.file.File;
+import marinalucentini.Unitutor.file.Transcription;
+import marinalucentini.Unitutor.file.repository.FileRepository;
+import marinalucentini.Unitutor.file.repository.TranscriptionRepository;
+import marinalucentini.Unitutor.lesson.Lesson;
+import marinalucentini.Unitutor.lesson.repository.LessonRepository;
+import marinalucentini.Unitutor.professor.Professor;
+import marinalucentini.Unitutor.professor.repositories.ProfessorRepository;
+
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
 import marinalucentini.Unitutor.student.studentCard.services.StudentCardService;
+import marinalucentini.Unitutor.subject.Subject;
+import marinalucentini.Unitutor.subject.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,6 +45,18 @@ public class CourseService {
     StudentCardService studentCardService;
     @Autowired
     CourseStudentCardRepository courseStudentCardRepository;
+    @Autowired
+    ProfessorRepository professorRepository;
+    @Autowired
+    ExamRepository examRepository;
+    @Autowired
+    LessonRepository lessonRepository;
+    @Autowired
+    FileRepository fileRepository;
+    @Autowired
+    SubjectRepository subjectRepository;
+    @Autowired
+    TranscriptionRepository transcriptionRepository;
 // 1.1 creazione del corso ed associarlo al libretto
 public String createNewCourse(NewCoursePayload coursePayload, UUID id) {
     StudentCard studentCard = studentCardService.findById(id);
@@ -134,7 +158,24 @@ public Course findById(UUID id){
                             .anyMatch(c -> c.getName().equalsIgnoreCase(name)))
                     .findFirst()
                     .orElseThrow(() -> new NotFoundException("Nessun CourseStudentCard associato trovato."));
-
+for(Subject subject : courseStudentCard.getSubjectList()){
+    for (Professor professor : subject.getProfessorList()){
+        professorRepository.delete(professor);
+    }
+    for (Exam exam : subject.getExamList()){
+        examRepository.delete(exam);
+    }
+    for(Lesson lesson : subject.getLessonList()){
+        lessonRepository.delete(lesson);
+    }
+   for (File file : subject.getFileList()){
+       fileRepository.delete(file);
+   }
+   for (Transcription transcription : subject.getTranscriptions()){
+       transcriptionRepository.delete(transcription);
+   }
+    subjectRepository.delete(subject);
+}
 
             courseStudentCard.getCourseList().remove(course);
 
