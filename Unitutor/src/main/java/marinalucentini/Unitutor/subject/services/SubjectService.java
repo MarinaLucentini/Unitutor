@@ -7,8 +7,10 @@ import marinalucentini.Unitutor.exam.repository.ExamRepository;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.exception.NotFoundException;
 import marinalucentini.Unitutor.file.File;
+import marinalucentini.Unitutor.file.Keyword;
 import marinalucentini.Unitutor.file.Transcription;
 import marinalucentini.Unitutor.file.repository.FileRepository;
+import marinalucentini.Unitutor.file.repository.KeywordRepository;
 import marinalucentini.Unitutor.file.repository.TranscriptionRepository;
 import marinalucentini.Unitutor.lesson.Lesson;
 import marinalucentini.Unitutor.lesson.repository.LessonRepository;
@@ -44,6 +46,8 @@ public class SubjectService {
     LessonRepository lessonRepository;
     @Autowired
     ProfessorRepository professorRepository;
+    @Autowired
+    KeywordRepository keywordRepository;
     public Subject findByName(String name){
         return subjectRepository.findByName(name).orElseThrow(()-> new NotFoundException("La materia " + name + " non è stata trovata"));
     }
@@ -123,6 +127,9 @@ if(updateSubjectPayload.subjectGrade() != 0){
             fileRepository.delete(file);
         }
         for (Transcription transcription : existingSubject.getTranscriptions()){
+            for (Keyword keyword : transcription.getKeywordList()){
+              keywordRepository.delete(keyword);
+            }
             transcriptionRepository.delete(transcription);
         }
 

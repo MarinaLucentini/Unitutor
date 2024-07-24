@@ -12,8 +12,10 @@ import marinalucentini.Unitutor.exam.repository.ExamRepository;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.exception.NotFoundException;
 import marinalucentini.Unitutor.file.File;
+import marinalucentini.Unitutor.file.Keyword;
 import marinalucentini.Unitutor.file.Transcription;
 import marinalucentini.Unitutor.file.repository.FileRepository;
+import marinalucentini.Unitutor.file.repository.KeywordRepository;
 import marinalucentini.Unitutor.file.repository.TranscriptionRepository;
 import marinalucentini.Unitutor.lesson.Lesson;
 import marinalucentini.Unitutor.lesson.repository.LessonRepository;
@@ -55,6 +57,8 @@ public class CourseService {
     SubjectRepository subjectRepository;
     @Autowired
     TranscriptionRepository transcriptionRepository;
+    @Autowired
+    KeywordRepository keywordRepository;
 // 1.1 creazione del corso ed associarlo al libretto
 public String createNewCourse(NewCoursePayload coursePayload, UUID id) {
     StudentCard studentCard = studentCardService.findById(id);
@@ -170,6 +174,9 @@ for(Subject subject : courseStudentCard.getSubjectList()){
        fileRepository.delete(file);
    }
    for (Transcription transcription : subject.getTranscriptions()){
+       for (Keyword keyword : transcription.getKeywordList()){
+           keywordRepository.delete(keyword);
+       }
        transcriptionRepository.delete(transcription);
    }
     subjectRepository.delete(subject);
