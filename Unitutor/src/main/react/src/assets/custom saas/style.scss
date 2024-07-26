@@ -1,0 +1,9 @@
+@import "./partials/bootstrap-override";
+@import "../../component/Navbar/navbar";
+@import "../../component/Homepage/homepage";
+.img-brand{
+    height: 3rem;
+}
+.text-shadow-mb{
+    text-shadow: 1px 4px 8px $secondary;
+}

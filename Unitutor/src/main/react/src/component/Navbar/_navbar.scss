@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat+Brush&display=swap');
+@font-face {
+    font-family: "Black-board";
+    src: url("../../assets/font/BlackBoard.ttf");
+}
+.navbar-brand {
+    padding-top: var(--#{$prefix}navbar-brand-padding-y);
+    padding-bottom: var(--#{$prefix}navbar-brand-padding-y);
+    margin-right: var(--#{$prefix}navbar-brand-margin-end);
+    @include font-size($h3-font-size);
+   font-family: "Black-board","Oswald", sans-serif;
+    color:#af004c;
+    text-decoration: none;
+    white-space: nowrap;
+  
+    &:hover,
+    &:focus {
+      color: var(--#{$prefix}navbar-brand-hover-color);
+      text-decoration: if($link-hover-decoration == underline, none, null);
+    }
+  }
+  
+  .nav-link {
+    position: relative;
+    display: inline-block;
+    margin-bottom: calc(-1 * var(--#{$prefix}nav-tabs-border-width)); // stylelint-disable-line function-disallowed-list
+    border: var(--#{$prefix}nav-tabs-border-width) solid transparent;
+    @include border-top-radius(var(--#{$prefix}nav-tabs-border-radius));
+  
+    &:hover,
+    &:focus {
+      // Prevents active .nav-link tab overlapping focus outline of previous/next .nav-link
+      isolation: isolate;
+      border-color: var(--#{$prefix}nav-tabs-link-hover-border-color);
+    }
+  
+    &::after {
+      content: '';
+      display: block;
+      width: 0;
+      height: 2px;
+      background: #7D23D7; // Underline color
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -3px; // Adjust according to your design
+      left: 0;
+    }
+  
+    &:hover::after {
+      width: 100%;
+    }
+  }
+
+  
+// custom button
+
+  $btn-hover-shadow: 1px 5px 20px  #af004c;
+  .btn {
+  
+
+  &:hover {
+
+    box-shadow: $btn-hover-shadow;
+  }
+
+  .btn-check + &:hover {
+
+ 
+    box-shadow: $btn-hover-shadow;
+  }
+
+ 
+}
+
+  
+
+
