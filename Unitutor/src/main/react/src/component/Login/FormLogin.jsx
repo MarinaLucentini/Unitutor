@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { loginUser } from "../../redux/actions";
+
 import { Alert, Button, Card, Form, Spinner } from "react-bootstrap";
 import logo from "../../assets/g19.svg";
 import monnalisa from "../../assets/monnalisa.png";
@@ -12,7 +12,7 @@ const FormLogin = () => {
     email: "",
     password: "",
   });
-  const dispatch = useDispatch();
+
   const userRegister = useSelector((state) => state.student);
   const { loading, error } = userRegister;
 
@@ -27,7 +27,7 @@ const FormLogin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    dispatch(loginUser(formData));
+    // dispatch(loginUser(formData));
     navigate("/profile");
   };
 

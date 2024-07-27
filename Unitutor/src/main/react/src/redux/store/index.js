@@ -1,10 +1,9 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import StudentReduce from "../reducers/StudentReduce";
-import StudentLoginReduce from "../reducers/StudentLoginReduce";
 
 const rootReducer = combineReducers({
   student: StudentReduce,
-  authentication: StudentLoginReduce,
+  // authentication: StudentLoginReduce,
 });
 
 export const store = configureStore({

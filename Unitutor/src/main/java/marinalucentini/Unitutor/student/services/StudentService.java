@@ -48,7 +48,7 @@ public class StudentService {
                     throw new BadRequestException("Lo username " + studentDTO.username() + " è già in uso!");
                 }
         );
-        String response = "Lo studente "  + studentDTO.username() + " è stato correttamente inserito nel db";
+        String response = "Lo studente "  + studentDTO.username() + " è stato correttamente registrato";
       Student student = new Student(studentDTO.name(), studentDTO.surname(), studentDTO.username(), studentDTO.email(),bcrypt.encode(studentDTO.password()), studentDTO.dateOfBirth());
         student.setUrlAvatar("https://unsplash.com/it/foto/person-holding-notepad-and-pen-flat-lay-photography-flRm0z3MEoA");
         Role userRole = roleRepository.findByName("USER")

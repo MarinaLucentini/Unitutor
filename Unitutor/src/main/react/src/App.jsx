@@ -4,6 +4,7 @@ import ConditionalNav from "./component/Navbar/ConditionalNav";
 import MyFooter from "./component/Footer/MyFooter";
 import MyHomepage from "./component/Homepage/MyHomepage";
 import LoginPage from "./component/Login/LoginPage";
+import RegistrationPage from "./component/Registration/RegistrationPage";
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MyHomepage />} />
           <Route path="/loginPage" element={<LoginPage />} />
+          <Route path="/registerPage" element={<RegistrationPage />} />
         </Routes>
         <MyFooter />
       </BrowserRouter>
