@@ -1,6 +1,15 @@
 
-.card-title {
-    margin-bottom: var(--#{$prefix}card-title-spacer-y);
-    color: #af004c;
-    text-decoration: underline, #7D23D7;
-  }
+
+  $card-hover-shadow: 1px 5px 20px  #761364;
+  
+.card-secondary {
+  
+  --#{$prefix}card-height: 200px;
+  &:hover {
+
+    box-shadow: $card-hover-shadow;
+   }
+ 
+
+ 
+}

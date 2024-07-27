@@ -4,8 +4,7 @@
 
 
 // 2. Include any default variable overrides here
-$body-color-dark:  $white;
-$body-bg-dark: $black;
+
 $font-family-sans-serif:"Quicksand", sans-serif;
 $body-text-align: center;
 $font-size-base: 1rem;
@@ -22,7 +21,8 @@ $secondary: #761364;
 $info: #7D23D7;
 $black: #0b0713;
 $white: #FAF6FD;
-
+$body-color-dark:  $white;
+$body-bg-dark: $black;
 $theme-colors:(
     "primary":    #af004c,
     "secondary":  #761364,

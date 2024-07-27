@@ -7,7 +7,7 @@ const MyNav = () => {
   return (
     <>
       <Navbar expand="lg" className=" text-light">
-        <Container>
+        <Container className="align-items-end">
           <NavLink to={"/"} className={"navbar-brand "}>
             <img src={logo} alt="" className="img-fluid img-brand" />
           </NavLink>
@@ -21,30 +21,31 @@ const MyNav = () => {
           </div>
 
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
-              <NavLink to={"/"} className={"nav-link"}>
-                {" "}
-                Home
-              </NavLink>
+            <Nav className="w-100 justify-content-between">
+              <Nav.Item>
+                <NavLink to={"/"} className={"nav-link"}>
+                  {" "}
+                  Home
+                </NavLink>
 
-              <NavLink to={"/aboutUs"} className={"nav-link"}>
-                {" "}
-                About
-              </NavLink>
-              <NavLink to={"/contactUs"} className={"nav-link"}>
-                {" "}
-                Contact
-              </NavLink>
+                <NavLink to={"/aboutUs"} className={"nav-link"}>
+                  {" "}
+                  About
+                </NavLink>
+                <NavLink to={"/contactUs"} className={"nav-link"}>
+                  {" "}
+                  Contact
+                </NavLink>
+              </Nav.Item>
+
+              <Nav.Item>
+                <NavLink to={"/loginPage"} className={" btn btn-primary  mx-3 flex-column "}>
+                  <p className="m-0">Log-In</p>
+                </NavLink>
+              </Nav.Item>
             </Nav>
           </Navbar.Collapse>
         </Container>
-        <Nav className="d-none d-lg-flex justify-content-end align-items-center  " activeKey="/home">
-          <Nav.Item>
-            <NavLink to={"/loginPage"} className={" btn btn-primary  mx-3 flex-column "}>
-              <p className="m-0">Log-In</p>
-            </NavLink>
-          </Nav.Item>
-        </Nav>
       </Navbar>
     </>
   );
