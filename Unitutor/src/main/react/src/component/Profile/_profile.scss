@@ -1,0 +1,7 @@
+
+$profile-hover-shadow: 8px 3px 20px 6px  #af004c;
+.profile-shadow{
+    &:hover{
+        box-shadow: $card-hover-shadow;
+    }
+}

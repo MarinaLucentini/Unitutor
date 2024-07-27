@@ -50,7 +50,7 @@ public class StudentService {
         );
         String response = "Lo studente "  + studentDTO.username() + " è stato correttamente registrato";
       Student student = new Student(studentDTO.name(), studentDTO.surname(), studentDTO.username(), studentDTO.email(),bcrypt.encode(studentDTO.password()), studentDTO.dateOfBirth());
-        student.setUrlAvatar("https://unsplash.com/it/foto/person-holding-notepad-and-pen-flat-lay-photography-flRm0z3MEoA");
+        student.setUrlAvatar("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKaiKiPcLJj7ufrj6M2KaPwyCT4lDSFA5oog&s");
         Role userRole = roleRepository.findByName("USER")
                 .orElseThrow(() -> new NotFoundException("Ruolo USER non trovato"));
         StudentCard studentCard = new StudentCard();

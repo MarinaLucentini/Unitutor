@@ -11762,6 +11762,10 @@ textarea.form-control-lg {
   width: 35%;
 }
 
+.profile-shadow:hover {
+  box-shadow: 1px 5px 20px #761364;
+}
+
 .img-brand {
   height: 3rem;
 }

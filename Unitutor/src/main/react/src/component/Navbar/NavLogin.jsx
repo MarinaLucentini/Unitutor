@@ -1,13 +1,22 @@
-import { Container, Nav, Navbar } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/g19.svg";
+import { logoutUser } from "../../redux/actions";
+import { useDispatch } from "react-redux";
 const NavLogin = ({ username }) => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    dispatch(logoutUser());
+
+    navigate("/");
+  };
   return (
     <>
       <Navbar bg="dark" data-bs-theme="dark" expand="lg" className="bg-black">
         <Container>
           <NavLink to={"/"} className={"navbar-brand"}>
-            <img src={logo} alt="logo" />
+            <img src={logo} alt="logo" className="img-fluid img-brand" />
           </NavLink>
 
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -28,12 +37,13 @@ const NavLogin = ({ username }) => {
               </NavLink>
             </Nav>
           </Navbar.Collapse>
-        </Container>
-        <Nav className="d-none d-lg-flex justify-content-end align-items-center  " activeKey="/home">
-          <Nav.Item>
-            <p className="my-0 mx-3">Welcome {username}</p>
+          <Nav.Item className="d-none d-md-flex align-items-center">
+            <p className="my-0 mx-3">Bentornat* {username}</p>
+            <Button variant="primary" onClick={handleLogout}>
+              Log-out
+            </Button>
           </Nav.Item>
-        </Nav>
+        </Container>
       </Navbar>
     </>
   );

@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 import { Alert, Button, Card, Form, Spinner } from "react-bootstrap";
 import logo from "../../assets/g19.svg";
 import monnalisa from "../../assets/monnalisa.png";
+import { loginUser } from "../../redux/actions";
 
 const FormLogin = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const FormLogin = () => {
     email: "",
     password: "",
   });
-
+  const dispatch = useDispatch();
   const userRegister = useSelector((state) => state.student);
   const { loading, error } = userRegister;
 
@@ -27,10 +28,10 @@ const FormLogin = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // dispatch(loginUser(formData));
+    dispatch(loginUser(formData));
+
     navigate("/profile");
   };
-
   return (
     <>
       <Card className="bg-secondary bg-opacity-10 align-items-center">
