@@ -14,8 +14,8 @@ const FormLogin = () => {
     password: "",
   });
   const dispatch = useDispatch();
-  const userRegister = useSelector((state) => state.student);
-  const { loading, error } = userRegister;
+  const userLogin = useSelector((state) => state.authentication);
+  const { loading, error, errorMsg, success } = userLogin;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -29,8 +29,9 @@ const FormLogin = () => {
     e.preventDefault();
 
     dispatch(loginUser(formData));
-
-    navigate("/profile");
+    if (success) {
+      navigate("/profile");
+    }
   };
   return (
     <>
@@ -50,7 +51,7 @@ const FormLogin = () => {
 
           <Form onSubmit={handleSubmit}>
             {loading && <Spinner animation="border" />}
-            {error && <Alert variant="danger">{error}</Alert>}
+            {error && <Alert variant="danger">{errorMsg}</Alert>}
 
             <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formEmail">
               <Form.Label>Email</Form.Label>

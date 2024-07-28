@@ -5783,12 +5783,12 @@ textarea.form-control-lg {
   --bs-tooltip-padding-y: 0.25rem;
   --bs-tooltip-margin: ;
   --bs-tooltip-font-size: 0.875rem;
-  --bs-tooltip-color: var(--bs-body-bg);
-  --bs-tooltip-bg: var(--bs-emphasis-color);
+  --bs-tooltip-color: #FAF6FD;
+  --bs-tooltip-bg: #0b0713;
   --bs-tooltip-border-radius: var(--bs-border-radius);
   --bs-tooltip-opacity: 0.9;
-  --bs-tooltip-arrow-width: 0.8rem;
-  --bs-tooltip-arrow-height: 0.4rem;
+  --bs-tooltip-arrow-width: 0;
+  --bs-tooltip-arrow-height: 0;
   z-index: var(--bs-tooltip-zindex);
   display: block;
   margin: var(--bs-tooltip-margin);
@@ -11769,6 +11769,10 @@ textarea.form-control-lg {
 
 .profile-shadow:hover {
   box-shadow: 1px 5px 20px #761364;
+}
+
+.profile-img {
+  height: 250px;
 }
 
 .img-brand {

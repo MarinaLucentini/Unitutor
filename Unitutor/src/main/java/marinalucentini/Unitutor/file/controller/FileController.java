@@ -35,7 +35,7 @@ public class FileController {
     public String addAudio(@AuthenticationPrincipal Student student, @PathVariable UUID subjectId, @RequestParam("audio") MultipartFile audio) throws IOException{
         return fileService.saveFileAudio(student.getId(), subjectId, audio);
     }
-
+// processare file audio
     @PostMapping("/{subjectId}/upload")
     public ResponseEntity<String> uploadAudio(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Student student, @PathVariable UUID subjectId) {
         try {

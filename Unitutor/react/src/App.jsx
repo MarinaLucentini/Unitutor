@@ -9,18 +9,16 @@ import ProfilePage from "./component/Profile/ProfilePage";
 
 function App() {
   return (
-    <>
-      <BrowserRouter>
-        <ConditionalNav />
-        <Routes>
-          <Route path="/" element={<MyHomepage />} />
-          <Route path="/loginPage" element={<LoginPage />} />
-          <Route path="/registerPage" element={<RegistrationPage />} />
-          <Route path="/profile" element={<ProfilePage />} />
-        </Routes>
-        <MyFooter />
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <ConditionalNav />
+      <Routes>
+        <Route path="/" element={<MyHomepage />} />
+        <Route path="/loginPage" element={<LoginPage />} />
+        <Route path="/registerPage" element={<RegistrationPage />} />
+        <Route path="/profile" element={<ProfilePage />} />
+      </Routes>
+      <MyFooter />
+    </BrowserRouter>
   );
 }
 
