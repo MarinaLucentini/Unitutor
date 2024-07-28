@@ -17,7 +17,7 @@ const ConditionalNav = () => {
     <>
       {loading && <Spinner animation="border" />}
 
-      {content ? <NavLogin username={content.username} /> : <MyNav />}
+      {content ? <NavLogin username={content.username} image={content.urlAvatar} /> : <MyNav />}
     </>
   );
 };

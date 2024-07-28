@@ -11747,6 +11747,11 @@ textarea.form-control-lg {
   box-shadow: 1px 5px 20px #af004c;
 }
 
+.img-profile {
+  height: 50px;
+  width: 50px;
+}
+
 .card-secondary {
   --bs-card-height: 200px;
 }

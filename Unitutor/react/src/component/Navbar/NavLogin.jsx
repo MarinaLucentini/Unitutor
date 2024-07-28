@@ -3,7 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/g19.svg";
 import { logoutUser } from "../../redux/actions";
 import { useDispatch } from "react-redux";
-const NavLogin = ({ username }) => {
+const NavLogin = ({ username, image }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -38,6 +38,7 @@ const NavLogin = ({ username }) => {
             </Nav>
           </Navbar.Collapse>
           <Nav.Item className="d-none d-md-flex align-items-center">
+            <img src={image} alt="" className="rounded-4   img-profile" />
             <p className="my-0 mx-3">Bentornat* {username}</p>
             <Button variant="primary" onClick={handleLogout}>
               Log-out
