@@ -6,6 +6,7 @@ import MyHomepage from "./component/Homepage/MyHomepage";
 import LoginPage from "./component/Login/LoginPage";
 import RegistrationPage from "./component/Registration/RegistrationPage";
 import ProfilePage from "./component/Profile/ProfilePage";
+import CoursePage from "./component/Course/CoursePage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/loginPage" element={<LoginPage />} />
         <Route path="/registerPage" element={<RegistrationPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/course/:id" element={<CoursePage />} />
       </Routes>
       <MyFooter />
     </BrowserRouter>

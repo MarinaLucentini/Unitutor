@@ -37,10 +37,10 @@ public class StudentProfileController {
         }
        return studentService.uploadPassword(currentAuthenticatedUser.getId(), passwordPayload.password() );
     }
+    // aggiungo endpoint con e-mail
  // 2 aggiungere e modificare immagine profilo
 @PatchMapping("/avatar")
     public ResponseEntity<Object> uploadImage(@AuthenticationPrincipal Student currentAuthenticatedUser, @RequestParam("avatar") MultipartFile image) throws IOException{
-
 
     try {
         String response = studentService.uploadImage(currentAuthenticatedUser.getId(), image);

@@ -50,7 +50,12 @@
       width: 100%;
     }
   }
-
+  .no-caret::after{
+ display: none;
+  
+    // Generate the caret automatically
+    
+  }
   
 // custom button
 

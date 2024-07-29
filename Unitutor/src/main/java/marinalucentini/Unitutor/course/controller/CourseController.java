@@ -61,11 +61,17 @@ public class CourseController {
 }
     //3 modifica dei cfu, data di iscrizione
     @PutMapping("/update")
-    public String updateCourse(@AuthenticationPrincipal Student student, @RequestBody @Validated UploadCoursePayload body, BindingResult bindingResult){
+    public ResponseEntity<Object> updateCourse(@AuthenticationPrincipal Student student, @RequestBody @Validated UploadCoursePayload body, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw  new BadRequestException(bindingResult.getAllErrors());
         }
-        return courseService.findAndUpdate(body, student.getStudentCard().getId());
+        try {
+            String response = courseService.findAndUpdate(body, student.getStudentCard().getId());
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+
     }
 
 

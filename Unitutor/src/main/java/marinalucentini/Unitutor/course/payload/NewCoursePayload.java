@@ -11,7 +11,7 @@ public record NewCoursePayload(
         String name,
        int cfu,
         String register,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+
       @NotNull(message = "Il campo data di iscrizione è obbligatorio")
        LocalDate dateEnrollment
 

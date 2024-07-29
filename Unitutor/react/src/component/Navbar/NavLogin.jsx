@@ -1,4 +1,4 @@
-import { Button, Container, Nav, Navbar } from "react-bootstrap";
+import { Container, Dropdown, Nav, Navbar } from "react-bootstrap";
 import { NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/g19.svg";
 import { logoutUser } from "../../redux/actions";
@@ -38,11 +38,16 @@ const NavLogin = ({ username, image }) => {
             </Nav>
           </Navbar.Collapse>
           <Nav.Item className="d-none d-md-flex align-items-center">
-            <img src={image} alt="" className="rounded-4   img-profile" />
             <p className="my-0 mx-3">Bentornat* {username}</p>
-            <Button variant="primary" onClick={handleLogout}>
-              Log-out
-            </Button>
+            <Dropdown>
+              <Dropdown.Toggle variant="btn" id="dropdown-basic" className="no-caret">
+                <img src={image} alt="" className="rounded-4   img-profile" />
+              </Dropdown.Toggle>
+
+              <Dropdown.Menu>
+                <Dropdown.Item onClick={handleLogout}>Log-out</Dropdown.Item>
+              </Dropdown.Menu>
+            </Dropdown>
           </Nav.Item>
         </Container>
       </Navbar>

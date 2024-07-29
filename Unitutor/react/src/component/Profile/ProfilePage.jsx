@@ -4,6 +4,7 @@ import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import ProfileImageModal from "./ProfileImageModal";
 import ProfileCourseModal from "./ProfileCourseModal";
+import { Link } from "react-router-dom";
 
 const ProfilePage = () => {
   const { loading, content } = useSelector((state) => state.authentication);
@@ -19,6 +20,14 @@ const ProfilePage = () => {
       Clicca per aggiungere un corso
     </Tooltip>
   );
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
   return (
     <>
       {loading && <Spinner animation="border" />}
@@ -28,8 +37,9 @@ const ProfilePage = () => {
             {content && (
               <>
                 <Container className="my-3">
-                  <Row>
-                    <Col className="d-flex align-items-end justify-content-between mx-3">
+                  <Row className="my-3">
+                    <h3>Carta dello studente</h3>
+                    <Col className="d-flex align-items-end justify-content-evenly mx-3">
                       <div className="profile-shadow rounded-4">
                         <img
                           src={content.urlAvatar}
@@ -38,18 +48,27 @@ const ProfilePage = () => {
                           onClick={handleShowModalImage}
                         />
                       </div>
-                      <div>
-                        <h4>{content.name}</h4>
+                      <div className="d-flex justify-content-between ">
+                        <h4 className="mx-3">{content.name}</h4>
                         <h4>{content.surname}</h4>
+                      </div>
+                      <div className="d-flex flex-column">
+                        <div>
+                          <h5>Data di nascita: {formatDate(content.dateOfBirth)}</h5>
+                        </div>
+                        <div className="d-flex justify-content-between ">
+                          <h5 className="mx-3">Email</h5>
+                          <h5>{content.email}</h5>
+                        </div>
                       </div>
                     </Col>
                     <ProfileImageModal show={showModalImage} handleClose={handleCloseModalImage} />
                   </Row>
 
-                  <Row className="flex-column">
+                  <Row className="flex-column my-5">
+                    <h5 className="text-uppercase">Corsi</h5>
                     <Col className="mb-3">
                       <div className="d-flex align-items-center  justify-content-around mx-3">
-                        <h3>Carta dello studente</h3>
                         {content.studentCard.register ? (
                           <h5 className="text-uppercase">Matricola: {content.studentCard.register}</h5>
                         ) : (
@@ -70,7 +89,9 @@ const ProfilePage = () => {
                           <div key={courseStudentCard.id}>
                             {courseStudentCard.courseList.map((course) => (
                               <ListGroup.Item key={course.id} action variant="info">
-                                {course.name}
+                                <Link to={`/course/${courseStudentCard.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                                  {course.name}
+                                </Link>
                               </ListGroup.Item>
                             ))}
                           </div>

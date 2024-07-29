@@ -11740,6 +11740,10 @@ textarea.form-control-lg {
   width: 100%;
 }
 
+.no-caret::after {
+  display: none;
+}
+
 .btn:hover {
   box-shadow: 1px 5px 20px #af004c;
 }
@@ -11768,11 +11772,11 @@ textarea.form-control-lg {
 }
 
 .profile-shadow:hover {
-  box-shadow: 1px 5px 20px #761364;
+  box-shadow: 0px 0px 20px 6px #af004c;
 }
 
 .profile-img {
-  height: 250px;
+  height: 150px;
 }
 
 .img-brand {
