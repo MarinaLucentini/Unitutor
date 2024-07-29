@@ -1,4 +1,4 @@
-import { ADD_NEW_COURSE_FAILURE, ADD_NEW_COURSE_REQUEST, ADD_NEW_COURSE_SUCCESS } from "../actions/course";
+import { ADD_NEW_COURSE_FAILURE, ADD_NEW_COURSE_REQUEST, ADD_NEW_COURSE_SUCCESS, RESET_COURSE_STATE } from "../actions/course";
 
 const initialState = {
   loading: false,
@@ -15,6 +15,8 @@ const CourseReduce = (state = initialState, action) => {
       return { ...state, loading: false, success: true, content: action.payload, errorMsg: null, error: false };
     case ADD_NEW_COURSE_FAILURE:
       return { ...state, loading: false, errorMsg: action.payload, success: false, error: true };
+    case RESET_COURSE_STATE:
+      return initialState;
     default:
       return state;
   }

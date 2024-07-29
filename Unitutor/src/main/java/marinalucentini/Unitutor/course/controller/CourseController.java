@@ -52,12 +52,24 @@ public class CourseController {
     }
     // 2 cancellazione del corso dalla lista
 @DeleteMapping("/delete")
-    public String deleteCourse(@AuthenticationPrincipal Student student, @RequestBody @Validated DeleteCoursePayload body, BindingResult bindingResult){
+    public ResponseEntity<Object> deleteCourse(@AuthenticationPrincipal Student student, @RequestBody @Validated DeleteCoursePayload body, BindingResult bindingResult){
 
-        if(bindingResult.hasErrors()){
-            throw new BadRequestException(bindingResult.getAllErrors());
+    if (bindingResult.hasErrors()) {
+        Map<String, String> errors = new HashMap<>();
+        for (ObjectError error : bindingResult.getAllErrors()) {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
         }
-        return courseService.findAndDelete(body.name(), student.getStudentCard().getId());
+        return ResponseEntity.badRequest().body(errors);
+    }
+    try {
+        String response = courseService.findAndDelete(body.name(), student.getStudentCard().getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+    } catch (BadRequestException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+    }
+
 }
     //3 modifica dei cfu, data di iscrizione
     @PutMapping("/update")

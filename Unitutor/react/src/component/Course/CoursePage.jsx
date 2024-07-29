@@ -5,6 +5,7 @@ import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import CourseModalUpdate from "./CourseModalUpdate";
+import CourseModalDelete from "./CourseModalDelete";
 
 const CoursePage = () => {
   const { id } = useParams();
@@ -14,6 +15,9 @@ const CoursePage = () => {
   const [showModalUpdate, setShowModalUpdate] = useState(false);
   const handleCloseModalUpdate = () => setShowModalUpdate(false);
   const handleShowModalUpdate = () => setShowModalUpdate(true);
+  const [showModalDelete, setShowModalDelete] = useState(null);
+  const handleCloseModaleDelete = () => setShowModalDelete(false);
+  const handleShowModalDelete = () => setShowModalDelete(true);
   useEffect(() => {
     if (content && content.studentCard) {
       const foundCard = content.studentCard.courseStudentCards.find((card) => card.id === id);
@@ -62,7 +66,7 @@ const CoursePage = () => {
                   </Button>
                 </OverlayTrigger>
                 <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip3}>
-                  <Button variant="btn" size="sm">
+                  <Button variant="btn" size="sm" onClick={handleShowModalDelete}>
                     <BsXLg className="text-secondary" size={44} />
                   </Button>
                 </OverlayTrigger>
@@ -73,6 +77,7 @@ const CoursePage = () => {
                   dateEnrollment={courseStudentCard.enrollmentDate}
                   cfu={courseStudentCard.cfu}
                 />
+                <CourseModalDelete show={showModalDelete} handleClose={handleCloseModaleDelete} name={course.name} />
               </div>
               <div className="mx-3">
                 <h2>Dettagli del Corso</h2>

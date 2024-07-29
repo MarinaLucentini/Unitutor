@@ -21,6 +21,7 @@ const ProfileCourseModal = ({ show, handleClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(AddNewCourse(formData));
+    handleClose();
   };
 
   return (

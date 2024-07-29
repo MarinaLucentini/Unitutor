@@ -19,6 +19,7 @@ const ProfileImageModal = ({ show, handleClose }) => {
     }
 
     dispatch(uploadImage(selectedFile));
+    handleClose();
   };
 
   return (

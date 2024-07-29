@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
+import { Alert, Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
 import { UpdateCourse } from "../../redux/actions/course";
 
 const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => {
   const dispatch = useDispatch();
+  const { loading, success, content, error } = useSelector((state) => state.course);
   const [formData, setFormData] = useState({
     name: nome,
     graduationGrade: "",
@@ -22,6 +23,7 @@ const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(UpdateCourse(formData));
+    handleClose();
   };
   return (
     <>
@@ -30,6 +32,10 @@ const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => 
           <Modal.Title>Aggiungi il corso</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {content && loading && <Spinner animation="border" />}
+          {content && error && <Alert variant="danger">{content}</Alert>}
+          {content && success && <Alert variant="success">{content}</Alert>}
+
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col>
