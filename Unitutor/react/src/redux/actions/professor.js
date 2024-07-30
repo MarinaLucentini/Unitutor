@@ -68,3 +68,24 @@ export const UpdateProfessor = (professorData) => async (dispatch) => {
     dispatch(addNewProfessorFailure(error.message));
   }
 };
+export const DeleteProfessor = (professorData) => async (dispatch) => {
+  const token = localStorage.getItem("authToken");
+  try {
+    const response = await fetch("http://localhost:3001/professor/delete", {
+      method: "DELETE",
+      body: JSON.stringify(professorData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Errore durante la modifica");
+    }
+
+    dispatch(fetchProtectedResource());
+  } catch (error) {
+    dispatch(addNewProfessorFailure(error.message));
+  }
+};

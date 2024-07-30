@@ -9,6 +9,8 @@ import SubjectModalUpdate from "./SubjectModalUpdate";
 import SubjectModalDelete from "./SubjectModalDelete";
 import ProfessorModalUpdate from "./ProfessorModalUpdate";
 
+import ProfessorModalDelete from "./ProfessorModalDelete";
+
 const SubjectPage = () => {
   const { id } = useParams();
   const { loading, content } = useSelector((state) => state.authentication);
@@ -23,6 +25,9 @@ const SubjectPage = () => {
   const [showModalProfessorUpdate, setShowModalProfessorUpdate] = useState(false);
   const handleCloseModalProfessorUpdate = () => setShowModalProfessorUpdate(false);
   const handleShowModalProfessorUpdate = () => setShowModalProfessorUpdate(true);
+  const [showModalProfessorDelete, setShowModalProfessorDelete] = useState(false);
+  const handleCloseModalProfessorDelete = () => setShowModalProfessorDelete(false);
+  const handleShowModalProfessorDelete = () => setShowModalProfessorDelete(true);
   const [showModalUpdateSubject, setShowModalUpdateSubject] = useState(false);
   const handleCloseModalUpdateSubject = () => setShowModalUpdateSubject(false);
   const handleShowModalUpdateSubject = () => setShowModalUpdateSubject(true);
@@ -134,7 +139,7 @@ const SubjectPage = () => {
                         {professor.name} {professor.surname}
                         <div>
                           <BsFeather className="text-secondary mx-3" size={24} onClick={handleShowModalProfessorUpdate} />
-                          <BsXLg className="text-secondary" size={24} />
+                          <BsXLg className="text-secondary" size={24} onClick={handleShowModalProfessorDelete} />
                           <ProfessorModalUpdate
                             show={showModalProfessorUpdate}
                             handleClose={handleCloseModalProfessorUpdate}
@@ -142,6 +147,14 @@ const SubjectPage = () => {
                             nameSubject={subject.name}
                             professorName={professor.name}
                             professorSurname={professor.surname}
+                          />
+                          <ProfessorModalDelete
+                            show={showModalProfessorDelete}
+                            handleClose={handleCloseModalProfessorDelete}
+                            nameCourse={course.name}
+                            nameSubject={subject.name}
+                            nameProfessor={professor.name}
+                            surnameProfessor={professor.surname}
                           />
                         </div>
                       </ListGroup.Item>
