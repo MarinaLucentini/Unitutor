@@ -6,6 +6,7 @@ import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import CourseModalUpdate from "./CourseModalUpdate";
 import CourseModalDelete from "./CourseModalDelete";
+import CourseSubjectModal from "./CourseSubjectModal";
 
 const CoursePage = () => {
   const { id } = useParams();
@@ -18,6 +19,9 @@ const CoursePage = () => {
   const [showModalDelete, setShowModalDelete] = useState(null);
   const handleCloseModaleDelete = () => setShowModalDelete(false);
   const handleShowModalDelete = () => setShowModalDelete(true);
+  const [showCourseSubjectModal, setCourseSubjectModal] = useState(false);
+  const handleCloseSubjectModal = () => setCourseSubjectModal(false);
+  const handleShowSubjectModal = () => setCourseSubjectModal(true);
   useEffect(() => {
     if (content && content.studentCard) {
       const foundCard = content.studentCard.courseStudentCards.find((card) => card.id === id);
@@ -66,8 +70,8 @@ const CoursePage = () => {
                   </Button>
                 </OverlayTrigger>
                 <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip3}>
-                  <Button variant="btn" size="sm" onClick={handleShowModalDelete}>
-                    <BsXLg className="text-secondary" size={44} />
+                  <Button variant="btn" size="sm">
+                    <BsXLg className="text-secondary" size={44} onClick={handleShowModalDelete} />
                   </Button>
                 </OverlayTrigger>
                 <CourseModalUpdate
@@ -88,7 +92,7 @@ const CoursePage = () => {
                     {courseStudentCard.cfu !== 0 ? <p>Cfu totali: {courseStudentCard.cfu}</p> : <></>}
                     {courseStudentCard.endDate ? (
                       <>
-                        <p>Voto finale: {courseStudentCard.graduationGrade}</p>
+                        {courseStudentCard.graduationGrade !== 0 ? <p>Voto finale: {courseStudentCard.graduationGrade}</p> : <></>}
                         <p>Data di fine corso: {formatDate(courseStudentCard.endDate)}</p>
                       </>
                     ) : (
@@ -107,9 +111,10 @@ const CoursePage = () => {
                 <h5 className="text-uppercase">Materie</h5>
                 <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip}>
                   <Button variant="btn" size="sm">
-                    <FaPlus className="text-secondary" size={44} />
+                    <FaPlus className="text-secondary" size={44} onClick={handleShowSubjectModal} />
                   </Button>
                 </OverlayTrigger>
+                <CourseSubjectModal show={showCourseSubjectModal} handleClose={handleCloseSubjectModal} name={course.name} />
               </div>
             </Col>
             <Col>

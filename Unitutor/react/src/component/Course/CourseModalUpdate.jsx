@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { UpdateCourse } from "../../redux/actions/course";
+import { RESET_COURSE_STATE, UpdateCourse } from "../../redux/actions/course";
 
 const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => {
   const dispatch = useDispatch();
@@ -11,7 +11,7 @@ const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => 
     graduationGrade: "",
     endDate: "",
     dateEnrollment: dateEnrollment,
-    cfu: cfu,
+    cfu: cfu || 0,
   });
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -25,6 +25,20 @@ const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => 
     dispatch(UpdateCourse(formData));
     handleClose();
   };
+  useEffect(() => {
+    setFormData({
+      name: nome,
+      graduationGrade: "",
+      endDate: "",
+      dateEnrollment: dateEnrollment,
+      cfu: cfu || 0,
+    });
+  }, [nome, dateEnrollment, cfu]);
+  useEffect(() => {
+    if (show) {
+      dispatch({ type: RESET_COURSE_STATE });
+    }
+  }, [show, dispatch]);
   return (
     <>
       <Modal show={show} onHide={handleClose} animation={false}>
@@ -41,14 +55,7 @@ const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => 
               <Col>
                 <Form.Group className="mb-3 d-flex flex-column align-items-center">
                   <Form.Label>Nome del corso</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="inserisci il nome del corso a cui sei iscritto"
-                    required
-                    onChange={handleChange}
-                    name="name"
-                    value={formData.name}
-                  />
+                  <Form.Control type="text" placeholder="inserisci il nome del corso a cui sei iscritto" name="name" value={formData.name} readOnly />
                 </Form.Group>
               </Col>
               <Col>

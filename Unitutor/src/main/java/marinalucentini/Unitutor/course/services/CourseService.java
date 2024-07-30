@@ -227,15 +227,16 @@ public Page<ResponseCoursePayload> getCourses(int pageNumber, int pageSize, Stri
                 .orElseThrow(() -> new NotFoundException("Il corso " + body.name() + " non è stato trovato nella lista dei corsi dello studente"));
 
 
-        if (body.cfu() != 0) {
+
+
             courseStudentCard.setCfu(body.cfu());
-        }
+
         if (body.endDate() != null) {
             courseStudentCard.setEndDate(body.endDate());
         }
-        if (body.graduationGrade() != 0) {
+
             courseStudentCard.setGraduationGrade(body.graduationGrade());
-        }
+
         if (body.dateEnrollment() != null) {
             courseStudentCard.setEnrollmentDate(body.dateEnrollment());
         }
