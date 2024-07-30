@@ -7,6 +7,7 @@ import { useParams } from "react-router-dom";
 import ProfessorModalAdd from "./ProfessorModalAdd";
 import SubjectModalUpdate from "./SubjectModalUpdate";
 import SubjectModalDelete from "./SubjectModalDelete";
+import ProfessorModalUpdate from "./ProfessorModalUpdate";
 
 const SubjectPage = () => {
   const { id } = useParams();
@@ -19,6 +20,9 @@ const SubjectPage = () => {
   const [showModalProfessor, setShowModalProfessor] = useState(false);
   const handleCloseModalProfessor = () => setShowModalProfessor(false);
   const handleShowModalProfessor = () => setShowModalProfessor(true);
+  const [showModalProfessorUpdate, setShowModalProfessorUpdate] = useState(false);
+  const handleCloseModalProfessorUpdate = () => setShowModalProfessorUpdate(false);
+  const handleShowModalProfessorUpdate = () => setShowModalProfessorUpdate(true);
   const [showModalUpdateSubject, setShowModalUpdateSubject] = useState(false);
   const handleCloseModalUpdateSubject = () => setShowModalUpdateSubject(false);
   const handleShowModalUpdateSubject = () => setShowModalUpdateSubject(true);
@@ -129,8 +133,16 @@ const SubjectPage = () => {
                       <ListGroup.Item variant="info" className="d-flex align-items-center ">
                         {professor.name} {professor.surname}
                         <div>
-                          <BsFeather className="text-secondary mx-3" size={24} />
+                          <BsFeather className="text-secondary mx-3" size={24} onClick={handleShowModalProfessorUpdate} />
                           <BsXLg className="text-secondary" size={24} />
+                          <ProfessorModalUpdate
+                            show={showModalProfessorUpdate}
+                            handleClose={handleCloseModalProfessorUpdate}
+                            nameCourse={course.name}
+                            nameSubject={subject.name}
+                            professorName={professor.name}
+                            professorSurname={professor.surname}
+                          />
                         </div>
                       </ListGroup.Item>
                     </div>

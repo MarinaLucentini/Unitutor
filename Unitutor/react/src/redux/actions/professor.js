@@ -44,3 +44,27 @@ export const AddNewProfessor = (professorData) => async (dispatch) => {
     dispatch(addNewProfessorFailure(error.message));
   }
 };
+export const UpdateProfessor = (professorData) => async (dispatch) => {
+  const token = localStorage.getItem("authToken");
+  dispatch(addNewProfessorRequest());
+  try {
+    const response = await fetch("http://localhost:3001/professor/update", {
+      method: "PATCH",
+      body: JSON.stringify(professorData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Errore durante la registrazione");
+    }
+
+    dispatch(addNewProfessorSuccess(data.message));
+    dispatch(resetProfessorState());
+    dispatch(fetchProtectedResource());
+  } catch (error) {
+    dispatch(addNewProfessorFailure(error.message));
+  }
+};
