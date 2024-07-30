@@ -3,6 +3,7 @@ package marinalucentini.Unitutor.professor.services;
 import marinalucentini.Unitutor.course.CourseStudentCard;
 import marinalucentini.Unitutor.exception.NotFoundException;
 import marinalucentini.Unitutor.professor.Professor;
+import marinalucentini.Unitutor.professor.payload.ProfessorDelete;
 import marinalucentini.Unitutor.professor.payload.ProfessorPayload;
 import marinalucentini.Unitutor.professor.payload.UpdateProfessorPayload;
 import marinalucentini.Unitutor.professor.repositories.ProfessorRepository;
@@ -62,7 +63,7 @@ public String updateProfessor(UUID id, UpdateProfessorPayload body){
         return "Il professore è stato modificato correttamente";
 }
 // cancellazione
-public String deleteProfessor(UUID id, ProfessorPayload body){
+public String deleteProfessor(UUID id, ProfessorDelete body){
     Student student = studentService.findById(id);
     CourseStudentCard courseStudentCard = student.getStudentCard().getCourseStudentCards().stream().filter(courseStudentCard1 -> courseStudentCard1.getCourseList().stream()
             .anyMatch(course -> course.getName().equalsIgnoreCase(body.courseName()))).findFirst().orElseThrow(() -> new NotFoundException("Il corso " + body.courseName() + " non è stato trovato"));
@@ -71,8 +72,9 @@ public String deleteProfessor(UUID id, ProfessorPayload body){
             .orElseThrow(()-> new NotFoundException("La materia " + body.subjectName() + " non è stata trovata"));
 
     Professor professor = subject.getProfessorList().stream()
-            .filter(professor1 -> professor1.getName().equalsIgnoreCase(body.professorName()) && professor1.getSurname().equalsIgnoreCase(body.professorSurname()))
-            .findFirst().orElseThrow(()-> new NotFoundException("Il professore " + body.professorName() + " " + body.professorSurname() + " non è stato trovato"));
+            .filter(prof -> prof.getId().equals(body.id()))
+            .findFirst()
+            .orElseThrow(() -> new NotFoundException("Il professore con id " + body.id() + " non è stato trovato nella materia " + body.subjectName()));
     subject.getProfessorList().removeIf(professor1 -> professor1.getId().equals(professor.getId()));
     subjectRepository.save(subject);
     professorRepository.delete(professor);

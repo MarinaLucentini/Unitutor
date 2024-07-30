@@ -1,6 +1,7 @@
 package marinalucentini.Unitutor.professor.controller;
 
 import marinalucentini.Unitutor.exception.BadRequestException;
+import marinalucentini.Unitutor.professor.payload.ProfessorDelete;
 import marinalucentini.Unitutor.professor.payload.ProfessorPayload;
 import marinalucentini.Unitutor.professor.payload.UpdateProfessorPayload;
 import marinalucentini.Unitutor.professor.services.ProfessorService;
@@ -14,6 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/professor")
@@ -50,7 +52,7 @@ public class ProfessorController {
 }
     //3 eliminare professore
     @DeleteMapping("/delete")
-    public ResponseEntity<Object> deleteProfessor(@AuthenticationPrincipal Student student, @RequestBody @Validated ProfessorPayload professorPayload, BindingResult bindingResult){
+    public ResponseEntity<Object> deleteProfessor(@AuthenticationPrincipal Student student, @RequestBody @Validated ProfessorDelete professorPayload, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }

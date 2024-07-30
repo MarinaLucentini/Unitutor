@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Container, ListGroup, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
+import { Button, Col, Container, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
 import { BsFeather, BsXLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import ProfessorModalAdd from "./ProfessorModalAdd";
+
 import SubjectModalUpdate from "./SubjectModalUpdate";
 import SubjectModalDelete from "./SubjectModalDelete";
-import ProfessorModalUpdate from "./ProfessorModalUpdate";
 
-import ProfessorModalDelete from "./ProfessorModalDelete";
+import ProfessorSection from "../Professor/ProfessorSection";
 
 const SubjectPage = () => {
   const { id } = useParams();
@@ -19,15 +18,6 @@ const SubjectPage = () => {
 
   const [course, setCourse] = useState(null);
 
-  const [showModalProfessor, setShowModalProfessor] = useState(false);
-  const handleCloseModalProfessor = () => setShowModalProfessor(false);
-  const handleShowModalProfessor = () => setShowModalProfessor(true);
-  const [showModalProfessorUpdate, setShowModalProfessorUpdate] = useState(false);
-  const handleCloseModalProfessorUpdate = () => setShowModalProfessorUpdate(false);
-  const handleShowModalProfessorUpdate = () => setShowModalProfessorUpdate(true);
-  const [showModalProfessorDelete, setShowModalProfessorDelete] = useState(false);
-  const handleCloseModalProfessorDelete = () => setShowModalProfessorDelete(false);
-  const handleShowModalProfessorDelete = () => setShowModalProfessorDelete(true);
   const [showModalUpdateSubject, setShowModalUpdateSubject] = useState(false);
   const handleCloseModalUpdateSubject = () => setShowModalUpdateSubject(false);
   const handleShowModalUpdateSubject = () => setShowModalUpdateSubject(true);
@@ -45,9 +35,10 @@ const SubjectPage = () => {
       Clicca per cancellare la materia
     </Tooltip>
   );
-  const renderTooltip3 = (props) => (
+
+  const renderTooltip4 = (props) => (
     <Tooltip id="button-tooltip" {...props}>
-      Clicca aggiungere un professore
+      Clicca aggiungere una lezione
     </Tooltip>
   );
 
@@ -116,51 +107,20 @@ const SubjectPage = () => {
               </div>
             </Col>
           </Row>
-          <Row className="flex-column my-5">
+          <Row className="my-5">
+            <Col>
+              <ProfessorSection course={course} subject={subject} content={content} />
+            </Col>
+
             <Col className="mb-3">
               <div className="d-flex align-items-center justify-content-evenly mx-3">
-                <p className="text-uppercase">Professori</p>
-                <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip3}>
+                <p className="text-uppercase">Lezioni</p>
+                <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip4}>
                   <Button variant="btn" size="sm">
-                    <FaPlus className="text-secondary" size={24} onClick={handleShowModalProfessor} />
+                    <FaPlus className="text-secondary" size={24} />
                   </Button>
                 </OverlayTrigger>
-                {content && subject && (
-                  <ProfessorModalAdd show={showModalProfessor} handleClose={handleCloseModalProfessor} nameCourse={course.name} nameSubject={subject.name} />
-                )}
               </div>
-            </Col>
-            <Col>
-              <ListGroup className="w-75  align-items-center">
-                {subject &&
-                  subject.professorList.map((professor) => (
-                    <div key={professor.id}>
-                      <ListGroup.Item variant="info" className="d-flex align-items-center ">
-                        {professor.name} {professor.surname}
-                        <div>
-                          <BsFeather className="text-secondary mx-3" size={24} onClick={handleShowModalProfessorUpdate} />
-                          <BsXLg className="text-secondary" size={24} onClick={handleShowModalProfessorDelete} />
-                          <ProfessorModalUpdate
-                            show={showModalProfessorUpdate}
-                            handleClose={handleCloseModalProfessorUpdate}
-                            nameCourse={course.name}
-                            nameSubject={subject.name}
-                            professorName={professor.name}
-                            professorSurname={professor.surname}
-                          />
-                          <ProfessorModalDelete
-                            show={showModalProfessorDelete}
-                            handleClose={handleCloseModalProfessorDelete}
-                            nameCourse={course.name}
-                            nameSubject={subject.name}
-                            nameProfessor={professor.name}
-                            surnameProfessor={professor.surname}
-                          />
-                        </div>
-                      </ListGroup.Item>
-                    </div>
-                  ))}
-              </ListGroup>
             </Col>
           </Row>
         </Container>

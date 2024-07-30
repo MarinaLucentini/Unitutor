@@ -3,13 +3,12 @@ import { useDispatch } from "react-redux";
 import { DeleteProfessor } from "../../redux/actions/professor";
 import { useState } from "react";
 
-const ProfessorModalDelete = ({ show, handleClose, nameSubject, nameProfessor, nameCourse, surnameProfessor }) => {
+const ProfessorModalDelete = ({ show, handleClose, nameSubject, idProfessor, nameCourse }) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     subjectName: nameSubject,
-    professorName: nameProfessor,
+    id: idProfessor,
     courseName: nameCourse,
-    professorSurname: surnameProfessor,
   });
   const handleDelete = () => {
     dispatch(DeleteProfessor(formData));

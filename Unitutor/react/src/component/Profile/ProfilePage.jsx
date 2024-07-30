@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Col, Container, ListGroup, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
+import { Button, Card, Col, Container, ListGroup, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import ProfileImageModal from "./ProfileImageModal";
@@ -39,7 +39,7 @@ const ProfilePage = () => {
                 <Container className="my-3">
                   <Row className="my-3">
                     <h3>Carta dello studente</h3>
-                    <Col className="d-flex align-items-end justify-content-evenly mx-3">
+                    <Col className="d-flex align-items-end justify-content-evenly mx-3 flex-column flex-lg-row">
                       <div className="profile-shadow rounded-4">
                         <img
                           src={content.urlAvatar}
@@ -54,11 +54,11 @@ const ProfilePage = () => {
                       </div>
                       <div className="d-flex flex-column">
                         <div>
-                          <h5>Data di nascita: {formatDate(content.dateOfBirth)}</h5>
+                          <h5 className="text-break">Data di nascita: {formatDate(content.dateOfBirth)}</h5>
                         </div>
                         <div className="d-flex justify-content-between ">
                           <h5 className="mx-3">Email</h5>
-                          <h5>{content.email}</h5>
+                          <h5 className="text-break">{content.email}</h5>
                         </div>
                       </div>
                     </Col>
@@ -106,15 +106,22 @@ const ProfilePage = () => {
             )}
           </Col>
         </Row>
-      </Container>
-      <Container>
-        <Row>
-          <Col xs={6}>
-            <Button className="mx-3" variant="secondary">
-              Modifica username
-            </Button>
-            <Button>Cancella profilo</Button>
-          </Col>
+        <h5 className="text-uppercase">Materie</h5>
+        <Row xs={1} sm={2} lg={4}>
+          {content.studentCard.courseStudentCards.map((courseStudentCard) => (
+            <Col key={courseStudentCard.id} className="my-3">
+              {courseStudentCard.courseList.map((course) => (
+                <Card key={course.id}>
+                  {course.name}
+                  {courseStudentCard.subjectList.map((subject) => (
+                    <Link to={`/subject/${subject.id}`} className="list-group-item list-group-item-info list-group-item-action" key={subject.id}>
+                      {subject.name}
+                    </Link>
+                  ))}
+                </Card>
+              ))}
+            </Col>
+          ))}
         </Row>
       </Container>
     </>

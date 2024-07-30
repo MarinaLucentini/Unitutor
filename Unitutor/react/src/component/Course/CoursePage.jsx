@@ -120,7 +120,7 @@ const CoursePage = () => {
                     ) : (
                       <></>
                     )}
-                    <div className="d-flex align-items-center justify-content-evenly bg-info bg-opacity-10 py-3">
+                    <div className="d-flex align-items-center justify-content-evenly bg-info bg-opacity-10 py-3 flex-column flex-lg-row">
                       <p className="m-0">Media aritmetica:{arithmeticMean} </p>
                       <p className="m-0">Media ponderata: {weightedMean}</p>
                       <p className="m-0">Base di laurea: {graduationBase}</p>

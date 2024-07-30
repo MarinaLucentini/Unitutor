@@ -9,10 +9,14 @@ import marinalucentini.Unitutor.lesson.service.LessonService;
 import marinalucentini.Unitutor.student.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 
 @RestController
 @RequestMapping("/lessons")
@@ -21,19 +25,31 @@ public class LessonController {
     LessonService lessonService;
     // 1 salvare la lezione associata a una materia del corso
     @PostMapping("/add")
-    public String saveNewLesson(@AuthenticationPrincipal Student student, @RequestBody @Validated LessonPayload body, BindingResult bindingResult){
+    public ResponseEntity<Object> saveNewLesson(@AuthenticationPrincipal Student student, @RequestBody @Validated LessonPayload body, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }
-        return lessonService.saveLesson(student.getId(), body);
+        try {
+            String response =lessonService.saveLesson(student.getId(), body);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+
     }
     // 2 modifica una lezione collegata a una materia del corso
     @PatchMapping("/update")
-    public String updateLesson(@AuthenticationPrincipal Student student, @RequestBody @Validated UpdateLesson body, BindingResult bindingResult){
+    public ResponseEntity<Object> updateLesson(@AuthenticationPrincipal Student student, @RequestBody @Validated UpdateLesson body, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }
-        return lessonService.updateLesson(student.getId(), body);
+        try {
+            String response =lessonService.updateLesson(student.getId(), body);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+
     }
     // 3 visualizzare tutte le lezione dell'utente collegato
     @GetMapping("/getAllLesson")
@@ -47,10 +63,16 @@ public class LessonController {
     }
     // 4 cancellare una lezione collegata a una materia del corso
     @DeleteMapping("/delete")
-    public String deleteLesson(@AuthenticationPrincipal Student student, @RequestBody @Validated DeleteLesson body, BindingResult bindingResult){
+    public ResponseEntity<Object> deleteLesson(@AuthenticationPrincipal Student student, @RequestBody @Validated DeleteLesson body, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }
-        return lessonService.deleteLesson(student.getId(), body);
+        try {
+            String response =lessonService.deleteLesson(student.getId(), body);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+    
     }
 }
