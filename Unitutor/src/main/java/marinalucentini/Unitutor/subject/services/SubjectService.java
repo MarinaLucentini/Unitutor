@@ -92,12 +92,12 @@ if(existSubject){
 if(updateSubjectPayload.newName() !=null){
     existingSubject.setName(updateSubjectPayload.newName());
 }
-if(updateSubjectPayload.cfu() != 0){
+
     existingSubject.setCfu(updateSubjectPayload.cfu());
-}
-if(updateSubjectPayload.subjectGrade() != 0){
+
+
     existingSubject.setSubjectGrade(updateSubjectPayload.subjectGrade());
-}
+
         subjectRepository.save(existingSubject);
         return "La materia " + updateSubjectPayload.name() + " è stata correttamente aggiornata";
     }

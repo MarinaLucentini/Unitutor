@@ -32,7 +32,7 @@ public class ProfessorController {
         } catch (BadRequestException e) {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
         }
-       
+
     }
     // 2 modificare professore associato
 @PatchMapping("/update")

@@ -88,11 +88,13 @@ const ProfilePage = () => {
                         {content.studentCard.courseStudentCards.map((courseStudentCard) => (
                           <div key={courseStudentCard.id}>
                             {courseStudentCard.courseList.map((course) => (
-                              <ListGroup.Item key={course.id} action variant="info">
-                                <Link to={`/course/${courseStudentCard.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-                                  {course.name}
-                                </Link>
-                              </ListGroup.Item>
+                              <Link
+                                to={`/course/${courseStudentCard.id}`}
+                                className="list-group-item list-group-item-info list-group-item-action"
+                                key={course.id}
+                              >
+                                {course.name}
+                              </Link>
                             ))}
                           </div>
                         ))}

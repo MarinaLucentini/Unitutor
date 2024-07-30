@@ -5,6 +5,8 @@ import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import ProfessorModalAdd from "./ProfessorModalAdd";
+import SubjectModalUpdate from "./SubjectModalUpdate";
+import SubjectModalDelete from "./SubjectModalDelete";
 
 const SubjectPage = () => {
   const { id } = useParams();
@@ -17,6 +19,12 @@ const SubjectPage = () => {
   const [showModalProfessor, setShowModalProfessor] = useState(false);
   const handleCloseModalProfessor = () => setShowModalProfessor(false);
   const handleShowModalProfessor = () => setShowModalProfessor(true);
+  const [showModalUpdateSubject, setShowModalUpdateSubject] = useState(false);
+  const handleCloseModalUpdateSubject = () => setShowModalUpdateSubject(false);
+  const handleShowModalUpdateSubject = () => setShowModalUpdateSubject(true);
+  const [showModalDeleteSubject, setShowModalDeleteSubject] = useState(false);
+  const handleCloseModalDeleteSubject = () => setShowModalDeleteSubject(false);
+  const handleShowModalDeleteSubject = () => setShowModalDeleteSubject(true);
 
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
@@ -61,14 +69,26 @@ const SubjectPage = () => {
               <div className="d-flex  justify-content-end mx-3">
                 <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip}>
                   <Button variant="btn" size="sm">
-                    <BsFeather className="text-secondary" size={44} />
+                    <BsFeather className="text-secondary" size={44} onClick={handleShowModalUpdateSubject} />
                   </Button>
                 </OverlayTrigger>
                 <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip2}>
                   <Button variant="btn" size="sm">
-                    <BsXLg className="text-secondary" size={44} />
+                    <BsXLg className="text-secondary" size={44} onClick={handleShowModalDeleteSubject} />
                   </Button>
                 </OverlayTrigger>
+                {content && subject && (
+                  <SubjectModalUpdate
+                    show={showModalUpdateSubject}
+                    handleClose={handleCloseModalUpdateSubject}
+                    nome={subject.name}
+                    nameCourse={course.name}
+                    cfu={subject.cfu}
+                  />
+                )}
+                {content && subject && (
+                  <SubjectModalDelete show={showModalDeleteSubject} handleClose={handleCloseModalDeleteSubject} name={subject.name} nameCourse={course.name} />
+                )}
               </div>
               <div className="mx-3">
                 <h2>Dettagli della Materia</h2>
