@@ -3,7 +3,7 @@ import { Button, Col, Container, ListGroup, OverlayTrigger, Row, Spinner, Toolti
 import { BsFeather, BsXLg } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import CourseModalUpdate from "./CourseModalUpdate";
 import CourseModalDelete from "./CourseModalDelete";
 import CourseSubjectModal from "./CourseSubjectModal";
@@ -123,7 +123,9 @@ const CoursePage = () => {
                   subject.map((subjects) => (
                     <div key={subjects.id}>
                       <ListGroup.Item action variant="info">
-                        {subjects.name}
+                        <Link to={`/subject/${subjects.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                          {subjects.name}
+                        </Link>
                       </ListGroup.Item>
                     </div>
                   ))}

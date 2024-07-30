@@ -1,9 +1,9 @@
 import { Container, Dropdown, Nav, Navbar } from "react-bootstrap";
-import { NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/g19.svg";
 import { logoutUser } from "../../redux/actions";
 import { useDispatch } from "react-redux";
-const NavLogin = ({ username, image }) => {
+const NavLogin = ({ username, image, courses }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleLogout = () => {
@@ -31,10 +31,25 @@ const NavLogin = ({ username, image }) => {
                 {" "}
                 Pagina profilo
               </NavLink>
-              <NavLink to={"/contactUs"} className={"nav-link"}>
-                {" "}
-                Libretto Universitario
-              </NavLink>
+              <Dropdown>
+                <Dropdown.Toggle id="dropdown-basic" variant="btn" className="no-caret">
+                  Corsi
+                </Dropdown.Toggle>
+
+                <Dropdown.Menu>
+                  {courses.map((course) => (
+                    <div key={course.id}>
+                      {course.courseList.map((singleCourse) => (
+                        <Dropdown.Item key={singleCourse.id} action variant="info">
+                          <Link to={`/course/${course.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                            {singleCourse.name}
+                          </Link>
+                        </Dropdown.Item>
+                      ))}
+                    </div>
+                  ))}
+                </Dropdown.Menu>
+              </Dropdown>
             </Nav>
           </Navbar.Collapse>
           <Nav.Item className="d-none d-md-flex align-items-center">

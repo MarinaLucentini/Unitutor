@@ -4,6 +4,7 @@ import StudentLoginReduce from "../reducers/StudentLoginReduce";
 import { UploadImageReduce } from "../reducers/UploadImageReduce";
 import CourseReduce from "../reducers/CourseReduce";
 import SubjectReduce from "../reducers/SubjectReduce";
+import ProfessorReduce from "../reducers/ProfessorReduce";
 
 const rootReducer = combineReducers({
   student: StudentReduce,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   uploadImage: UploadImageReduce,
   course: CourseReduce,
   subject: SubjectReduce,
+  professor: ProfessorReduce,
 });
 
 export const store = configureStore({
