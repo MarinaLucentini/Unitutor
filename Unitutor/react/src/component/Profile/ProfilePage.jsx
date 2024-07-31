@@ -48,17 +48,17 @@ const ProfilePage = () => {
                           onClick={handleShowModalImage}
                         />
                       </div>
-                      <div className="d-flex justify-content-between ">
-                        <h4 className="mx-3">{content.name}</h4>
-                        <h4>{content.surname}</h4>
-                      </div>
                       <div className="d-flex flex-column">
+                        <div>
+                          <h5 className="mx-3">
+                            {content.name} {content.surname}
+                          </h5>
+                        </div>
                         <div>
                           <h5 className="text-break">Data di nascita: {formatDate(content.dateOfBirth)}</h5>
                         </div>
-                        <div className="d-flex justify-content-between ">
-                          <h5 className="mx-3">Email</h5>
-                          <h5 className="text-break">{content.email}</h5>
+                        <div>
+                          <h5 className="mx-3">Email: {content.email}</h5>
                         </div>
                       </div>
                     </Col>
@@ -66,15 +66,9 @@ const ProfilePage = () => {
                   </Row>
 
                   <Row className="flex-column my-5">
-                    <h5 className="text-uppercase">Corsi</h5>
                     <Col className="mb-3">
                       <div className="d-flex align-items-center  justify-content-around mx-3">
-                        {content.studentCard.register ? (
-                          <h5 className="text-uppercase">Matricola: {content.studentCard.register}</h5>
-                        ) : (
-                          <h5 className="text-uppercase">Matricola</h5>
-                        )}
-
+                        <h5 className="text-uppercase m-0">Corsi</h5>
                         <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip}>
                           <Button variant="btn" size="sm" onClick={handleShowModalCourse}>
                             <FaPlus className="text-secondary" size={44} />
@@ -85,19 +79,20 @@ const ProfilePage = () => {
                     </Col>
                     <Col>
                       <ListGroup>
-                        {content.studentCard.courseStudentCards.map((courseStudentCard) => (
-                          <div key={courseStudentCard.id}>
-                            {courseStudentCard.courseList.map((course) => (
-                              <Link
-                                to={`/course/${courseStudentCard.id}`}
-                                className="list-group-item list-group-item-info list-group-item-action"
-                                key={course.id}
-                              >
-                                {course.name}
-                              </Link>
-                            ))}
-                          </div>
-                        ))}
+                        {content &&
+                          content.studentCard.courseStudentCards.map((courseStudentCard) => (
+                            <div key={courseStudentCard.id}>
+                              {courseStudentCard.courseList.map((course) => (
+                                <Link
+                                  to={`/course/${courseStudentCard.id}`}
+                                  className="list-group-item list-group-item-info list-group-item-action"
+                                  key={course.id}
+                                >
+                                  {course.name}
+                                </Link>
+                              ))}
+                            </div>
+                          ))}
                       </ListGroup>
                     </Col>
                   </Row>
@@ -106,22 +101,23 @@ const ProfilePage = () => {
             )}
           </Col>
         </Row>
-        <h5 className="text-uppercase">Materie</h5>
+        <h5 className="text-uppercase m-0">Materie</h5>
         <Row xs={1} sm={2} lg={4}>
-          {content.studentCard.courseStudentCards.map((courseStudentCard) => (
-            <Col key={courseStudentCard.id} className="my-3">
-              {courseStudentCard.courseList.map((course) => (
-                <Card key={course.id}>
-                  {course.name}
-                  {courseStudentCard.subjectList.map((subject) => (
-                    <Link to={`/subject/${subject.id}`} className="list-group-item list-group-item-info list-group-item-action" key={subject.id}>
-                      {subject.name}
-                    </Link>
-                  ))}
-                </Card>
-              ))}
-            </Col>
-          ))}
+          {content &&
+            content.studentCard.courseStudentCards.map((courseStudentCard) => (
+              <Col key={courseStudentCard.id} className="my-3">
+                {courseStudentCard.courseList.map((course) => (
+                  <Card key={course.id}>
+                    {course.name}
+                    {courseStudentCard.subjectList.map((subject) => (
+                      <Link to={`/subject/${subject.id}`} className="list-group-item list-group-item-info list-group-item-action" key={subject.id}>
+                        {subject.name}
+                      </Link>
+                    ))}
+                  </Card>
+                ))}
+              </Col>
+            ))}
         </Row>
       </Container>
     </>

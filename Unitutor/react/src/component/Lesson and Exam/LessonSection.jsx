@@ -1,6 +1,15 @@
 import { Col, ListGroup, Row } from "react-bootstrap";
 
 const LessonSection = ({ subject }) => {
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    return `${day}/${month}/${year} alle ${hours}:${minutes}`;
+  };
   return (
     <>
       <Row className="flex-column">
@@ -14,7 +23,7 @@ const LessonSection = ({ subject }) => {
             {subject &&
               subject.lessonList.map((lesson) => (
                 <ListGroup.Item variant="info" className="d-flex align-items-center " key={lesson.id}>
-                  {lesson.dateAndTime}
+                  {formatDate(lesson.dateAndTime)}
                 </ListGroup.Item>
               ))}
           </ListGroup>

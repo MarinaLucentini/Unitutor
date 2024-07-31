@@ -17,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -97,8 +99,22 @@ return "La lezione con ID" + body.lessonId() + " è stata modificata correttamen
         Page<ResponseLesson> lessonPage = new PageImpl<>(responseLessons.subList(start, end), pageable, responseLessons.size());
         return lessonPage;
     }
+    // torna le lezioni di una data specifica
+    public List<ResponseLesson> getLessonsByDate(LocalDate date, UUID studentId) {
+
+        Student student = studentService.findById(studentId);
+        List<Lesson> lessons = student.getStudentCard().getCourseStudentCards().stream()
+                .flatMap(courseStudentCard -> courseStudentCard.getSubjectList().stream())
+                .flatMap(subject -> subject.getLessonList().stream()).filter(lesson -> lesson.getDateAndTime().toLocalDate()
+                        .equals(date)).toList();
+        List<ResponseLesson> responseLessons = lessons.stream()
+                .map(lesson -> new ResponseLesson(lesson.getId(), lesson.getSubject().getName(), lesson.getDateAndTime()))
+                .collect(Collectors.toList());
+        return responseLessons;
+    }
    public Lesson findById(UUID id){
         return lessonRepository.findById(id).orElseThrow(()-> new NotFoundException("La lezione non è stata trovata"));
     }
+
 
 }

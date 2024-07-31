@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -114,6 +115,19 @@ public class ExamService {
         int end = Math.min((start + pageable.getPageSize()), responseLessons.size());
         Page<ResponseExam> examPage = new PageImpl<>(responseLessons.subList(start, end), pageable, responseLessons.size());
         return examPage;
+    }
+    // find by date
+    public List<ResponseExam> getExamsByDate(LocalDate date, UUID studentId) {
+
+        Student student = studentService.findById(studentId);
+        List<Exam> exams = student.getStudentCard().getCourseStudentCards().stream()
+                .flatMap(courseStudentCard -> courseStudentCard.getSubjectList().stream())
+                .flatMap(subject -> subject.getExamList().stream()).filter(exam -> exam.getDateTime().toLocalDate()
+                        .equals(date)).toList();
+        List<ResponseExam> responseExams = exams.stream()
+                .map(exam -> new ResponseExam(exam.getId(), exam.getSubject().getName(), exam.getDateTime(), exam.getGrade(), exam.isPass()))
+                .collect(Collectors.toList());
+        return responseExams;
     }
 
     public Exam findById(UUID id){

@@ -1,3 +1,5 @@
+@import 'react-calendar/dist/Calendar.css';
+
 @import "./partials/bootstrap-override";
 @import "../../component/Navbar/navbar";
 @import "../../component/Homepage/homepage";
@@ -7,5 +9,26 @@
     height: 3rem;
 }
 .text-shadow-mb{
-    text-shadow: 1px 4px 8px $secondary;
+    text-shadow: 1px 4px 8px #761364;
 }
+.react-calendar{
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background: inherit;
+}
+.react-calendar__tile--now {
+    background: #7D23D7;
+    color: $light;
+  }
+ 
+  .react-calendar__tile:enabled:hover, .react-calendar__tile:enabled:focus, .react-calendar__tile--active:enabled:hover {
+    background: #761364;
+    color: $light;
+  }
+  .react-calendar__navigation{
+    background: inherit;
+  }
+  .react-calendar__navigation__arrow .react-calendar__navigation__prev2-button{
+    background: inherit;
+  }

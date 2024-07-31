@@ -1,5 +1,7 @@
 package marinalucentini.Unitutor.lesson.controller;
 
+import marinalucentini.Unitutor.exam.payload.ResponseExam;
+import marinalucentini.Unitutor.exam.service.ExamService;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.lesson.payload.DeleteLesson;
 import marinalucentini.Unitutor.lesson.payload.LessonPayload;
@@ -16,13 +18,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/lessons")
 public class LessonController {
     @Autowired
     LessonService lessonService;
+    @Autowired
+    ExamService examService;
     // 1 salvare la lezione associata a una materia del corso
     @PostMapping("/add")
     public ResponseEntity<Object> saveNewLesson(@AuthenticationPrincipal Student student, @RequestBody @Validated LessonPayload body, BindingResult bindingResult){
@@ -74,5 +83,16 @@ public class LessonController {
             return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
         }
     
+    }
+    // 5 get lesson by date
+    @GetMapping("/lessons-exams")
+    public ResponseEntity<Map<String, List<?>>> getLessonsAndExamsByDate(@AuthenticationPrincipal Student student, @RequestParam  String date) {
+        LocalDate localDate = LocalDate.parse(date);
+        List<ResponseLesson> lessons = lessonService.getLessonsByDate(localDate, student.getId());
+        List<ResponseExam> exams = examService.getExamsByDate(localDate, student.getId());
+        Map<String, List<?>> response = new HashMap<>();
+        response.put("lessons", lessons);
+        response.put("exams", exams);
+        return ResponseEntity.ok(response);
     }
 }
