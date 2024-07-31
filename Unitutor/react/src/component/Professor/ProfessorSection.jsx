@@ -38,7 +38,7 @@ const ProfessorSection = ({ course, subject, content }) => {
           </div>
         </Col>
         <Col>
-          <ListGroup className="w-75  align-items-center">
+          <ListGroup className=" align-items-center">
             {subject &&
               subject.professorList.map((professor) => (
                 <div key={professor.id}>

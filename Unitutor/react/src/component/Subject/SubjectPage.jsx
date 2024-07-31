@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Col, Container, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
 import { BsFeather, BsXLg } from "react-icons/bs";
-import { FaPlus } from "react-icons/fa6";
+
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -9,6 +9,9 @@ import SubjectModalUpdate from "./SubjectModalUpdate";
 import SubjectModalDelete from "./SubjectModalDelete";
 
 import ProfessorSection from "../Professor/ProfessorSection";
+
+import ExamSection from "../Lesson and Exam/ExamSection";
+import LessonSection from "../Lesson and Exam/LessonSection";
 
 const SubjectPage = () => {
   const { id } = useParams();
@@ -33,12 +36,6 @@ const SubjectPage = () => {
   const renderTooltip2 = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       Clicca per cancellare la materia
-    </Tooltip>
-  );
-
-  const renderTooltip4 = (props) => (
-    <Tooltip id="button-tooltip" {...props}>
-      Clicca aggiungere una lezione
     </Tooltip>
   );
 
@@ -112,15 +109,11 @@ const SubjectPage = () => {
               <ProfessorSection course={course} subject={subject} content={content} />
             </Col>
 
-            <Col className="mb-3">
-              <div className="d-flex align-items-center justify-content-evenly mx-3">
-                <p className="text-uppercase">Lezioni</p>
-                <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip4}>
-                  <Button variant="btn" size="sm">
-                    <FaPlus className="text-secondary" size={24} />
-                  </Button>
-                </OverlayTrigger>
-              </div>
+            <Col>
+              <LessonSection subject={subject} />
+            </Col>
+            <Col>
+              <ExamSection subject={subject} />
             </Col>
           </Row>
         </Container>
