@@ -25,24 +25,24 @@ const ProfessorSection = ({ course, subject, content }) => {
     <>
       <Row className="flex-column">
         <Col className="mb-3">
-          <div className="d-flex align-items-center justify-content-evenly mx-3">
-            <p className="text-uppercase">Professori</p>
-            <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip3}>
+          <div className="d-flex align-items-center justify-content-lg-start mx-3 justify-content-center">
+            <OverlayTrigger placement="left" overlay={renderTooltip3}>
               <Button variant="btn" size="sm">
                 <FaPlus className="text-secondary" size={24} onClick={handleShowModalProfessor} />
               </Button>
             </OverlayTrigger>
+            <p className="text-uppercase m-0">Professori</p>
             {content && subject && (
               <ProfessorModalAdd show={showModalProfessor} handleClose={handleCloseModalProfessor} nameCourse={course.name} nameSubject={subject.name} />
             )}
           </div>
         </Col>
         <Col>
-          <ListGroup className=" align-items-center">
+          <ListGroup className="align-items-lg-start align-items-center">
             {subject &&
               subject.professorList.map((professor) => (
                 <div key={professor.id}>
-                  <ListGroup.Item variant="info" className="d-flex align-items-center ">
+                  <ListGroup.Item variant="info" className="d-flex  ">
                     {professor.name} {professor.surname}
                     <div>
                       <BsFeather className="text-secondary mx-3" size={24} onClick={handleShowModalProfessorUpdate} />

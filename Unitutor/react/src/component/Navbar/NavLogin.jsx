@@ -50,6 +50,9 @@ const NavLogin = ({ username, image, courses }) => {
                   ))}
                 </Dropdown.Menu>
               </Dropdown>
+              <NavLink to={"/calendarPage"} className={"nav-link"}>
+                Calendario
+              </NavLink>
             </Nav>
           </Navbar.Collapse>
           <Nav.Item className="d-none d-md-flex align-items-center">

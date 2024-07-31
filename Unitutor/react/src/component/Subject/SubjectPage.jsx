@@ -61,54 +61,56 @@ const SubjectPage = () => {
       {loading && <Spinner animation="border" />}
       {content && (
         <Container className="my-3 bg-secondary bg-opacity-10 rounded-4 p-3">
-          <Row>
-            <Col className="d-flex flex-column align-items-stretch ">
-              <div className="d-flex  justify-content-end mx-3">
-                <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip}>
-                  <Button variant="btn" size="sm">
-                    <BsFeather className="text-secondary" size={44} onClick={handleShowModalUpdateSubject} />
-                  </Button>
-                </OverlayTrigger>
-                <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip2}>
-                  <Button variant="btn" size="sm">
-                    <BsXLg className="text-secondary" size={44} onClick={handleShowModalDeleteSubject} />
-                  </Button>
-                </OverlayTrigger>
-                {content && subject && (
-                  <SubjectModalUpdate
-                    show={showModalUpdateSubject}
-                    handleClose={handleCloseModalUpdateSubject}
-                    nome={subject.name}
-                    nameCourse={course.name}
-                    cfu={subject.cfu}
-                  />
-                )}
-                {content && subject && (
-                  <SubjectModalDelete show={showModalDeleteSubject} handleClose={handleCloseModalDeleteSubject} name={subject.name} nameCourse={course.name} />
-                )}
-              </div>
-              <div className="mx-3">
-                <h2>Dettagli della Materia</h2>
-                {subject ? (
-                  <>
-                    <p>Nome del Corso: {course.name}</p>
-                    <p>Materia: {subject.name}</p>
+          <Row className="flex-column">
+            <Col className="d-flex justify-content-end  ">
+              <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip}>
+                <Button variant="btn" size="sm">
+                  <BsFeather className="text-secondary" size={44} onClick={handleShowModalUpdateSubject} />
+                </Button>
+              </OverlayTrigger>
+              <OverlayTrigger placement="right" delay={{ show: 250, hide: 400 }} overlay={renderTooltip2}>
+                <Button variant="btn" size="sm">
+                  <BsXLg className="text-secondary" size={44} onClick={handleShowModalDeleteSubject} />
+                </Button>
+              </OverlayTrigger>
+              {content && subject && (
+                <SubjectModalUpdate
+                  show={showModalUpdateSubject}
+                  handleClose={handleCloseModalUpdateSubject}
+                  nome={subject.name}
+                  nameCourse={course.name}
+                  cfu={subject.cfu}
+                />
+              )}
+              {content && subject && (
+                <SubjectModalDelete show={showModalDeleteSubject} handleClose={handleCloseModalDeleteSubject} name={subject.name} nameCourse={course.name} />
+              )}
+            </Col>
+            <Col>
+              <Row className="flex-column flex-lg-row my-3 align-items-center">
+                <Col xs={8}>
+                  {" "}
+                  <h2>Dettagli della Materia</h2>{" "}
+                  {subject ? (
+                    <>
+                      <p>Nome del Corso: {course.name}</p>
+                      <p>Materia: {subject.name}</p>
 
-                    {subject.cfu !== 0 ? <p>Cfu totali: {subject.cfu}</p> : <></>}
+                      {subject.cfu !== 0 ? <p>Cfu totali: {subject.cfu}</p> : <></>}
 
-                    <>{subject.subjectGrade !== 0 ? <p>Voto finale: {subject.subjectGrade}</p> : <></>}</>
-                  </>
-                ) : (
-                  <p>Materia non trovata</p>
-                )}
-              </div>
+                      <>{subject.subjectGrade !== 0 ? <p>Voto finale: {subject.subjectGrade}</p> : <></>}</>
+                    </>
+                  ) : (
+                    <p>Materia non trovata</p>
+                  )}
+                </Col>
+                <Col>
+                  <ProfessorSection course={course} subject={subject} content={content} />
+                </Col>
+              </Row>
             </Col>
           </Row>
           <Row className="my-5">
-            <Col>
-              <ProfessorSection course={course} subject={subject} content={content} />
-            </Col>
-
             <Col>
               <LessonSection subject={subject} />
             </Col>
