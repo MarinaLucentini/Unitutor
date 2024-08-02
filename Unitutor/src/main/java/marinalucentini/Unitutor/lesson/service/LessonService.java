@@ -53,9 +53,9 @@ public class LessonService {
     public String updateLesson(UUID userId, UpdateLesson body){
         Student student = studentService.findById(userId);
         CourseStudentCard courseStudentCard = student.getStudentCard().getCourseStudentCards().stream()
-                .filter(courseStudentCard1 -> courseStudentCard1.getCourseList().stream()
-                        .anyMatch(course -> course.getName().equalsIgnoreCase(body.courseName())))
-                .findFirst().orElseThrow(()-> new NotFoundException("Il corso " + body.courseName() + " non è stato trovato"));
+                .filter(courseStudentCard1 -> courseStudentCard1.getSubjectList().stream()
+                        .anyMatch(course -> course.getName().equalsIgnoreCase(body.subjectName())))
+                .findFirst().orElseThrow(()-> new NotFoundException("La materia " + body.subjectName() + " non è stato trovato"));
         Subject existingSubject = courseStudentCard.getSubjectList().stream()
                 .filter(subject -> subject.getName().equalsIgnoreCase(body.subjectName())).findFirst()
                 .orElseThrow(() -> new NotFoundException("La materia " +body.subjectName() + " non è stata trovata"));
@@ -69,9 +69,9 @@ return "La lezione con ID" + body.lessonId() + " è stata modificata correttamen
     public String deleteLesson(UUID userId, DeleteLesson body){
         Student student = studentService.findById(userId);
         CourseStudentCard courseStudentCard = student.getStudentCard().getCourseStudentCards().stream()
-                .filter(courseStudentCard1 -> courseStudentCard1.getCourseList().stream()
-                        .anyMatch(course -> course.getName().equalsIgnoreCase(body.courseName())))
-                .findFirst().orElseThrow(()-> new NotFoundException("Il corso " + body.courseName() + " non è stato trovato"));
+                .filter(courseStudentCard1 -> courseStudentCard1.getSubjectList().stream()
+                        .anyMatch(course -> course.getName().equalsIgnoreCase(body.subjectName())))
+                .findFirst().orElseThrow(()-> new NotFoundException("Il corso " + body.subjectName() + " non è stato trovato"));
         Subject existingSubject = courseStudentCard.getSubjectList().stream()
                 .filter(subject -> subject.getName().equalsIgnoreCase(body.subjectName())).findFirst()
                 .orElseThrow(() -> new NotFoundException("La materia " +body.subjectName() + " non è stata trovata"));

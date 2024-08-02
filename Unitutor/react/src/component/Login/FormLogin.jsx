@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -27,12 +27,15 @@ const FormLogin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     dispatch(loginUser(formData));
-    if (success) {
-      navigate("/profile");
-    }
   };
+  useEffect(() => {
+    if (success) {
+      setTimeout(() => {
+        navigate("/profile");
+      }, 3000);
+    }
+  }, [success, navigate]);
   return (
     <>
       <Card className="bg-secondary bg-opacity-10 align-items-center">
@@ -52,7 +55,7 @@ const FormLogin = () => {
           <Form onSubmit={handleSubmit}>
             {loading && <Spinner animation="border" />}
             {error && <Alert variant="danger">{errorMsg}</Alert>}
-
+            {success && <Alert variant="success">Login effettuato! Verrai automaticamente indirizzato alla pagina del profilo</Alert>}
             <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" placeholder="Inserisci la tua e-mail" name="email" value={formData.email} onChange={handleChange} />

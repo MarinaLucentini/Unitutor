@@ -9,7 +9,7 @@ import java.util.UUID;
 public record UpdateExam(
         @NotNull(message = "Il campo id esame è obbligatorio")
         UUID examId,
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm:ss")
+
 
         LocalDateTime dateTime,
         @NotNull(message = "Il campo nome del corso è obbligatorio")

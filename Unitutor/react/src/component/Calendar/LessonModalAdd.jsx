@@ -1,14 +1,11 @@
 import { useEffect, useState } from "react";
-import { Button, Form, Modal, Spinner } from "react-bootstrap";
+import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { AddNewLesson } from "../../redux/actions/lesson";
 import { addHours } from "date-fns";
 
 const LessonModalAdd = ({ show, handleClose, date }) => {
   const { loading, content } = useSelector((state) => state.authentication);
-  const courses = content.studentCard.courseStudentCards;
-  const allCourses = courses.flatMap((course) => course.courseList);
-
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     courseName: "",
@@ -18,12 +15,20 @@ const LessonModalAdd = ({ show, handleClose, date }) => {
 
   const [filteredSubjects, setFilteredSubjects] = useState([]);
   const [time, setTime] = useState("");
+
   useEffect(() => {
     setFormData((prevData) => ({
       ...prevData,
       dateTime: date,
     }));
   }, [date]);
+
+  if (!content || !content.studentCard) {
+    return null;
+  }
+
+  const courses = content.studentCard.courseStudentCards;
+  const allCourses = courses.flatMap((course) => course.courseList);
 
   const handleCourseChange = (e) => {
     const selectedCourseName = e.target.value;
@@ -78,48 +83,56 @@ const LessonModalAdd = ({ show, handleClose, date }) => {
   };
 
   return (
-    <>
-      <Modal show={show} onHide={handleClose} animation={false}>
-        <Modal.Header closeButton>
-          <Modal.Title>Aggiungi la lezione</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group>
-              <Form.Label>Seleziona il corso</Form.Label>
-              {loading && <Spinner />}
-              <Form.Select value={formData.courseName} onChange={handleCourseChange} name="courseName" size="sm">
-                <option>Apri la tendina per selezionare</option>
-                {allCourses.map((singleCourse) => (
-                  <option key={singleCourse.id} value={singleCourse.name}>
-                    {singleCourse.name}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-            <Form.Group>
-              <Form.Label>Seleziona la materia</Form.Label>
-              {loading && <Spinner />}
-              <Form.Select value={formData.subjectName} onChange={handleChange} name="subjectName" size="sm">
-                <option>Apri la tendina per selezionare</option>
-                {filteredSubjects.map((singleSubject) => (
-                  <option key={singleSubject.id} value={singleSubject.name}>
-                    {singleSubject.name}
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="align-items-center">
-              <Form.Label>{"Seleziona l'orario"}</Form.Label>
-              <Form.Control type="time" name="time" value={time} onChange={handleTimeChange} size="sm" />
-            </Form.Group>
-            <Button variant="primary" type="submit" className="my-3">
-              Aggiungi la lezione
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
-    </>
+    <Modal show={show} onHide={handleClose} animation={false}>
+      <Modal.Header closeButton>
+        <Modal.Title>Aggiungi la lezione</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={handleSubmit}>
+          <Row>
+            <Col>
+              {" "}
+              <Form.Group>
+                <Form.Label>Seleziona il corso</Form.Label>
+                {loading && <Spinner />}
+                <Form.Select value={formData.courseName} onChange={handleCourseChange} name="courseName" size="sm">
+                  <option>Apri la tendina per selezionare</option>
+                  {allCourses.map((singleCourse) => (
+                    <option key={singleCourse.id} value={singleCourse.name}>
+                      {singleCourse.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Col>
+            <Col>
+              {" "}
+              <Form.Group>
+                <Form.Label>Seleziona la materia</Form.Label>
+                {loading && <Spinner />}
+                <Form.Select value={formData.subjectName} onChange={handleChange} name="subjectName" size="sm">
+                  <option>Apri la tendina per selezionare</option>
+                  {filteredSubjects.map((singleSubject) => (
+                    <option key={singleSubject.id} value={singleSubject.name}>
+                      {singleSubject.name}
+                    </option>
+                  ))}
+                </Form.Select>
+              </Form.Group>
+            </Col>
+          </Row>
+
+          <Form.Group className="d-flex flex-column align-items-center justify-content-center">
+            <Form.Label>{"Seleziona l'orario"}</Form.Label>
+            <Form.Control type="time" name="time" value={time} onChange={handleTimeChange} size="sm" className="w-25" />
+          </Form.Group>
+          <Button variant="primary" type="submit" className="my-3">
+            Aggiungi la lezione
+          </Button>
+        </Form>
+      </Modal.Body>
+    </Modal>
   );
 };
+
 export default LessonModalAdd;

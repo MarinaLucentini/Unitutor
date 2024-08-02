@@ -14,7 +14,7 @@ const StudentLoginReduce = (state = initialState, action) => {
     case LOGIN_USER_FAILURE:
       return { ...state, loading: false, errorMsg: action.payload, success: false, error: true };
     case LOGOUT_USER:
-      return { ...state, content: null };
+      return { ...state, content: null, success: false, error: false, errorMsg: null };
     default:
       return state;
   }

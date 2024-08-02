@@ -10,8 +10,7 @@ public record DeleteLesson(
         @NotNull (message = "Il campo id lezione è obbligatorio")
         UUID lessonId,
 
-        @NotNull(message = "Il campo nome del corso è obbligatorio")
-        String courseName,
+
         @NotNull(message = "Il campo nome della materia è obbligatorio")
         String subjectName
 ) {

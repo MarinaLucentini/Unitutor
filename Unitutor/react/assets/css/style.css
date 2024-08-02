@@ -11764,6 +11764,10 @@ textarea.form-control-lg {
   box-shadow: 1px 5px 20px #761364;
 }
 
+.img-medusa {
+  filter: drop-shadow(1px 0px 30px #af004c);
+}
+
 .form-control {
   width: 75%;
 }
@@ -11778,6 +11782,11 @@ textarea.form-control-lg {
 
 .profile-img {
   height: 250px;
+}
+
+.list-group-item {
+  border: none;
+  background-color: transparent;
 }
 
 .img-brand {
@@ -11811,4 +11820,9 @@ textarea.form-control-lg {
 
 .react-calendar__navigation__arrow .react-calendar__navigation__prev2-button {
   background: inherit;
+}
+
+.form-check-input {
+  float: none;
+  margin-right: 1em;
 }/*# sourceMappingURL=style.css.map */

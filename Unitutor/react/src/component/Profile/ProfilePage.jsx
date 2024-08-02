@@ -1,20 +1,48 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, ListGroup, OverlayTrigger, Row, Spinner, Tooltip } from "react-bootstrap";
 import { FaPlus } from "react-icons/fa6";
 import { useSelector } from "react-redux";
 import ProfileImageModal from "./ProfileImageModal";
 import ProfileCourseModal from "./ProfileCourseModal";
 import { Link } from "react-router-dom";
+import LessonModalAdd from "../Calendar/LessonModalAdd";
+import ExamModalAdd from "../Calendar/ExamModalAdd";
 
 const ProfilePage = () => {
   const { loading, content } = useSelector((state) => state.authentication);
   const [showModalImage, setShowModalImage] = useState(false);
   const [showModalCourse, setShowModalCourse] = useState(false);
+  const [lessonsAndExam, setLessonsAndExam] = useState({ lessons: [], exams: [] });
+  const [showModalLesson, setShowModalLesson] = useState(false);
+
+  const handleCloseModalLesson = () => setShowModalLesson(false);
+  const handleShowModalLesson = () => setShowModalLesson(true);
 
   const handleCloseModalImage = () => setShowModalImage(false);
   const handleShowModalImage = () => setShowModalImage(true);
   const handleCloseModalCourse = () => setShowModalCourse(false);
   const handleShowModalCourse = () => setShowModalCourse(true);
+  const [showModalExam, setShowModalExam] = useState(false);
+
+  const handleCloseModalExam = () => setShowModalExam(false);
+  const handleShowModalExam = () => setShowModalExam(true);
+  const fetchLessons = async (selectedDate) => {
+    const token = localStorage.getItem("authToken");
+    const formattedDate = selectedDate.toISOString().split("T")[0];
+    const response = await fetch(`http://localhost:3001/lessons/lessons-exams?date=${formattedDate}`, {
+      method: "GET",
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    setLessonsAndExam(data);
+  };
+  useEffect(() => {
+    fetchLessons(new Date());
+  }, []);
   const renderTooltip = (props) => (
     <Tooltip id="button-tooltip" {...props}>
       Clicca per aggiungere un corso
@@ -26,6 +54,17 @@ const ProfilePage = () => {
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+  };
+  const formatTime = (dateString) => {
+    const time = new Date(dateString);
+
+    if (isNaN(time.getTime())) {
+      return "Invalid Date";
+    }
+
+    const hours = time.getHours().toString().padStart(2, "0");
+    const minutes = time.getMinutes().toString().padStart(2, "0");
+    return `${hours}:${minutes}`;
   };
 
   return (
@@ -85,7 +124,7 @@ const ProfilePage = () => {
                               {courseStudentCard.courseList.map((course) => (
                                 <Link
                                   to={`/course/${courseStudentCard.id}`}
-                                  className="list-group-item list-group-item-info list-group-item-action"
+                                  className="list-group-item list-group-item-info list-group-item-action  my-3 "
                                   key={course.id}
                                 >
                                   {course.name}
@@ -107,7 +146,7 @@ const ProfilePage = () => {
             content.studentCard.courseStudentCards.map((courseStudentCard) => (
               <Col key={courseStudentCard.id} className="my-3">
                 {courseStudentCard.courseList.map((course) => (
-                  <Card key={course.id}>
+                  <Card key={course.id} className="bg-info bg-opacity-10">
                     {course.name}
                     {courseStudentCard.subjectList.map((subject) => (
                       <Link to={`/subject/${subject.id}`} className="list-group-item list-group-item-info list-group-item-action" key={subject.id}>
@@ -118,6 +157,64 @@ const ProfilePage = () => {
                 ))}
               </Col>
             ))}
+        </Row>
+        <Row>
+          <Col>
+            <LessonModalAdd show={showModalLesson} handleClose={handleCloseModalLesson} date={new Date()} />
+            <ExamModalAdd show={showModalExam} handleClose={handleCloseModalExam} date={new Date()} />
+            <ListGroup className="align-items-center">
+              {lessonsAndExam.lessons.length > 0 ? (
+                <>
+                  <h5>Lezioni</h5>
+                  {lessonsAndExam.lessons.map((lesson, index) => (
+                    <ListGroup.Item key={index} variant="info" className="w-75">
+                      Lezione di {lesson.subjectName} alle {formatTime(lesson.dataAndTime)}
+                    </ListGroup.Item>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <ListGroup.Item variant="info" className="w-75">
+                    Nessuna lezione per oggi
+                  </ListGroup.Item>
+                </>
+              )}
+            </ListGroup>
+            <ListGroup className="align-items-center my-3">
+              {lessonsAndExam.exams.length > 0 ? (
+                <>
+                  <h5>Esami</h5>
+                  {lessonsAndExam.exams.map((lesson, index) => (
+                    <ListGroup.Item key={index} variant="info" className="w-75">
+                      Esame di {lesson.subjectName} alle {formatTime(lesson.dataAndTime)}
+                    </ListGroup.Item>
+                  ))}
+                  <div className="d-flex align-items-center">
+                    <Button variant="secondary" size="sm" className="m-3" onClick={handleShowModalLesson}>
+                      Clicca qui per aggiungere una lezione
+                    </Button>
+                    <Button variant="primary" size="sm" onClick={handleShowModalExam}>
+                      Clicca qui per aggiungere un esame
+                    </Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <ListGroup.Item variant="info" className="w-75">
+                    Nessun esame per oggi
+                  </ListGroup.Item>
+                  <div className="d-flex align-items-center">
+                    <Button variant="secondary" size="sm" className="m-3" onClick={handleShowModalLesson}>
+                      Clicca qui per aggiungere una lezione
+                    </Button>
+                    <Button variant="primary" size="sm" onClick={handleShowModalExam}>
+                      Clicca qui per aggiungere un esame
+                    </Button>
+                  </div>
+                </>
+              )}
+            </ListGroup>
+          </Col>
         </Row>
       </Container>
     </>

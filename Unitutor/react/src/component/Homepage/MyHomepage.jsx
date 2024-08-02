@@ -16,7 +16,7 @@ const MyHomepage = () => {
             <h6>Unitutor è un applicazione web pensata per semplificare e potenziare il percorso accademico degli studenti.</h6>
           </Col>
           <Col className="d-none d-lg-block">
-            <img className="img-fluid object-fit-cover  " src={Myimage} alt="image-medusa" />
+            <img className="img-fluid object-fit-cover img-medusa " src={Myimage} alt="image-medusa" />
           </Col>
         </Row>
       </Container>
