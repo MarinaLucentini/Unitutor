@@ -8,8 +8,12 @@ import { fetchLessons } from "../../redux/actions/lesson";
 import { useDispatch, useSelector } from "react-redux";
 import ExamModalAdd from "./ExamModalAdd";
 import LessonModalUpdate from "./LessonModalUpdate";
+import LessonModalDelete from "./LessonModalDelete";
+import ExamModalUpdate from "./ExamModalUpdate";
+import ExamModalDelete from "./ExamModalDelete";
 
 const CaledarPage = () => {
+  // eslint-disable-next-line no-unused-vars
   const [date, setDate] = useState(new Date());
   const [showColumn, setShowColumn] = useState(false);
   const [selectedDay, setSelectedDay] = useState(null);
@@ -22,10 +26,22 @@ const CaledarPage = () => {
 
   const handleCloseModalExam = () => setShowModalExam(false);
   const handleShowModalExam = () => setShowModalExam(true);
+  const [showModalExamUpdate, setShowModalExamUpdate] = useState(false);
+
+  const handleCloseModalExamUpdate = () => setShowModalExamUpdate(false);
+  const handleShowModalExamUpdate = () => setShowModalExamUpdate(true);
+  const [showModalExamDelete, setShowModalExamDelete] = useState(false);
+
+  const handleCloseModalExamDelete = () => setShowModalExamDelete(false);
+  const handleShowModalExamDelete = () => setShowModalExamDelete(true);
   const [showModalUpdateLesson, setShowModalUpdateLesson] = useState(false);
 
   const handleCloseModalUpdateLesson = () => setShowModalUpdateLesson(false);
   const handleShowModalUpdateLesson = () => setShowModalUpdateLesson(true);
+  const [showModalDeleteLesson, setShowModalDeleteLesson] = useState(false);
+
+  const handleCloseModalDeleteLesson = () => setShowModalDeleteLesson(false);
+  const handleShowModalDeleteLesson = () => setShowModalDeleteLesson(true);
   const dispatch = useDispatch();
   const content = useSelector((state) => state.lesson.content);
 
@@ -81,12 +97,18 @@ const CaledarPage = () => {
                         <div>
                           <BsFeather className="text-secondary mx-3" size={24} onClick={handleShowModalUpdateLesson} />
 
-                          <BsXLg className="text-secondary" size={24} />
+                          <BsXLg className="text-secondary" size={24} onClick={handleShowModalDeleteLesson} />
                           <LessonModalUpdate
                             id={lesson.id}
                             subjectName={lesson.subjectName}
                             show={showModalUpdateLesson}
                             handleClose={handleCloseModalUpdateLesson}
+                          />
+                          <LessonModalDelete
+                            id={lesson.id}
+                            subjectName={lesson.subjectName}
+                            show={showModalDeleteLesson}
+                            handleClose={handleCloseModalDeleteLesson}
                           />
                         </div>
                       </ListGroup.Item>
@@ -104,12 +126,22 @@ const CaledarPage = () => {
                 {lessonsAndExam && lessonsAndExam.exams.length > 0 ? (
                   <>
                     <h5>Esami</h5>
-                    {lessonsAndExam.exams.map((lesson, index) => (
+                    {lessonsAndExam.exams.map((exam, index) => (
                       <ListGroup.Item key={index} variant="info" className="w-75 d-flex align-items-center justify-content-center">
-                        {lesson.subjectName} alle {formatDate(lesson.dataAndTime)}
+                        {exam.subjectName} alle {formatDate(exam.dataAndTime)}
                         <div>
-                          <BsFeather className="text-secondary mx-3" size={24} />
-                          <BsXLg className="text-secondary" size={24} />
+                          <BsFeather className="text-secondary mx-3" size={24} onClick={handleShowModalExamUpdate} />
+                          <BsXLg className="text-secondary" size={24} onClick={handleShowModalExamDelete} />
+                          <ExamModalUpdate
+                            id={exam.id}
+                            subjectName={exam.subjectName}
+                            date={exam.dataAndTime}
+                            pass={exam.pass}
+                            grade={exam.grade}
+                            show={showModalExamUpdate}
+                            handleClose={handleCloseModalExamUpdate}
+                          />
+                          <ExamModalDelete id={exam.id} subjectName={exam.subjectName} show={showModalExamDelete} handleClose={handleCloseModalExamDelete} />
                         </div>
                       </ListGroup.Item>
                     ))}
