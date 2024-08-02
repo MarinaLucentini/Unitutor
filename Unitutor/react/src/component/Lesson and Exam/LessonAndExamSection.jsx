@@ -63,7 +63,7 @@ const LessonAndExamSection = ({ subject }) => {
 
               return (
                 <Tab eventKey={monthYear} title={`${monthNames[month - 1]} ${year}`} key={monthYear}>
-                  <h5>Lezioni</h5>
+                  <h5 className="my-3">Lezioni</h5>
                   <ListGroup className="align-items-center">
                     {lessons.map((lesson) => (
                       <ListGroup.Item variant="info" className="d-flex align-items-center" key={lesson.id}>

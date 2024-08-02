@@ -44,3 +44,48 @@ export const AddNewExam = (examData) => async (dispatch) => {
     dispatch(addNewExamFailure(error.message));
   }
 };
+export const UpdateExam = (examData) => async (dispatch) => {
+  const token = localStorage.getItem("authToken");
+  dispatch(addNewExamRequest());
+  try {
+    const response = await fetch("http://localhost:3001/exam/update", {
+      method: "PATCH",
+      body: JSON.stringify(examData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.erroe || "Errore durante la modifica");
+    }
+    dispatch(addNewExamSuccess(data.message));
+    dispatch(resetExamState());
+    dispatch(fetchProtectedResource());
+  } catch (error) {
+    dispatch(addNewExamFailure(error.message));
+  }
+};
+export const DeleteExam = (examData) => async (dispatch) => {
+  const token = localStorage.getItem("authToken");
+  try {
+    const response = await fetch("http://localhost:3001/exam/delete", {
+      method: "DELETE",
+      body: JSON.stringify(examData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Errore durante la cancellazione");
+    }
+
+    dispatch(resetExamState());
+    dispatch(fetchProtectedResource());
+  } catch (error) {
+    dispatch(addNewExamFailure(error.message));
+  }
+};

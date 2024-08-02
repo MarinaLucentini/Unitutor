@@ -124,7 +124,7 @@ const ProfilePage = () => {
                               {courseStudentCard.courseList.map((course) => (
                                 <Link
                                   to={`/course/${courseStudentCard.id}`}
-                                  className="list-group-item list-group-item-info list-group-item-action  my-3 "
+                                  className="list-group-item list-group-item-info list-group-item-action  "
                                   key={course.id}
                                 >
                                   {course.name}

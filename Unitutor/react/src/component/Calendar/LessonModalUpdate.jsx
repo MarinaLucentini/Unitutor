@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { UpdateLesson } from "../../redux/actions/lesson";
 import { Button, Form, Modal } from "react-bootstrap";
 
 const LessonModalUpdate = ({ show, handleClose, id, subjectName }) => {
-  const { loading, content } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     subjectName: subjectName,
