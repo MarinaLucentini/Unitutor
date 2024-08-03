@@ -9,6 +9,7 @@ import ProfilePage from "./component/Profile/ProfilePage";
 import CoursePage from "./component/Course/CoursePage";
 import SubjectPage from "./component/Subject/SubjectPage";
 import CaledarPage from "./component/Calendar/CalendarPage";
+import TransciptionPage from "./component/Transcription/TranscriptionPage";
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
         <Route path="/course/:id" element={<CoursePage />} />
         <Route path="/subject/:id" element={<SubjectPage />} />
         <Route path="/calendarPage" element={<CaledarPage />} />
+        <Route path="/transcription" element={<TransciptionPage />} />
       </Routes>
       <MyFooter />
     </BrowserRouter>

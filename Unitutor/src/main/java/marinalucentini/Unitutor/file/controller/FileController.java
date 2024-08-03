@@ -36,8 +36,8 @@ public class FileController {
         return fileService.saveFileAudio(student.getId(), subjectId, audio);
     }
 // processare file audio
-    @PostMapping("/{subjectId}/upload")
-    public ResponseEntity<String> uploadAudio(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Student student, @PathVariable UUID subjectId) {
+    @PostMapping("/{subjectId}/transcription")
+    public ResponseEntity<String> transcriptionAudio(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Student student, @PathVariable UUID subjectId) {
         try {
 
             Path tempDir = Files.createTempDirectory("uploaded-audio");

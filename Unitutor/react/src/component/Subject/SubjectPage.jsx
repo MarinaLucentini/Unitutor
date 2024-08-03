@@ -11,6 +11,7 @@ import SubjectModalDelete from "./SubjectModalDelete";
 import ProfessorSection from "../Professor/ProfessorSection";
 
 import LessonAndExamSection from "../Lesson and Exam/LessonAndExamSection";
+import TranscriptionSection from "../Transcription/TranscriptionSection";
 
 const SubjectPage = () => {
   const { id } = useParams();
@@ -112,6 +113,11 @@ const SubjectPage = () => {
           <Row className="my-5">
             <Col>
               <LessonAndExamSection subject={subject} />
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <TranscriptionSection subject={subject} />
             </Col>
           </Row>
         </Container>

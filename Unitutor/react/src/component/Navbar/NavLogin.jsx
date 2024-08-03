@@ -53,6 +53,9 @@ const NavLogin = ({ username, image, courses }) => {
               <NavLink to={"/calendarPage"} className={"nav-link"}>
                 Calendario
               </NavLink>
+              <NavLink to={"/transcription"} className={"nav-link"}>
+                Appunti
+              </NavLink>
             </Nav>
           </Navbar.Collapse>
           <Nav.Item className="d-none d-md-flex align-items-center">

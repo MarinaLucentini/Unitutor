@@ -5,27 +5,18 @@ import { useSelector } from "react-redux";
 import ProfileImageModal from "./ProfileImageModal";
 import ProfileCourseModal from "./ProfileCourseModal";
 import { Link } from "react-router-dom";
-import LessonModalAdd from "../Calendar/LessonModalAdd";
-import ExamModalAdd from "../Calendar/ExamModalAdd";
 
 const ProfilePage = () => {
   const { loading, content } = useSelector((state) => state.authentication);
   const [showModalImage, setShowModalImage] = useState(false);
   const [showModalCourse, setShowModalCourse] = useState(false);
   const [lessonsAndExam, setLessonsAndExam] = useState({ lessons: [], exams: [] });
-  const [showModalLesson, setShowModalLesson] = useState(false);
-
-  const handleCloseModalLesson = () => setShowModalLesson(false);
-  const handleShowModalLesson = () => setShowModalLesson(true);
 
   const handleCloseModalImage = () => setShowModalImage(false);
   const handleShowModalImage = () => setShowModalImage(true);
   const handleCloseModalCourse = () => setShowModalCourse(false);
   const handleShowModalCourse = () => setShowModalCourse(true);
-  const [showModalExam, setShowModalExam] = useState(false);
 
-  const handleCloseModalExam = () => setShowModalExam(false);
-  const handleShowModalExam = () => setShowModalExam(true);
   const fetchLessons = async (selectedDate) => {
     const token = localStorage.getItem("authToken");
     const formattedDate = selectedDate.toISOString().split("T")[0];
@@ -160,8 +151,6 @@ const ProfilePage = () => {
         </Row>
         <Row>
           <Col>
-            <LessonModalAdd show={showModalLesson} handleClose={handleCloseModalLesson} date={new Date()} />
-            <ExamModalAdd show={showModalExam} handleClose={handleCloseModalExam} date={new Date()} />
             <ListGroup className="align-items-center">
               {lessonsAndExam.lessons.length > 0 ? (
                 <>
@@ -189,28 +178,12 @@ const ProfilePage = () => {
                       Esame di {lesson.subjectName} alle {formatTime(lesson.dataAndTime)}
                     </ListGroup.Item>
                   ))}
-                  <div className="d-flex align-items-center">
-                    <Button variant="secondary" size="sm" className="m-3" onClick={handleShowModalLesson}>
-                      Clicca qui per aggiungere una lezione
-                    </Button>
-                    <Button variant="primary" size="sm" onClick={handleShowModalExam}>
-                      Clicca qui per aggiungere un esame
-                    </Button>
-                  </div>
                 </>
               ) : (
                 <>
                   <ListGroup.Item variant="info" className="w-75">
                     Nessun esame per oggi
                   </ListGroup.Item>
-                  <div className="d-flex align-items-center">
-                    <Button variant="secondary" size="sm" className="m-3" onClick={handleShowModalLesson}>
-                      Clicca qui per aggiungere una lezione
-                    </Button>
-                    <Button variant="primary" size="sm" onClick={handleShowModalExam}>
-                      Clicca qui per aggiungere un esame
-                    </Button>
-                  </div>
                 </>
               )}
             </ListGroup>

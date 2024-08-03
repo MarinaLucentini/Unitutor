@@ -30,6 +30,7 @@ public class Transcription {
     private LocalDateTime timestamp;
 @OneToMany(mappedBy = "transcription", fetch = FetchType.EAGER)
 private List<Keyword> keywordList = new ArrayList<>();
+
     public Transcription(Subject subject, String text) {
         this.subject = subject;
         this.text = text;

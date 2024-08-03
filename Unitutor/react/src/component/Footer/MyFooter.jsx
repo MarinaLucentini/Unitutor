@@ -25,7 +25,7 @@ const MyFooter = () => {
             </Col>
             <Col md={3} lg={2} className="text-center">
               <h5 className="mb-2 text-primary">Useful Links</h5>
-              <p className="mb-1">Your Account</p>
+              <p className="mb-1">Il tuo profilo</p>
               <p className="mb-1">Help</p>
               <p className="mb-1">Privacy Policy</p>
               <p className="mb-1">Terms of Service</p>
