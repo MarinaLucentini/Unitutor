@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Card } from "react-bootstrap";
+import { Button, Col, Container, Row } from "react-bootstrap";
 import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 
@@ -8,6 +8,8 @@ const TrascriptionDetails = () => {
   const { content } = useSelector((state) => state.authentication);
 
   const [transcription, setTranscription] = useState(null);
+  const [subjectName, setSubjectName] = useState(null);
+  const [highlight, setHighlight] = useState(true);
   useEffect(() => {
     if (content && content.studentCard) {
       content.studentCard.courseStudentCards.forEach((card) => {
@@ -15,6 +17,7 @@ const TrascriptionDetails = () => {
           const foundTranscription = subject.transcriptions.find((trans) => trans.id === id);
           if (foundTranscription) {
             setTranscription(foundTranscription);
+            setSubjectName(subject.name);
           }
         });
       });
@@ -42,7 +45,7 @@ const TrascriptionDetails = () => {
     const regex = new RegExp(`\\b(${keywordArray.join("|")})\\b`, "gi");
     return text.split(regex).map((part, index) =>
       typeof part === "string" && keywordArray.includes(part.toLowerCase()) ? (
-        <mark key={index} className="highlight-keyword">
+        <mark key={index} className={highlight ? "highlight-keyword" : "highlight-keyword-none"}>
           {part}
         </mark>
       ) : (
@@ -50,13 +53,33 @@ const TrascriptionDetails = () => {
       )
     );
   };
-
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+  const handleHighlight = () => {
+    setHighlight(!highlight);
+  };
   return (
     <>
-      <Card body>
-        <h3>Transcription Details</h3>
-        <div>{highlightKeywords(transcription.text, transcription.keywordList)}</div>
-      </Card>
+      <Container className="my-3 bg-secondary bg-opacity-10 rounded-4 p-3">
+        <Row className="flex-column">
+          <Col>
+            <h3>
+              Trascrizione del {formatDate(transcription.timestamp)} di {subjectName}{" "}
+            </h3>
+            <div>{highlightKeywords(transcription.text, transcription.keywordList)}</div>
+          </Col>
+          <Col>
+            <Button variant="primary" onClick={handleHighlight}>
+              {highlight ? "Non evidenziare" : "Evidenzia"}
+            </Button>
+          </Col>
+        </Row>
+      </Container>
     </>
   );
 };

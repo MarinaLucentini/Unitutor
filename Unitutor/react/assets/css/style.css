@@ -11831,4 +11831,9 @@ textarea.form-control-lg {
   background-color: transparent;
   -webkit-text-decoration: underline wavy #7D23D7;
           text-decoration: underline wavy #7D23D7;
+}
+
+.highlight-keyword-none {
+  background-color: transparent;
+  text-decoration: none;
 }/*# sourceMappingURL=style.css.map */
