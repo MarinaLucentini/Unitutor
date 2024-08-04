@@ -15,7 +15,7 @@ const FormLogin = () => {
   });
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.authentication);
-  const { loading, error, errorMsg, success } = userLogin;
+  const { loading, error, success } = userLogin;
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -54,7 +54,7 @@ const FormLogin = () => {
 
           <Form onSubmit={handleSubmit}>
             {loading && <Spinner animation="border" />}
-            {error && <Alert variant="danger">{errorMsg}</Alert>}
+            {error && <Alert variant="danger">Qualcosa è andato storto riprova</Alert>}
             {success && <Alert variant="success">Login effettuato! Verrai automaticamente indirizzato alla pagina del profilo</Alert>}
             <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formEmail">
               <Form.Label>Email</Form.Label>

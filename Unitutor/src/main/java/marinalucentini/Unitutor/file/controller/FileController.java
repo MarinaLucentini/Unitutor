@@ -20,6 +20,8 @@ import java.nio.file.Files;
 
 
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -37,20 +39,22 @@ public class FileController {
     }
 // processare file audio
     @PostMapping("/{subjectId}/transcription")
-    public ResponseEntity<String> transcriptionAudio(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Student student, @PathVariable UUID subjectId) {
-        try {
+    public ResponseEntity<Object> transcriptionAudio(@RequestParam("file") MultipartFile file, @AuthenticationPrincipal Student student, @PathVariable UUID subjectId) {
 
+        try {
             Path tempDir = Files.createTempDirectory("uploaded-audio");
             File tempFile = new File(tempDir.toFile(), file.getOriginalFilename());
             file.transferTo(tempFile);
 
-
             String response = audioProcessingService.processAndSaveAudio(student.getId(), subjectId, tempFile.getAbsolutePath());
-
 
             Files.deleteIfExists(tempFile.toPath());
 
-            return ResponseEntity.ok(response);
+
+            Map<String, String> jsonResponse = new HashMap<>();
+            jsonResponse.put("message", response);
+
+            return ResponseEntity.ok(jsonResponse);
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(500).body("Error during audio transcription: " + e.getMessage());

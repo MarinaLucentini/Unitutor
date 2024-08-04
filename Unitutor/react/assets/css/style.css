@@ -11825,4 +11825,10 @@ textarea.form-control-lg {
 .form-check-input {
   float: none;
   margin-right: 1em;
+}
+
+.highlight-keyword {
+  background-color: transparent;
+  -webkit-text-decoration: underline wavy #7D23D7;
+          text-decoration: underline wavy #7D23D7;
 }/*# sourceMappingURL=style.css.map */

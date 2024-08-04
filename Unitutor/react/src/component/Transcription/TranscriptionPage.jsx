@@ -1,10 +1,11 @@
 import { useState } from "react";
-import { Button, Col, Container, Form, Row, Spinner } from "react-bootstrap";
+import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { transcriptionNewFile } from "../../redux/actions/transcription";
 
 const TransciptionPage = () => {
-  const { loading, content } = useSelector((state) => state.authentication);
+  const { content } = useSelector((state) => state.authentication);
+  const { loading, success } = useSelector((state) => state.transcriprion);
   const [selectedFile, setSelectedFile] = useState(null);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
@@ -46,14 +47,14 @@ const TransciptionPage = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(selectedFile, formData);
+
     dispatch(transcriptionNewFile(selectedFile, formData.subjectId));
   };
 
   return (
     <>
       <Container className="my-3 bg-secondary bg-opacity-10 rounded-4 p-3">
-        <Row className="flex-column">
+        <Row className="flex-column align-items-center">
           <Col>
             <h5 className="text-uppercase">Appunti</h5>
             <p>
@@ -61,13 +62,13 @@ const TransciptionPage = () => {
               materia selezionata.
             </p>
           </Col>
-          <Col>
+          <Col xs={6}>
             <Form onSubmit={handleSubmit}>
               <Row>
                 <Col>
                   <Form.Group>
                     <Form.Label>Seleziona il corso</Form.Label>
-                    {loading && <Spinner />}
+
                     <Form.Select onChange={handleCourseChange} name="courseName" size="sm">
                       <option>Apri la tendina per selezionare</option>
                       {allCourses.map((singleCourse) => (
@@ -81,7 +82,7 @@ const TransciptionPage = () => {
                 <Col>
                   <Form.Group>
                     <Form.Label>Seleziona la materia</Form.Label>
-                    {loading && <Spinner />}
+
                     <Form.Select value={formData.subjectId} onChange={handleSubjectChange} name="subjectId" size="sm">
                       <option>Apri la tendina per selezionare</option>
                       {filteredSubjects.map((singleSubject) => (
@@ -93,13 +94,15 @@ const TransciptionPage = () => {
                   </Form.Group>
                 </Col>
               </Row>
-              <Form.Control type="file" onChange={handleFileChange} />
+              <Form.Control type="file" onChange={handleFileChange} className="my-3" />
               <Button variant="primary" type="submit">
                 Sbobbina il file
               </Button>
             </Form>
           </Col>
         </Row>
+        {loading && <Alert variant="primary">Stiamo sbobinnando il file un attimo di attesa....</Alert>}
+        {success && <Alert variant="success">Trascrizione avvenuta con successo vai alla pagina della materia per visualizzarla</Alert>}
       </Container>
     </>
   );

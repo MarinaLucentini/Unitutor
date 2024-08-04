@@ -18,7 +18,7 @@ const MyFooter = () => {
             <Col className="text-center" xs={3}>
               <h5 className="mb-2 text-primary">Features</h5>
               <p className="mb-1">Gestione delle lezioni e degli esami</p>
-              <p className="mb-1">Registrazione delle lezioni</p>
+
               <p className="mb-1">Sbobbinature automatiche</p>
               <p className="mb-1">Mappe concettuali</p>
               <p className="mb-1">Community sempre attiva</p>
