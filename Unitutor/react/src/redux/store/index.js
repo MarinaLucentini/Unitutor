@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
   professor: ProfessorReduce,
   lesson: LessonReduce,
   exam: ExamReduce,
-  transcriprion: TranscriptionReduce,
+  transcription: TranscriptionReduce,
 });
 
 export const store = configureStore({

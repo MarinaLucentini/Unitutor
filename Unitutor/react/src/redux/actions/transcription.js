@@ -76,3 +76,52 @@ export const transcriprionGetFile = (id) => async (dispatch) => {
     dispatch(TranscriptionFailure(error.message));
   }
 };
+export const transcriptionUpdateFunction = (formData, subjectId, transcriptionId) => async (dispatch) => {
+  const token = localStorage.getItem("authToken");
+  dispatch(TranscriptionRequest());
+  try {
+    const response = await fetch(`http://localhost:3001/files/${subjectId}/${transcriptionId}`, {
+      method: "PATCH",
+      body: JSON.stringify(formData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Errore durante la modifica");
+    }
+    dispatch(TranscriptionSuccess(data.message));
+    dispatch(fetchProtectedResource());
+    setTimeout(() => {
+      dispatch(resetTranscription());
+    }, 3000);
+  } catch (error) {
+    dispatch(TranscriptionFailure(error.message));
+  }
+};
+export const transcriptionDeleteFunction = (subjectId, transcriptionId) => async (dispatch) => {
+  const token = localStorage.getItem("authToken");
+  dispatch(TranscriptionRequest());
+  try {
+    const response = await fetch(`http://localhost:3001/files/delete/transcription/${subjectId}/${transcriptionId}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Errore durante la cancellazione");
+    }
+    dispatch(TranscriptionSuccess(data.message));
+    dispatch(fetchProtectedResource());
+    setTimeout(() => {
+      dispatch(resetTranscription());
+    }, 3000);
+  } catch (error) {
+    dispatch(TranscriptionFailure(error.message));
+  }
+};

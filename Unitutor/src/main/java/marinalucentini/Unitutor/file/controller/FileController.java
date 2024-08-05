@@ -1,6 +1,7 @@
 package marinalucentini.Unitutor.file.controller;
 
 
+import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.file.payload.TranscriptionFilePayload;
 import marinalucentini.Unitutor.file.payload.TranscriptionFileUploadPayload;
 import marinalucentini.Unitutor.file.services.AudioProcessingService;
@@ -9,6 +10,7 @@ import marinalucentini.Unitutor.file.services.SpeechFlowService;
 import marinalucentini.Unitutor.student.Student;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ import java.nio.file.Files;
 
 
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -62,18 +65,41 @@ public class FileController {
     }
     // modifica file di testo estratto
     @PatchMapping("/{subjectId}/{transcriptionId}")
-    public String updateTranscription (@AuthenticationPrincipal Student student, @PathVariable UUID subjectId, @PathVariable UUID transcriptionId, @RequestBody TranscriptionFileUploadPayload transcriptionFilePayload){
-return audioProcessingService.updateProcessAudio(student.getId(), subjectId, transcriptionId, transcriptionFilePayload.text());
+    public ResponseEntity<Object> updateTranscription (@AuthenticationPrincipal Student student, @PathVariable UUID subjectId, @PathVariable UUID transcriptionId, @RequestBody TranscriptionFileUploadPayload transcriptionFilePayload){
+        try {
+            String response = audioProcessingService.updateProcessAudio(student.getId(), subjectId, transcriptionId, transcriptionFilePayload.text());
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+
+
+
     }
     // cancellazione file audio
     @DeleteMapping("delete/file/audio/{subjectId}/{fileId}")
-    public String deleteFileAudio(@AuthenticationPrincipal Student student, @PathVariable UUID subjectId, @PathVariable UUID fileId){
-        return fileService.deleteFileAudio(student.getId(), subjectId, fileId);
+    public ResponseEntity<Object> deleteFileAudio(@AuthenticationPrincipal Student student, @PathVariable UUID subjectId, @PathVariable UUID fileId){
+        try {
+            String response =  fileService.deleteFileAudio(student.getId(), subjectId, fileId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+
+
+
     }
     // cancellazione file di testo
     @DeleteMapping("delete/transcription/{subjectId}/{transcriptionId}")
-    public String deleteTranscription(@AuthenticationPrincipal Student student, @PathVariable UUID subjectId, @PathVariable UUID transcriptionId){
-        return audioProcessingService.findByIdAndDelete(student.getId(), subjectId, transcriptionId);
+    public ResponseEntity<Object> deleteTranscription(@AuthenticationPrincipal Student student, @PathVariable UUID subjectId, @PathVariable UUID transcriptionId){
+
+        try {
+            String response =  audioProcessingService.findByIdAndDelete(student.getId(), subjectId, transcriptionId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+
     }
     // visualizzazione di tutti i file trascritti per materia
 @GetMapping("/{subjectId}/transcription")

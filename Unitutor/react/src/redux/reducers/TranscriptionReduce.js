@@ -1,4 +1,4 @@
-import { RESET_TRANSCRIPTION, TRANSCRIPTION_FAILURE, TRANSCRIPTION_REQUEST, TRANSCRIPTION_SUCCESS } from "../actions/transcription";
+import { RESET_TRANSCRIPTION, TRANSCRIPTION_FAILURE, TRANSCRIPTION_GET, TRANSCRIPTION_REQUEST, TRANSCRIPTION_SUCCESS } from "../actions/transcription";
 
 const initialState = {
   loading: false,
@@ -12,12 +12,15 @@ export const TranscriptionReduce = (state = initialState, action) => {
       return {
         ...state,
         loading: true,
+        success: false,
       };
     case TRANSCRIPTION_SUCCESS:
       return {
         ...state,
         loading: false,
         message: action.payload,
+        success: true,
+
         error: "",
       };
     case TRANSCRIPTION_FAILURE:
@@ -25,11 +28,19 @@ export const TranscriptionReduce = (state = initialState, action) => {
         ...state,
         loading: false,
         message: "",
+        success: false,
+
         error: action.payload,
       };
     case RESET_TRANSCRIPTION:
       return initialState;
-
+    case TRANSCRIPTION_GET:
+      return {
+        ...state,
+        loading: false,
+        content: action.payload,
+        error: "",
+      };
     default:
       return state;
   }
