@@ -8,6 +8,7 @@ import ProfessorReduce from "../reducers/ProfessorReduce";
 import LessonReduce from "../reducers/LessonReduce";
 import ExamReduce from "../reducers/ExamReduce";
 import { TranscriptionReduce } from "../reducers/TranscriptionReduce";
+import PostReduce from "../reducers/PostReduce";
 
 const rootReducer = combineReducers({
   student: StudentReduce,
@@ -19,6 +20,7 @@ const rootReducer = combineReducers({
   lesson: LessonReduce,
   exam: ExamReduce,
   transcription: TranscriptionReduce,
+  post: PostReduce,
 });
 
 export const store = configureStore({

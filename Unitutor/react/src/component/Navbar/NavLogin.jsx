@@ -56,6 +56,9 @@ const NavLogin = ({ username, image, courses }) => {
               <NavLink to={"/transcription"} className={"nav-link"}>
                 Appunti
               </NavLink>
+              <NavLink className={"nav-link"} to={"/community"}>
+                Community
+              </NavLink>
             </Nav>
           </Navbar.Collapse>
           <Nav.Item className="d-none d-md-flex align-items-center">

@@ -11,6 +11,7 @@ import SubjectPage from "./component/Subject/SubjectPage";
 import CaledarPage from "./component/Calendar/CalendarPage";
 import TransciptionPage from "./component/Transcription/TranscriptionPage";
 import TrascriptionDetails from "./component/Transcription/TranscriptionDetails";
+import CommunityHomePage from "./component/Post/CommunityHomePage";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/calendarPage" element={<CaledarPage />} />
         <Route path="/transcription" element={<TransciptionPage />} />
         <Route path="/transcription/:id" element={<TrascriptionDetails />} />
+        <Route path="/community" element={<CommunityHomePage />} />
       </Routes>
       <MyFooter />
     </BrowserRouter>
