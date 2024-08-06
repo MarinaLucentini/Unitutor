@@ -31,11 +31,12 @@ public class CommentService {
     PostRepository postRepository;
     @Autowired
     StudentRepository studentRepository;
+    @Autowired
+    PostService postService;
 // creazione di un commento
     public String addNewComment(UUID userId, UUID postId, NewCommentPayload body){
         Student student = studentService.findById(userId);
-        Post post = student.getPostList().stream().filter(post1 -> post1.getId().equals(postId))
-                .findFirst().orElseThrow(()-> new NotFoundException("Il post non è stato trovato"));
+        Post post = postService.findById(postId);
         Comment comment = new Comment(body.content());
         commentRepository.save(comment);
         comment.setStudent(student);
