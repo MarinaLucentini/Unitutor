@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotEmpty;
 
 import java.time.LocalDate;
 
-public record StudentUploadUsernamePayload(
-        @NotEmpty (message = "Il campo username è obbligatorio")
+public record StudentUploadPayload(
+
         String username,
         String name,
         String surname,

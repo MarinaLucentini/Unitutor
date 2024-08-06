@@ -27,15 +27,6 @@ const MyNav = () => {
                   {" "}
                   Home
                 </NavLink>
-
-                <NavLink to={"/aboutUs"} className={"nav-link"}>
-                  {" "}
-                  About
-                </NavLink>
-                <NavLink to={"/contactUs"} className={"nav-link"}>
-                  {" "}
-                  Contact
-                </NavLink>
               </Nav.Item>
 
               <Nav.Item>

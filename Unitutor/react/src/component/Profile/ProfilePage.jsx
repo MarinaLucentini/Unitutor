@@ -69,6 +69,7 @@ const ProfilePage = () => {
                 <Container className="my-3">
                   <Row className="my-3">
                     <h3>Carta dello studente</h3>
+
                     <Col className="d-flex align-items-end justify-content-evenly mx-3 flex-column flex-lg-row">
                       <div className="profile-shadow rounded-4">
                         <img

@@ -5,7 +5,7 @@ import marinalucentini.Unitutor.student.Student;
 
 import marinalucentini.Unitutor.student.payload.StudentResponse;
 import marinalucentini.Unitutor.student.payload.StudentUploadPasswordPayload;
-import marinalucentini.Unitutor.student.payload.StudentUploadUsernamePayload;
+import marinalucentini.Unitutor.student.payload.StudentUploadPayload;
 import marinalucentini.Unitutor.student.services.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -51,17 +51,31 @@ public class StudentProfileController {
 
 }
     // 3 modificare username
-    @PatchMapping("/username")
-    public String uploadUsername(@AuthenticationPrincipal Student currentAutheticatedUser, @RequestBody @Validated StudentUploadUsernamePayload studentUploadUsernamePayload, BindingResult bindingResult){
+    @PatchMapping("/update")
+    public ResponseEntity<Object> uploadUsername(@AuthenticationPrincipal Student currentAutheticatedUser, @RequestBody @Validated StudentUploadPayload studentUploadUsernamePayload, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }
-        return studentService.uploadUsername(currentAutheticatedUser.getId(), studentUploadUsernamePayload.username());
+        try {
+            String response = studentService.uploadProfile(currentAutheticatedUser.getId(), studentUploadUsernamePayload);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+
     }
+
+
     // 4 cancellare profilo
 @DeleteMapping
-    public String deleteUser(@AuthenticationPrincipal Student student){
-        return studentService.findByIdAndDelete(student.getId());
+    public ResponseEntity<Object> deleteUser(@AuthenticationPrincipal Student student){
+    try {
+        String response = studentService.findByIdAndDelete(student.getId());
+        return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+    } catch (BadRequestException e) {
+        return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+    }
+
 }
 
 

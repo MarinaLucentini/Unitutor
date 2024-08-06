@@ -69,7 +69,11 @@ const NavLogin = ({ username, image, courses }) => {
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
-                <Dropdown.Item>Settings</Dropdown.Item>
+                <Dropdown.Item>
+                  <Link to={"/settingsPage"} style={{ textDecoration: "none", color: "inherit" }}>
+                    Settings
+                  </Link>
+                </Dropdown.Item>
                 <Dropdown.Item onClick={handleLogout}>Log-out</Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>

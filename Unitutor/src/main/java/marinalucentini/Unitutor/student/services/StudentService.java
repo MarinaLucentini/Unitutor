@@ -8,6 +8,7 @@ import marinalucentini.Unitutor.role.Role;
 import marinalucentini.Unitutor.role.repository.RoleRepository;
 import marinalucentini.Unitutor.student.Student;
 import marinalucentini.Unitutor.student.payload.StudentPayload;
+import marinalucentini.Unitutor.student.payload.StudentUploadPayload;
 import marinalucentini.Unitutor.student.repositories.StudentRepository;
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
 import marinalucentini.Unitutor.student.studentCard.services.StudentCardService;
@@ -78,11 +79,26 @@ StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
         studentRepository.save(student);
         return "Immagine del profilo aggiornata correttamente!";
     }
-    public String uploadUsername(UUID id, String username){
+    public String uploadProfile(UUID id, StudentUploadPayload body){
         Student student = findById(id);
-        student.setUsername(username);
+        if(body.username() != null){
+
+        student.setUsername(body.username());
+        }
+        if(body.dateOfBirth() != null){
+            student.setDateOfBirth(body.dateOfBirth());
+        }
+        if(body.email()!= null){
+            student.setEmail(body.email());
+        }
+        if(body.name()!= null){
+            student.setName(body.name());
+        }
+        if(body.surname() != null){
+            student.setSurname(body.surname());
+        }
         studentRepository.save(student);
-        return "Lo username dell'utente è stato correttamente modificato in: " + username;
+        return "Lo studente è stato correttamente modificato!";
     }
     public String findByIdAndDelete(UUID id){
         Student student = findById(id);
