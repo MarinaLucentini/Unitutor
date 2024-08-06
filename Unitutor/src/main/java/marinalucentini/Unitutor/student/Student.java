@@ -42,13 +42,13 @@ private String urlAvatar;
         inverseJoinColumns = @JoinColumn(name = "role_id", nullable = false)
 )
 private List<Role> roles;
-@OneToOne
+@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private StudentCard studentCard;
 
-@OneToMany (mappedBy = "student")
+@OneToMany (mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
 @JsonIgnore
     private List<Post> postList;
-@OneToMany (mappedBy = "student")
+@OneToMany (mappedBy = "student",  cascade = CascadeType.ALL, orphanRemoval = true)
 @JsonIgnore
     private List<Comment> commentList;
 

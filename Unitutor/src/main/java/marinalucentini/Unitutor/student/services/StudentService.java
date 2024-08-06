@@ -2,6 +2,7 @@ package marinalucentini.Unitutor.student.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import marinalucentini.Unitutor.course.repositories.CourseStudentCardRepository;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.exception.NotFoundException;
 import marinalucentini.Unitutor.role.Role;
@@ -11,6 +12,7 @@ import marinalucentini.Unitutor.student.payload.StudentPayload;
 import marinalucentini.Unitutor.student.payload.StudentUploadPayload;
 import marinalucentini.Unitutor.student.repositories.StudentRepository;
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
+import marinalucentini.Unitutor.student.studentCard.repository.StudentCardRepository;
 import marinalucentini.Unitutor.student.studentCard.services.StudentCardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,6 +21,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -35,6 +38,10 @@ public class StudentService {
    private StudentCardService studentCardService;
     @Autowired
     private Cloudinary cloudinaryUploader;
+    @Autowired
+    private StudentCardRepository studentCardRepository;
+    @Autowired
+    private CourseStudentCardRepository courseStudentCardRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -100,8 +107,13 @@ StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
         studentRepository.save(student);
         return "Lo studente è stato correttamente modificato!";
     }
+    @Transactional
     public String findByIdAndDelete(UUID id){
         Student student = findById(id);
+       StudentCard studentCard = studentCardService.findById(student.getStudentCard().getId());
+        courseStudentCardRepository.deleteByStudentCardId(studentCard.getId());
+       studentCardRepository.delete(studentCard);
+
         studentRepository.delete(student);
         return "L'utente è stato cancellato correttamente";
     }

@@ -117,6 +117,29 @@ export const updateProfile = (userData) => async (dispatch) => {
     }
 
     dispatch(registerUserSuccess(data.message));
+    dispatch(fetchProtectedResource());
+  } catch (error) {
+    dispatch(registerUserFailure(error.message));
+  }
+};
+
+export const deleteProfile = () => async (dispatch) => {
+  const token = localStorage.getItem("authToken");
+  dispatch(registerUserRequest());
+  try {
+    const response = await fetch("http://localhost:3001/profile/delete", {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Errore durante la registrazione");
+    }
+
+    dispatch(registerUserSuccess(data.message));
   } catch (error) {
     dispatch(registerUserFailure(error.message));
   }

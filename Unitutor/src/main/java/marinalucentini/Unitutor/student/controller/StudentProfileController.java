@@ -67,7 +67,7 @@ public class StudentProfileController {
 
 
     // 4 cancellare profilo
-@DeleteMapping
+@DeleteMapping("/delete")
     public ResponseEntity<Object> deleteUser(@AuthenticationPrincipal Student student){
     try {
         String response = studentService.findByIdAndDelete(student.getId());

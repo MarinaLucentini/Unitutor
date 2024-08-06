@@ -2,10 +2,15 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateProfile } from "../../redux/actions";
 import { Button, Col, Container, Form, Row } from "react-bootstrap";
+import { BsXLg } from "react-icons/bs";
+import ModalDeleteProfile from "./ModalDeleteProfile";
 
 const ProfileSettingPage = () => {
   const { content } = useSelector((state) => state.authentication);
   const dispatch = useDispatch();
+  const [showModalDelete, setShowModalDelete] = useState(null);
+  const handleCloseModaleDelete = () => setShowModalDelete(false);
+  const handleShowModalDelete = () => setShowModalDelete(true);
   const [formData, setFormData] = useState({
     username: "",
     name: "",
@@ -38,9 +43,12 @@ const ProfileSettingPage = () => {
   };
   return (
     <>
-      <Container>
+      <Container className="my-3 bg-secondary  bg-opacity-10 rounded-4 p-3">
         <Row>
           <Col>
+            <Button variant="btn" size="sm">
+              <BsXLg className="text-secondary" size={44} onClick={handleShowModalDelete} />
+            </Button>
             <Form onSubmit={handleSubmit}>
               <Row>
                 <Col>
@@ -80,6 +88,7 @@ const ProfileSettingPage = () => {
                 Submit
               </Button>
             </Form>
+            <ModalDeleteProfile show={showModalDelete} handleClose={handleCloseModaleDelete} />
           </Col>
         </Row>
       </Container>
