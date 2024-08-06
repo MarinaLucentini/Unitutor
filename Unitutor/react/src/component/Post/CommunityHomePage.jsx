@@ -7,6 +7,8 @@ import PostUpdateModal from "./PostUpdateModal";
 import PostDeleteModal from "./PostDeleteModal";
 import { FaPlus } from "react-icons/fa";
 import AddCommentModal from "./AddCommentModal";
+import UpdateCommentModal from "./UpdateCommentModal";
+import DeleteCommentModal from "./DeleteCommentModal";
 
 const CommunityHomePage = () => {
   const dispatch = useDispatch();
@@ -16,6 +18,7 @@ const CommunityHomePage = () => {
   const [postToDelete, setPostToDelete] = useState(null);
 
   const [openComments, setOpenComments] = useState(null);
+  const [commentToUpdateAndDelete, setCommentToUpdateAndDelete] = useState(null);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -51,6 +54,18 @@ const CommunityHomePage = () => {
   const handleShowModalAddComment = (post) => {
     setShowModalAddComment(true);
     setPostToDelete(post.idPost);
+  };
+  const [showModalUpdateModalComment, setShowModalUpdateModalComment] = useState(false);
+  const handleCloseModalUpdateModalComment = () => setShowModalUpdateModalComment(false);
+  const handleShowModalUpdateModalComment = (comment) => {
+    setShowModalUpdateModalComment(true);
+    setCommentToUpdateAndDelete(comment.commentId);
+  };
+  const [showModalDeleteModalComment, setShowModalDeleteModalComment] = useState(false);
+  const handleCloseModalDeleteModalComment = () => setShowModalDeleteModalComment(false);
+  const handleShowModalDeleteModalComment = (comment) => {
+    setShowModalDeleteModalComment(true);
+    setCommentToUpdateAndDelete(comment.commentId);
   };
 
   const handleShowComments = (postId) => {
@@ -121,12 +136,19 @@ const CommunityHomePage = () => {
                         post.commentList.map((comment) => (
                           <Collapse in={openComments === post.idPost} key={comment.commentId} id={`comments-${post.idPost}`}>
                             <div>
-                              <Button variant="btn" size="sm">
-                                <BsFeather className="text-secondary" size={16} />
-                              </Button>
-                              <Button variant="btn" size="sm">
-                                <BsXLg className="text-secondary" size={16} />
-                              </Button>
+                              {comment.usernameAuthor === content.username ? (
+                                <>
+                                  <Button variant="btn" size="sm">
+                                    <BsFeather className="text-secondary" size={16} onClick={() => handleShowModalUpdateModalComment(comment)} />
+                                  </Button>
+                                  <Button variant="btn" size="sm">
+                                    <BsXLg className="text-secondary" size={16} onClick={() => handleShowModalDeleteModalComment(comment)} />
+                                  </Button>
+                                </>
+                              ) : (
+                                <></>
+                              )}
+
                               <h6> Autore: {comment.usernameAuthor} </h6>
                               <p>{comment.content}</p>
                             </div>
@@ -145,6 +167,8 @@ const CommunityHomePage = () => {
             <PostUpdateModal show={showModalUpdate} handleClose={handleCloseModalUpdate} post={postToUpdate} />
             <PostDeleteModal show={showModalDelete} handleClose={handleCloseModalDelete} postId={postToDelete} />
             <AddCommentModal show={showModalAddComment} handleClose={handleCloseModalAddComment} postId={postToDelete} />
+            <UpdateCommentModal show={showModalUpdateModalComment} handleClose={handleCloseModalUpdateModalComment} commentId={commentToUpdateAndDelete} />
+            <DeleteCommentModal show={showModalDeleteModalComment} handleClose={handleCloseModalDeleteModalComment} commentId={commentToUpdateAndDelete} />
           </Col>
         </Row>
       </Container>
