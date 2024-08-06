@@ -102,9 +102,8 @@ export const UpdatePost = (postData) => async (dispatch) => {
 export const DeletePost = (postId) => async (dispatch) => {
   const token = localStorage.getItem("authToken");
   try {
-    const response = await fetch(`http://localhost:3001/post/delete/${postId} `, {
+    const response = await fetch(`http://localhost:3001/post/delete/${postId}`, {
       method: "DELETE",
-
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,

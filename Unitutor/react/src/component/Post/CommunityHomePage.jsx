@@ -4,12 +4,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { AddNewPost, GetAllPost } from "../../redux/actions/post";
 import { BsFeather, BsXLg } from "react-icons/bs";
 import PostUpdateModal from "./PostUpdateModal";
+import PostDeleteModal from "./PostDeleteModal";
 
 const CommunityHomePage = () => {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.post);
   const { content } = useSelector((state) => state.authentication);
   const [postToUpdate, setPostToUpdate] = useState(null);
+  const [postToDelete, setPostToDelete] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -32,6 +34,12 @@ const CommunityHomePage = () => {
   const handleShowModalUpdate = (post) => {
     setShowModalUpdate(true);
     setPostToUpdate(post);
+  };
+  const [showModalDelete, setShowModalDelete] = useState(false);
+  const handleCloseModalDelete = () => setShowModalDelete(false);
+  const handleShowModalDelete = (post) => {
+    setShowModalDelete(true);
+    setPostToDelete(post.idPost);
   };
   useEffect(() => {
     dispatch(GetAllPost());
@@ -67,7 +75,7 @@ const CommunityHomePage = () => {
                           <BsFeather className="text-secondary" size={16} onClick={() => handleShowModalUpdate(post)} />
                         </Button>
                         <Button variant="btn" size="sm">
-                          <BsXLg className="text-secondary" size={16} />
+                          <BsXLg className="text-secondary" size={16} onClick={() => handleShowModalDelete(post)} />
                         </Button>
                       </>
                     ) : (
@@ -83,6 +91,7 @@ const CommunityHomePage = () => {
               <p>Nessun post disponibile.</p>
             )}
             <PostUpdateModal show={showModalUpdate} handleClose={handleCloseModalUpdate} post={postToUpdate} />
+            <PostDeleteModal show={showModalDelete} handleClose={handleCloseModalDelete} postId={postToDelete} />
           </Col>
         </Row>
       </Container>

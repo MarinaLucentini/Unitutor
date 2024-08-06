@@ -24,6 +24,18 @@ import java.util.UUID;
 public class PostController {
     @Autowired
     PostService postService;
+    // 3 cancella un post
+
+    @DeleteMapping("/delete/{postId}")
+    public ResponseEntity<Object> deletePost(@AuthenticationPrincipal Student student, @PathVariable UUID postId){
+        System.out.println("Received request to delete post with ID: " + postId);
+        try {
+            String response = postService.deletePost(student.getId(), postId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+    }
     // 1 aggiungi un post
 @PostMapping("/add")
     public ResponseEntity<Object> saveNewPost(@AuthenticationPrincipal Student student, @RequestBody @Validated NewPostPayload body, BindingResult bindingResult){
@@ -52,17 +64,7 @@ public class PostController {
         }
 
     }
-    // 3 cancella un post
-    @DeleteMapping("/delete/{postId}")
-    public ResponseEntity<Object> deletePost(@AuthenticationPrincipal Student student, @PathVariable UUID postId){
-        try {
-            String response = postService.deletePost(student.getId(), postId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
-        } catch (BadRequestException e) {
-            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
-        }
 
-    }
     // 4 visualizza tutti i post
     @GetMapping("/allPost")
     public Page<ResponsePostPayload> getAllPosts(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "id") String sortBy) {
