@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import { Button, Card, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { AddNewPost, GetAllPost } from "../../redux/actions/post";
+import { BsFeather, BsXLg } from "react-icons/bs";
+import PostUpdateModal from "./PostUpdateModal";
 
 const CommunityHomePage = () => {
   const dispatch = useDispatch();
   const { posts } = useSelector((state) => state.post);
+  const { content } = useSelector((state) => state.authentication);
+  const [postToUpdate, setPostToUpdate] = useState(null);
   const [formData, setFormData] = useState({
     title: "",
     content: "",
@@ -23,7 +27,12 @@ const CommunityHomePage = () => {
     e.preventDefault();
     dispatch(AddNewPost(formData));
   };
-
+  const [showModalUpdate, setShowModalUpdate] = useState(false);
+  const handleCloseModalUpdate = () => setShowModalUpdate(false);
+  const handleShowModalUpdate = (post) => {
+    setShowModalUpdate(true);
+    setPostToUpdate(post);
+  };
   useEffect(() => {
     dispatch(GetAllPost());
   }, [dispatch]);
@@ -52,6 +61,18 @@ const CommunityHomePage = () => {
               posts.content.map((post) => (
                 <Card key={post.idPost} className="my-3">
                   <Card.Body>
+                    {post.usernameAuthor === content.username ? (
+                      <>
+                        <Button variant="btn" size="sm">
+                          <BsFeather className="text-secondary" size={16} onClick={() => handleShowModalUpdate(post)} />
+                        </Button>
+                        <Button variant="btn" size="sm">
+                          <BsXLg className="text-secondary" size={16} />
+                        </Button>
+                      </>
+                    ) : (
+                      <></>
+                    )}
                     <strong>Autore:</strong> {post.usernameAuthor} <br />
                     <strong>Titolo:</strong> {post.title} <br />
                     <strong>Testo:</strong> {post.content}
@@ -61,6 +82,7 @@ const CommunityHomePage = () => {
             ) : (
               <p>Nessun post disponibile.</p>
             )}
+            <PostUpdateModal show={showModalUpdate} handleClose={handleCloseModalUpdate} post={postToUpdate} />
           </Col>
         </Row>
       </Container>

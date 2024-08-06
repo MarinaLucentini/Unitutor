@@ -43,6 +43,7 @@ export const AddNewPost = (postData) => async (dispatch) => {
     }
 
     dispatch(addNewPostSuccess(data.message));
+    dispatch(GetAllPost());
     dispatch(resetPostState());
     dispatch(fetchProtectedResource());
   } catch (error) {
@@ -66,6 +67,55 @@ export const GetAllPost = () => async (dispatch) => {
       throw new Error(data.error || "Errore durante la fetch");
     }
     dispatch(getAllPostSuccess(data));
+    dispatch(fetchProtectedResource());
+  } catch (error) {
+    dispatch(addNewPostFailure(error.message));
+  }
+};
+
+export const UpdatePost = (postData) => async (dispatch) => {
+  const token = localStorage.getItem("authToken");
+  dispatch(addNewPostRequest());
+  try {
+    const response = await fetch("http://localhost:3001/post/update", {
+      method: "PATCH",
+      body: JSON.stringify(postData),
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Errore durante la modifica");
+    }
+
+    dispatch(addNewPostSuccess(data.message));
+    dispatch(GetAllPost());
+    dispatch(resetPostState());
+    dispatch(fetchProtectedResource());
+  } catch (error) {
+    dispatch(addNewPostFailure(error.message));
+  }
+};
+
+export const DeletePost = (postId) => async (dispatch) => {
+  const token = localStorage.getItem("authToken");
+  try {
+    const response = await fetch(`http://localhost:3001/post/delete/${postId} `, {
+      method: "DELETE",
+
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      throw new Error(data.error || "Errore durante la cancellazione");
+    }
+    dispatch(GetAllPost());
+    dispatch(resetPostState());
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewPostFailure(error.message));
