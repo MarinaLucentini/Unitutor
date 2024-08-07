@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { Alert, Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { RESET_COURSE_STATE, UpdateCourse } from "../../redux/actions/course";
+import { resetCourseState, UpdateCourse } from "../../redux/actions/course";
 
 const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => {
   const dispatch = useDispatch();
   const { loading, success, content, error } = useSelector((state) => state.course);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [formData, setFormData] = useState({
     name: nome,
     graduationGrade: "",
@@ -23,7 +25,6 @@ const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => 
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(UpdateCourse(formData));
-    handleClose();
   };
   useEffect(() => {
     setFormData({
@@ -35,10 +36,25 @@ const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => 
     });
   }, [nome, dateEnrollment, cfu]);
   useEffect(() => {
-    if (show) {
-      dispatch({ type: RESET_COURSE_STATE });
+    if (success) {
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        dispatch(resetCourseState());
+        handleClose();
+      }, 3000);
     }
-  }, [show, dispatch]);
+  }, [success, handleClose]);
+  useEffect(() => {
+    if (error) {
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+        dispatch(resetCourseState());
+      }, 3000);
+    }
+  }, [error]);
+
   return (
     <>
       <Modal show={show} onHide={handleClose} animation={false}>
@@ -47,8 +63,8 @@ const CourseModalUpdate = ({ show, handleClose, nome, dateEnrollment, cfu }) => 
         </Modal.Header>
         <Modal.Body>
           {content && loading && <Spinner animation="border" />}
-          {content && error && <Alert variant="danger">{content}</Alert>}
-          {content && success && <Alert variant="success">{content}</Alert>}
+          {showErrorMessage && <Alert variant="danger">{content}</Alert>}
+          {showSuccessMessage && <Alert variant="success">{content}</Alert>}
 
           <Form onSubmit={handleSubmit}>
             <Row>

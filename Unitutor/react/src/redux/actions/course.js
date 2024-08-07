@@ -83,6 +83,7 @@ export const DeleteCourse = (name) => async (dispatch) => {
     if (!response.ok) {
       throw new Error(data.error || "Errore durante la modifica");
     }
+    dispatch(addNewCourseSuccess(data.message));
 
     dispatch(fetchProtectedResource());
   } catch (error) {
