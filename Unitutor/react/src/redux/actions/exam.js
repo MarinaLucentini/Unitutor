@@ -58,7 +58,7 @@ export const UpdateExam = (examData) => async (dispatch) => {
     });
     const data = await response.json();
     if (!response.ok) {
-      throw new Error(data.erroe || "Errore durante la modifica");
+      throw new Error(data.error || "Errore durante la modifica");
     }
     dispatch(addNewExamSuccess(data.message));
     dispatch(resetExamState());
