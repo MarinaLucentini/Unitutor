@@ -27,10 +27,6 @@ const NavLogin = ({ username, image, courses }) => {
                 Home
               </NavLink>
 
-              <NavLink to={"/profile"} className={"nav-link"}>
-                {" "}
-                Pagina profilo
-              </NavLink>
               <Dropdown>
                 <Dropdown.Toggle id="dropdown-basic" variant="btn" className="no-caret">
                   Corsi
@@ -68,6 +64,11 @@ const NavLogin = ({ username, image, courses }) => {
                 </Dropdown.Toggle>
 
                 <Dropdown.Menu>
+                  <Dropdown.Item>
+                    <Link to={"/profile"} style={{ textDecoration: "none", color: "inherit" }}>
+                      Pagina Profilo
+                    </Link>
+                  </Dropdown.Item>
                   <Dropdown.Item>
                     <Link to={"/settingsPage"} style={{ textDecoration: "none", color: "inherit" }}>
                       Settings

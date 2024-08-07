@@ -1,9 +1,13 @@
-import { useState } from "react";
-import { Modal, Button, Form, Row, Col } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { AddNewCourse } from "../../redux/actions/course";
+import { useEffect, useState } from "react";
+import { Modal, Button, Form, Row, Col, Spinner, Alert } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { AddNewCourse, resetCourseState } from "../../redux/actions/course";
 
 const ProfileCourseModal = ({ show, handleClose }) => {
+  const { loading, error, success } = useSelector((state) => state.course);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
+
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: "",
@@ -21,8 +25,27 @@ const ProfileCourseModal = ({ show, handleClose }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(AddNewCourse(formData));
-    handleClose();
   };
+  useEffect(() => {
+    if (success) {
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        dispatch(resetCourseState());
+        handleClose();
+      }, 3000);
+    }
+  }, [success, handleClose]);
+
+  useEffect(() => {
+    if (error) {
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+        dispatch(resetCourseState());
+      }, 3000);
+    }
+  }, [error]);
 
   return (
     <>
@@ -31,6 +54,9 @@ const ProfileCourseModal = ({ show, handleClose }) => {
           <Modal.Title>Aggiungi il corso</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {loading && <Spinner animation="border" />}
+          {showErrorMessage && <Alert variant="danger">Qualcosa è andato storto, riprova</Alert>}
+          {showSuccessMessage && <Alert variant="success">Corso aggiunto con successo</Alert>}
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col>

@@ -38,7 +38,7 @@ export const AddNewCourse = (courseData) => async (dispatch) => {
     }
 
     dispatch(addNewCourseSuccess(data.message));
-    dispatch(resetCourseState());
+
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewCourseFailure(error.message));
@@ -61,7 +61,7 @@ export const UpdateCourse = (courseData) => async (dispatch) => {
       throw new Error(data.error || "Errore durante la modifica");
     }
     dispatch(addNewCourseSuccess(data.message));
-    dispatch(resetCourseState());
+
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewCourseFailure(error.message));

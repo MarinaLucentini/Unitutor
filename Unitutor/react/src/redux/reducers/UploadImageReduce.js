@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   message: "",
   error: "",
+  success: false,
 };
 export const UploadImageReduce = (state = initialState, action) => {
   switch (action.type) {
@@ -18,6 +19,7 @@ export const UploadImageReduce = (state = initialState, action) => {
         loading: false,
         message: action.payload,
         error: "",
+        success: true,
       };
     case UPLOAD_IMAGE_FAILURE:
       return {
