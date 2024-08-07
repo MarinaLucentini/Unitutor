@@ -2,13 +2,16 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
-import { Alert, Button, Card, Form, Spinner } from "react-bootstrap";
+import { Alert, Button, Card, Form, InputGroup, Spinner } from "react-bootstrap";
 import logo from "../../assets/g19.svg";
 import monnalisa from "../../assets/monnalisa.png";
 import { loginUser } from "../../redux/actions";
+import { PiEye, PiEyeClosed } from "react-icons/pi";
 
 const FormLogin = () => {
   const navigate = useNavigate();
+  const [hasAttemptedLogin, setHasAttemptedLogin] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -27,6 +30,7 @@ const FormLogin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setHasAttemptedLogin(true);
     dispatch(loginUser(formData));
   };
   useEffect(() => {
@@ -54,8 +58,8 @@ const FormLogin = () => {
 
           <Form onSubmit={handleSubmit}>
             {loading && <Spinner animation="border" />}
-            {error && <Alert variant="danger">Qualcosa è andato storto riprova</Alert>}
-            {success && <Alert variant="success">Login effettuato! Verrai automaticamente indirizzato alla pagina del profilo</Alert>}
+            {error && !loading && hasAttemptedLogin && <Alert variant="danger">Qualcosa è andato storto riprova</Alert>}
+            {success && hasAttemptedLogin && <Alert variant="success">Login effettuato! Verrai automaticamente indirizzato alla pagina del profilo</Alert>}
             <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formEmail">
               <Form.Label>Email</Form.Label>
               <Form.Control type="email" placeholder="Inserisci la tua e-mail" name="email" value={formData.email} onChange={handleChange} />
@@ -63,7 +67,18 @@ const FormLogin = () => {
 
             <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Inserisci la tua Password" name="password" value={formData.password} onChange={handleChange} />
+              <InputGroup>
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Inserisci la tua Password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                />
+                <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <PiEye /> : <PiEyeClosed />}
+                </Button>
+              </InputGroup>
             </Form.Group>
 
             <Link className="mx-3">Ho dimenticato la password</Link>

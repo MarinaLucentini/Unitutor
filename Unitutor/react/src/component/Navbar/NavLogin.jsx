@@ -60,24 +60,24 @@ const NavLogin = ({ username, image, courses }) => {
                 Community
               </NavLink>
             </Nav>
-          </Navbar.Collapse>
-          <Nav.Item className="d-none d-md-flex align-items-center">
-            <p className="my-0 mx-3">Bentornat* {username}</p>
-            <Dropdown>
-              <Dropdown.Toggle variant="btn" id="dropdown-basic" className="no-caret">
-                <img src={image} alt="" className="rounded-4   img-profile" />
-              </Dropdown.Toggle>
+            <Nav.Item className="d-none d-md-flex align-items-center">
+              <p className="my-0 mx-3">Bentornat* {username}</p>
+              <Dropdown>
+                <Dropdown.Toggle variant="btn" id="dropdown-basic" className="no-caret">
+                  <img src={image} alt="" className="rounded-4   img-profile" />
+                </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                <Dropdown.Item>
-                  <Link to={"/settingsPage"} style={{ textDecoration: "none", color: "inherit" }}>
-                    Settings
-                  </Link>
-                </Dropdown.Item>
-                <Dropdown.Item onClick={handleLogout}>Log-out</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Nav.Item>
+                <Dropdown.Menu>
+                  <Dropdown.Item>
+                    <Link to={"/settingsPage"} style={{ textDecoration: "none", color: "inherit" }}>
+                      Settings
+                    </Link>
+                  </Dropdown.Item>
+                  <Dropdown.Item onClick={handleLogout}>Log-out</Dropdown.Item>
+                </Dropdown.Menu>
+              </Dropdown>
+            </Nav.Item>
+          </Navbar.Collapse>
         </Container>
       </Navbar>
     </>

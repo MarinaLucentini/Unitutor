@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser } from "../../redux/actions";
-import { Alert, Button, Card, Col, Form, Row, Spinner } from "react-bootstrap";
+import { Alert, Button, Card, Col, Form, InputGroup, Row, Spinner } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 import logo from "../../assets/g19.svg";
 import monnalisa from "../../assets/statua.png";
+
+import { PiEye, PiEyeClosed } from "react-icons/pi";
 
 const FormRegistration = () => {
   const [formData, setFormData] = useState({
@@ -19,10 +21,12 @@ const FormRegistration = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, success, errorMsg, content } = useSelector((state) => state.student);
+  const { loading, error, success, errorMsg } = useSelector((state) => state.student);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -48,7 +52,7 @@ const FormRegistration = () => {
         navigate("/loginPage");
       }, 2000);
 
-      return () => clearTimeout(timer); // Pulizia del timer se il componente si smonta
+      return () => clearTimeout(timer);
     }
   }, [success, navigate]);
 
@@ -71,7 +75,7 @@ const FormRegistration = () => {
           <Form onSubmit={handleSubmit}>
             {loading && <Spinner animation="border" />}
             {error && <Alert variant="danger">{errorMsg}</Alert>}
-            {success && <Alert variant="success">{content}</Alert>}
+            {success && <Alert variant="success">{"L'utente è stato correttamente registrato a breve verrai reindirizzato nella pagina di login"}</Alert>}
             <img src={monnalisa} alt="" className=" monnalisa" />
             <Row>
               <Col>
@@ -138,27 +142,39 @@ const FormRegistration = () => {
 
             <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                isInvalid={!!errors.password}
-                required
-              />
-              <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+              <InputGroup>
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  isInvalid={!!errors.password}
+                  required
+                />
+                <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
+                  {showPassword ? <PiEye /> : <PiEyeClosed />}
+                </Button>
+                <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+              </InputGroup>
             </Form.Group>
-            <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formBasicPasswordConfirm">
+            <Form.Group className="mb-3 d-flex flex-column  align-items-center" controlId="formBasicPasswordConfirm">
               <Form.Label>Confirm password</Form.Label>
-              <Form.Control
-                type="password"
-                placeholder="Conferma Password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-              />
+              <InputGroup>
+                <Form.Control
+                  type={showConfirmPassword ? "text" : "password"}
+                  placeholder="Conferma Password"
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  isInvalid={!!errors.confirmPassword}
+                  required
+                />
+                <Button variant="outline-secondary" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                  {showConfirmPassword ? <PiEye /> : <PiEyeClosed />}
+                </Button>
+                <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
+              </InputGroup>
             </Form.Group>
             <Row className="justify-content-between">
               <Col xs={9}>
