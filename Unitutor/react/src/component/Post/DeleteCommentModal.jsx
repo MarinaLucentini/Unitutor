@@ -15,7 +15,7 @@ const DeleteCommentModal = ({ show, handleClose, commentId }) => {
     <>
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Sei sicuro di voler eliminare il post?</Modal.Title>
+          <Modal.Title>Sei sicuro di voler eliminare il commento?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Button variant="secondary" onClick={handleClose} className="mx-3">

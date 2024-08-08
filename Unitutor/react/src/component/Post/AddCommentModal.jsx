@@ -24,7 +24,7 @@ const AddCommentModal = ({ show, handleClose, postId }) => {
     <>
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Aggiungi una materia al corso</Modal.Title>
+          <Modal.Title>Aggiungi un commento</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>

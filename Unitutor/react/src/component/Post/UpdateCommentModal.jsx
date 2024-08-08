@@ -26,7 +26,7 @@ const UpdateCommentModal = ({ commentId, show, handleClose }) => {
     <>
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifica il corso</Modal.Title>
+          <Modal.Title>Modifica il commento</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>

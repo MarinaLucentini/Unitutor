@@ -14,12 +14,18 @@ const TransciptionPage = () => {
   useEffect(() => {
     if (success) {
       setShowSuccessMessage(true);
+      setTimeout(() => {
+        dispatch(resetTranscription());
+      }, 10000);
     }
   }, [success]);
 
   useEffect(() => {
     if (error) {
       setShowErrorMessage(true);
+      setTimeout(() => {
+        dispatch(resetTranscription());
+      }, 10000);
     }
   }, [error]);
   const [formData, setFormData] = useState({
@@ -62,9 +68,6 @@ const TransciptionPage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(transcriptionNewFile(selectedFile, formData.subjectId));
-    setTimeout(() => {
-      dispatch(resetTranscription());
-    }, 10000);
   };
 
   return (

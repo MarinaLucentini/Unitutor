@@ -35,7 +35,7 @@ const PostUpdateModal = ({ show, handleClose, post }) => {
     <>
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Modifica il corso</Modal.Title>
+          <Modal.Title>Modifica il post</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
