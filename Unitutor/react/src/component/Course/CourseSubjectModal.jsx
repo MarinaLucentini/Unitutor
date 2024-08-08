@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { AddNewsubject } from "../../redux/actions/subject";
+import { useEffect, useState } from "react";
+import { Alert, Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { AddNewsubject, resetsubjectsState } from "../../redux/actions/subject";
 
 const CourseSubjectModal = ({ show, handleClose, name }) => {
   const dispatch = useDispatch();
+  const { loading, success, error } = useSelector((state) => state.subject);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     cfu: "",
@@ -20,8 +23,27 @@ const CourseSubjectModal = ({ show, handleClose, name }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(AddNewsubject(formData));
-    handleClose();
   };
+  useEffect(() => {
+    if (success) {
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        dispatch(resetsubjectsState());
+        handleClose();
+      }, 3000);
+    }
+  }, [success, handleClose]);
+
+  useEffect(() => {
+    if (error) {
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+        dispatch(resetsubjectsState());
+      }, 3000);
+    }
+  }, [error]);
 
   return (
     <>
@@ -31,6 +53,9 @@ const CourseSubjectModal = ({ show, handleClose, name }) => {
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
+            {loading && <Spinner animation="border" />}
+            {showErrorMessage && <Alert variant="danger">Qualcosa è andato storto, riprova</Alert>}
+            {showSuccessMessage && <Alert variant="success">Materia aggiunta con successo</Alert>}
             <Row>
               <Col>
                 <Form.Group className="mb-3 d-flex flex-column align-items-center">

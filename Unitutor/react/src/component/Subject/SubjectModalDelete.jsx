@@ -7,12 +7,14 @@ const SubjectModalDelete = ({ show, handleClose, name, nameCourse }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { error } = useSelector((state) => state.subject);
+
   const handleDelete = () => {
     dispatch(DeleteSubject(name, nameCourse));
     if (!error) {
       navigate("/profile");
     }
   };
+
   return (
     <Modal show={show} onHide={handleClose} animation={false}>
       <Modal.Header closeButton>

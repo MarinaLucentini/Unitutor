@@ -38,7 +38,7 @@ export const AddNewsubject = (subjectData) => async (dispatch) => {
     }
 
     dispatch(addNewsubjectsSuccess(data.message));
-    dispatch(resetsubjectsState());
+
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewsubjectsFailure(error.message));
@@ -61,7 +61,7 @@ export const UpdateSubject = (subjectData) => async (dispatch) => {
       throw new Error(data.error || "Errore durante la modifica");
     }
     dispatch(addNewsubjectsSuccess(data.message));
-    dispatch(resetsubjectsState());
+
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewsubjectsFailure(error.message));
@@ -85,7 +85,9 @@ export const DeleteSubject = (name, nameCourse) => async (dispatch) => {
     }
 
     dispatch(fetchProtectedResource());
+    dispatch(resetsubjectsState());
   } catch (error) {
     dispatch(addNewsubjectsFailure(error.message));
+    dispatch(resetsubjectsState());
   }
 };
