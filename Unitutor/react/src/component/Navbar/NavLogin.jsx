@@ -1,4 +1,4 @@
-import { Container, Dropdown, Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Dropdown, Nav, Navbar } from "react-bootstrap";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../../assets/g19.svg";
 import { logoutUser } from "../../redux/actions";
@@ -55,8 +55,17 @@ const NavLogin = ({ username, image, courses }) => {
               <NavLink className={"nav-link"} to={"/community"}>
                 Community
               </NavLink>
+              <NavLink className={"nav-link d-block d-lg-none"} to={"/profile"}>
+                Pagina del profilo
+              </NavLink>
+              <NavLink className={"nav-link d-block d-lg-none"} to={"/settingsPage"}>
+                Settings
+              </NavLink>
+              <Button className={"nav-link d-block d-lg-none"} onClick={handleLogout}>
+                Log-out
+              </Button>
             </Nav>
-            <Nav.Item className="d-none d-md-flex align-items-center">
+            <Nav.Item className="d-none d-lg-flex align-items-center">
               <p className="my-0 mx-3">Bentornat* {username}</p>
               <Dropdown>
                 <Dropdown.Toggle variant="btn" id="dropdown-basic" className="no-caret">

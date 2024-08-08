@@ -140,6 +140,7 @@ export const deleteProfile = () => async (dispatch) => {
     }
 
     dispatch(registerUserSuccess(data.message));
+    localStorage.removeItem("authToken");
   } catch (error) {
     dispatch(registerUserFailure(error.message));
   }
