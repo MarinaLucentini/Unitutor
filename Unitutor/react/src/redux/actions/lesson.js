@@ -38,7 +38,7 @@ export const AddNewLesson = (lessonData) => async (dispatch) => {
     }
 
     dispatch(addNewLessonSuccess(data.message));
-    dispatch(resetLessonState());
+
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewLessonFailure(error.message));
@@ -81,7 +81,7 @@ export const UpdateLesson = (lessonData) => async (dispatch) => {
     }
 
     dispatch(addNewLessonSuccess(data.message));
-    dispatch(resetLessonState());
+
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewLessonFailure(error.message));

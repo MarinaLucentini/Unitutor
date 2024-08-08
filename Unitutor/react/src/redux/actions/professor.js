@@ -38,7 +38,7 @@ export const AddNewProfessor = (professorData) => async (dispatch) => {
     }
 
     dispatch(addNewProfessorSuccess(data.message));
-    dispatch(resetProfessorState());
+
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewProfessorFailure(error.message));
@@ -62,7 +62,7 @@ export const UpdateProfessor = (professorData) => async (dispatch) => {
     }
 
     dispatch(addNewProfessorSuccess(data.message));
-    dispatch(resetProfessorState());
+
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewProfessorFailure(error.message));

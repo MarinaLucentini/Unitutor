@@ -38,7 +38,7 @@ export const AddNewExam = (examData) => async (dispatch) => {
     }
 
     dispatch(addNewExamSuccess(data.message));
-    dispatch(resetExamState());
+
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewExamFailure(error.message));
@@ -61,7 +61,7 @@ export const UpdateExam = (examData) => async (dispatch) => {
       throw new Error(data.error || "Errore durante la modifica");
     }
     dispatch(addNewExamSuccess(data.message));
-    dispatch(resetExamState());
+
     dispatch(fetchProtectedResource());
   } catch (error) {
     dispatch(addNewExamFailure(error.message));

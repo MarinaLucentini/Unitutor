@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
-import { useDispatch } from "react-redux";
-import { UpdateProfessor } from "../../redux/actions/professor";
+import { useEffect, useState } from "react";
+import { Alert, Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { resetProfessorState, UpdateProfessor } from "../../redux/actions/professor";
 
 const ProfessorModalUpdate = ({ show, handleClose, nameCourse, nameSubject, professorName, professorSurname }) => {
   const dispatch = useDispatch();
+  const { success, loading, error } = useSelector((state) => state.professor);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [formData, setFormData] = useState({
     subjectName: nameSubject,
     newName: professorName,
@@ -23,8 +26,26 @@ const ProfessorModalUpdate = ({ show, handleClose, nameCourse, nameSubject, prof
   const handleSubmit = (e) => {
     e.preventDefault();
     dispatch(UpdateProfessor(formData));
-    handleClose();
   };
+  useEffect(() => {
+    if (success) {
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        dispatch(resetProfessorState());
+        handleClose();
+      }, 3000);
+    }
+  }, [success, handleClose]);
+  useEffect(() => {
+    if (error) {
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+        dispatch(resetProfessorState());
+      }, 3000);
+    }
+  }, [error]);
   return (
     <>
       <Modal show={show} onHide={handleClose} animation={false}>
@@ -32,6 +53,9 @@ const ProfessorModalUpdate = ({ show, handleClose, nameCourse, nameSubject, prof
           <Modal.Title>Modifica professore</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {loading && <Spinner animation="border" />}
+          {showErrorMessage && <Alert variant="danger">Qualcosa è andato storto, riprova</Alert>}
+          {showSuccessMessage && <Alert variant="success">Professore modificato con successo!</Alert>}
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col>

@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
-import { Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
+import { Alert, Button, Col, Form, Modal, Row, Spinner } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { AddNewLesson } from "../../redux/actions/lesson";
+import { AddNewLesson, resetLessonState } from "../../redux/actions/lesson";
 import { addHours } from "date-fns";
 
 const LessonModalAdd = ({ show, handleClose, date }) => {
   const { loading, content } = useSelector((state) => state.authentication);
+  const { success, error } = useSelector((state) => state.lesson);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     courseName: "",
@@ -22,6 +25,26 @@ const LessonModalAdd = ({ show, handleClose, date }) => {
       dateTime: date,
     }));
   }, [date]);
+  useEffect(() => {
+    if (success) {
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        dispatch(resetLessonState());
+        handleClose();
+      }, 3000);
+    }
+  }, [success, handleClose]);
+
+  useEffect(() => {
+    if (error) {
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+        dispatch(resetLessonState());
+      }, 3000);
+    }
+  }, [error]);
 
   if (!content || !content.studentCard) {
     return null;
@@ -74,7 +97,7 @@ const LessonModalAdd = ({ show, handleClose, date }) => {
       dateTime: finalDateTime,
     };
     dispatch(AddNewLesson(finalFormData));
-    handleClose();
+
     setFormData({
       courseName: "",
       subjectName: "",
@@ -88,6 +111,8 @@ const LessonModalAdd = ({ show, handleClose, date }) => {
         <Modal.Title>Aggiungi la lezione</Modal.Title>
       </Modal.Header>
       <Modal.Body>
+        {showErrorMessage && <Alert variant="danger">Qualcosa è andato storto, riprova</Alert>}
+        {showSuccessMessage && <Alert variant="success">Lezione aggiunta con successo</Alert>}
         <Form onSubmit={handleSubmit}>
           <Row>
             <Col>

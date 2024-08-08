@@ -5,7 +5,7 @@ import { transcriptionNewFile } from "../../redux/actions/transcription";
 
 const TransciptionPage = () => {
   const { content } = useSelector((state) => state.authentication);
-  const { loading, success } = useSelector((state) => state.transcriprion);
+  // const { loading, success } = useSelector((state) => state.transcriprion);
   const [selectedFile, setSelectedFile] = useState(null);
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
@@ -101,8 +101,8 @@ const TransciptionPage = () => {
             </Form>
           </Col>
         </Row>
-        {loading && <Alert variant="primary">Stiamo sbobinnando il file un attimo di attesa....</Alert>}
-        {success && <Alert variant="success">Trascrizione avvenuta con successo vai alla pagina della materia per visualizzarla</Alert>}
+        {/* {loading && <Alert variant="primary">Stiamo sbobinnando il file un attimo di attesa....</Alert>}
+        {success && <Alert variant="success">Trascrizione avvenuta con successo vai alla pagina della materia per visualizzarla</Alert>} */}
       </Container>
     </>
   );

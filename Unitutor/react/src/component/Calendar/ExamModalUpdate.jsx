@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { UpdateExam } from "../../redux/actions/exam";
-import { Button, Col, Form, Modal, Row } from "react-bootstrap";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { resetExamState, UpdateExam } from "../../redux/actions/exam";
+import { Alert, Button, Col, Form, Modal, Row } from "react-bootstrap";
 
 const ExamModalUpdate = ({ date, subjectName, show, handleClose, grade, pass, id }) => {
   const dispatch = useDispatch();
+  const { success, error } = useSelector((state) => state.exam);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [formData, setFormData] = useState({
     subjectName: subjectName,
     dateTime: date,
@@ -23,7 +26,7 @@ const ExamModalUpdate = ({ date, subjectName, show, handleClose, grade, pass, id
     e.preventDefault();
 
     dispatch(UpdateExam(formData));
-    handleClose();
+
     setFormData({
       subjectName: subjectName,
       dateTime: date,
@@ -32,6 +35,26 @@ const ExamModalUpdate = ({ date, subjectName, show, handleClose, grade, pass, id
       examId: id,
     });
   };
+  useEffect(() => {
+    if (success) {
+      setShowSuccessMessage(true);
+      setTimeout(() => {
+        setShowSuccessMessage(false);
+        dispatch(resetExamState());
+        handleClose();
+      }, 3000);
+    }
+  }, [success, handleClose]);
+
+  useEffect(() => {
+    if (error) {
+      setShowErrorMessage(true);
+      setTimeout(() => {
+        setShowErrorMessage(false);
+        dispatch(resetExamState());
+      }, 3000);
+    }
+  }, [error]);
 
   return (
     <>
@@ -40,6 +63,8 @@ const ExamModalUpdate = ({ date, subjectName, show, handleClose, grade, pass, id
           <Modal.Title>{"Aggiungi l'esame"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
+          {showErrorMessage && <Alert variant="danger">Qualcosa è andato storto, riprova</Alert>}
+          {showSuccessMessage && <Alert variant="success">Esame modifcato con successo</Alert>}
           <Form onSubmit={handleSubmit}>
             <Row>
               <Col>

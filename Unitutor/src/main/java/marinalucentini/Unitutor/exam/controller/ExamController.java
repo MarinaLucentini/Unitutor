@@ -40,19 +40,31 @@ public class ExamController {
     }
     // 2 modifica esame
     @PatchMapping("/update")
-    public String updateExam(@AuthenticationPrincipal Student student, @RequestBody @Validated UpdateExam body, BindingResult bindingResult){
+    public ResponseEntity<Object> updateExam(@AuthenticationPrincipal Student student, @RequestBody @Validated UpdateExam body, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }
-        return examService.updateExam(student.getId(), body);
+        try {
+            String response =examService.updateExam(student.getId(), body);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+
     }
     // 3 cancellazione esame
     @DeleteMapping("/delete")
-    public String deleteExam(@AuthenticationPrincipal Student student, @RequestBody @Validated DeleteExam body, BindingResult bindingResult){
+    public ResponseEntity<Object> deleteExam(@AuthenticationPrincipal Student student, @RequestBody @Validated DeleteExam body, BindingResult bindingResult){
         if(bindingResult.hasErrors()){
             throw new BadRequestException(bindingResult.getAllErrors());
         }
-        return examService.deleteExam(student.getId(), body);
+        try {
+            String response =examService.deleteExam(student.getId(), body);
+            return ResponseEntity.status(HttpStatus.CREATED).body(Collections.singletonMap("message", response));
+        } catch (BadRequestException e) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", e.getMessage()));
+        }
+     
     }
     // 4 visualizza tutti gli esami dell'utente
     @GetMapping("/getAllExam")
