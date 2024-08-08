@@ -1,13 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { transcriptionNewFile } from "../../redux/actions/transcription";
+import { resetTranscription, transcriptionNewFile } from "../../redux/actions/transcription";
+import { Link } from "react-router-dom";
 
 const TransciptionPage = () => {
   const { content } = useSelector((state) => state.authentication);
-  // const { loading, success } = useSelector((state) => state.transcriprion);
+  const { loading, success, error } = useSelector((state) => state.transcription);
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
   const dispatch = useDispatch();
+  useEffect(() => {
+    if (success) {
+      setShowSuccessMessage(true);
+    }
+  }, [success]);
+
+  useEffect(() => {
+    if (error) {
+      setShowErrorMessage(true);
+    }
+  }, [error]);
   const [formData, setFormData] = useState({
     subjectId: "",
   });
@@ -47,8 +61,10 @@ const TransciptionPage = () => {
   };
   const handleSubmit = (e) => {
     e.preventDefault();
-
     dispatch(transcriptionNewFile(selectedFile, formData.subjectId));
+    setTimeout(() => {
+      dispatch(resetTranscription());
+    }, 10000);
   };
 
   return (
@@ -101,8 +117,18 @@ const TransciptionPage = () => {
             </Form>
           </Col>
         </Row>
-        {/* {loading && <Alert variant="primary">Stiamo sbobinnando il file un attimo di attesa....</Alert>}
-        {success && <Alert variant="success">Trascrizione avvenuta con successo vai alla pagina della materia per visualizzarla</Alert>} */}
+        <Row className="my-3">
+          <Col>
+            {loading && <Alert variant="primary">Stiamo sbobinnando il file un attimo di attesa....</Alert>}
+            {showSuccessMessage && (
+              <Alert variant="success">
+                Trascrizione avvenuta con successo!! Clicca questo <Link to={`/subject/${formData.subjectId}`}> link</Link> per visualizzarla o vai direttamente
+                alla pagina della materia scelta
+              </Alert>
+            )}
+            {showErrorMessage && <Alert variant="danger">Qualcosa è andato storto, riprova</Alert>}
+          </Col>
+        </Row>
       </Container>
     </>
   );

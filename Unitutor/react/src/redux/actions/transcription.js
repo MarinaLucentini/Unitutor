@@ -48,9 +48,6 @@ export const transcriptionNewFile = (file, id) => async (dispatch) => {
     const data = await response.json();
     dispatch(TranscriptionSuccess(data.message));
     dispatch(fetchProtectedResource());
-    setTimeout(() => {
-      dispatch(resetTranscription());
-    }, 3000);
   } catch (error) {
     dispatch(TranscriptionFailure(error.message));
   }
@@ -124,4 +121,21 @@ export const transcriptionDeleteFunction = (subjectId, transcriptionId) => async
   } catch (error) {
     dispatch(TranscriptionFailure(error.message));
   }
+};
+export const groupTranscriptionsByMonthFunc = (transcriptions) => {
+  const transcriptionsByMonth = {};
+
+  transcriptions.forEach((transcription) => {
+    const date = new Date(transcription.timestamp);
+
+    const monthYear = `${date.getFullYear()}-${date.getMonth() + 1}`;
+
+    if (!transcriptionsByMonth[monthYear]) {
+      transcriptionsByMonth[monthYear] = [];
+    }
+
+    transcriptionsByMonth[monthYear].push(transcription);
+  });
+
+  return transcriptionsByMonth;
 };

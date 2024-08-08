@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { RESET_TRANSCRIPTION, transcriptionUpdateFunction } from "../../redux/actions/transcription";
 import TranscriptionDeleteModal from "./TranscriptionDeleteModal";
+import { BsFeather, BsXLg } from "react-icons/bs";
 
 const TranscriptionDetails = () => {
   const { id } = useParams();
@@ -109,7 +110,33 @@ const TranscriptionDetails = () => {
     <>
       <Container className="my-3 bg-secondary bg-opacity-10 rounded-4 p-3">
         <Row className="flex-column">
+          {loading && <Alert variant="info">Loading....</Alert>}
+          {success && <Alert variant="success">La trascrizione è stata correttamente modificata</Alert>}
+          <TranscriptionDeleteModal
+            show={showModalDeleteTranscription}
+            handleClose={handleCloseModalDeleteTranscription}
+            subjectId={subject.id}
+            TranscriptionId={transcription.id}
+          />
           <Col>
+            {!transcriptionUpdate ? (
+              <Col className="my-3 d-flex align-items-center justify-content-between">
+                <Button variant="primary" onClick={handleHighlight}>
+                  {highlight ? "Non evidenziare" : "Evidenzia"}
+                </Button>
+                <div>
+                  <Button variant="btn" size="sm">
+                    {" "}
+                    <BsFeather className="text-secondary" size={44} onClick={handleTranscriptionUpdate} />
+                  </Button>
+                  <Button variant="btn" size="sm">
+                    <BsXLg className="text-secondary" size={44} onClick={handleShowModalDeleteTranscription} />
+                  </Button>
+                </div>
+              </Col>
+            ) : (
+              <Col></Col>
+            )}
             <h3>
               Trascrizione del {formatDate(transcription.timestamp)} di {subject.name}
             </h3>
@@ -126,25 +153,6 @@ const TranscriptionDetails = () => {
               </Form>
             )}
           </Col>
-          {loading && <Alert variant="info">Loading....</Alert>}
-          {success && <Alert variant="success">La trascrizione è stata correttamente modificata</Alert>}
-          <TranscriptionDeleteModal
-            show={showModalDeleteTranscription}
-            handleClose={handleCloseModalDeleteTranscription}
-            subjectId={subject.id}
-            TranscriptionId={transcription.id}
-          />
-          {!transcriptionUpdate ? (
-            <Col className="my-3 d-flex align-items-center">
-              <Button variant="primary" onClick={handleHighlight}>
-                {highlight ? "Non evidenziare" : "Evidenzia"}
-              </Button>
-              <Button onClick={handleTranscriptionUpdate}>Modifica</Button>
-              <Button onClick={handleShowModalDeleteTranscription}>Cancella</Button>
-            </Col>
-          ) : (
-            <Col></Col>
-          )}
         </Row>
       </Container>
     </>

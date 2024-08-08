@@ -17,7 +17,7 @@ const TranscriptionDeleteModal = ({ show, handleClose, subjectId, TranscriptionI
     <>
       <Modal show={show} onHide={handleClose} animation={false}>
         <Modal.Header closeButton>
-          <Modal.Title>Sei sicuro di voler eliminare la materia ?</Modal.Title>
+          <Modal.Title>Sei sicuro di voler eliminare la trascrizione ?</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Button variant="secondary" onClick={handleClose} className="mx-3">

@@ -110,14 +110,14 @@ const SubjectPage = () => {
               </Row>
             </Col>
           </Row>
+          <Row>
+            <Col>
+              <TranscriptionSection transcriptions={subject.transcriptions} />
+            </Col>
+          </Row>
           <Row className="my-5">
             <Col>
               <LessonAndExamSection subject={subject} />
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <TranscriptionSection subject={subject} />
             </Col>
           </Row>
         </Container>
