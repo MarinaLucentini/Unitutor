@@ -39,32 +39,36 @@ const CaledarPage = () => {
   const handleCloseModalUpdateLesson = () => setShowModalUpdateLesson(false);
   const handleShowModalUpdateLesson = () => setShowModalUpdateLesson(true);
   const [showModalDeleteLesson, setShowModalDeleteLesson] = useState(false);
-
+  const [isLoading, setIsLoading] = useState(false);
   const handleCloseModalDeleteLesson = () => setShowModalDeleteLesson(false);
   const handleShowModalDeleteLesson = () => setShowModalDeleteLesson(true);
   const dispatch = useDispatch();
   const content = useSelector((state) => state.lesson.content);
 
-  const handleDayClick = (value) => {
-    const incrementedDate = addDays(value, 1);
-    setSelectedDay(incrementedDate);
-    dispatch(fetchLessons(incrementedDate));
-  };
-
   useEffect(() => {
     if (selectedDay) {
+      setIsLoading(true);
+      dispatch(fetchLessons(selectedDay)).finally(() => setIsLoading(false));
+    }
+  }, [selectedDay]);
+  useEffect(() => {
+    if (content) {
       setLessonsAndExam(content);
       setShowColumn(true);
     }
-  }, [content, selectedDay]);
+  }, [content]);
+
+  const handleDayClick = (value) => {
+    const incrementedDate = addDays(value, 1);
+    setSelectedDay(incrementedDate);
+    setShowColumn(false);
+  };
+
   const handleCloseColumn = () => setShowColumn(false);
+
   const formatDate = (dateString) => {
     const time = new Date(dateString);
-
-    if (isNaN(time.getTime())) {
-      return "Invalid Date";
-    }
-
+    if (isNaN(time.getTime())) return "Invalid Date";
     const hours = time.getHours().toString().padStart(2, "0");
     const minutes = time.getMinutes().toString().padStart(2, "0");
     return `${hours}:${minutes}`;
@@ -88,7 +92,7 @@ const CaledarPage = () => {
               <LessonModalAdd show={showModalLesson} handleClose={handleCloseModalLesson} date={subDays(selectedDay, 1)} />
               <ExamModalAdd show={showModalExam} handleClose={handleCloseModalExam} date={subDays(selectedDay, 1)} />
               <ListGroup className="align-items-center">
-                {lessonsAndExam && lessonsAndExam.lessons.length > 0 ? (
+                {lessonsAndExam && lessonsAndExam.lessons && lessonsAndExam.lessons.length > 0 ? (
                   <>
                     <h5>Lezioni</h5>
                     {lessonsAndExam.lessons.map((lesson, index) => (
@@ -103,12 +107,14 @@ const CaledarPage = () => {
                             subjectName={lesson.subjectName}
                             show={showModalUpdateLesson}
                             handleClose={handleCloseModalUpdateLesson}
+                            selectedDate={subDays(selectedDay, 1)}
                           />
                           <LessonModalDelete
                             id={lesson.id}
                             subjectName={lesson.subjectName}
                             show={showModalDeleteLesson}
                             handleClose={handleCloseModalDeleteLesson}
+                            selectedDate={subDays(selectedDay, 1)}
                           />
                         </div>
                       </ListGroup.Item>
@@ -123,7 +129,7 @@ const CaledarPage = () => {
                 )}
               </ListGroup>
               <ListGroup className="align-items-center my-3">
-                {lessonsAndExam && lessonsAndExam.exams.length > 0 ? (
+                {lessonsAndExam && lessonsAndExam.exams && lessonsAndExam.exams.length > 0 ? (
                   <>
                     <h5>Esami</h5>
                     {lessonsAndExam.exams.map((exam, index) => (
@@ -172,6 +178,7 @@ const CaledarPage = () => {
               </ListGroup>
             </Col>
           )}
+          {isLoading && <div>Loading...</div>}
         </Row>
       </Container>
     </>
