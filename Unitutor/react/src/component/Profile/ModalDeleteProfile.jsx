@@ -1,7 +1,7 @@
 import { Button, Modal } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { deleteProfile } from "../../redux/actions";
+import { deleteProfile, logoutUser } from "../../redux/actions";
 
 const ModalDeleteProfile = ({ show, handleClose }) => {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ const ModalDeleteProfile = ({ show, handleClose }) => {
   const handleDelete = () => {
     dispatch(deleteProfile());
     if (!error) {
+      dispatch(logoutUser());
       navigate("/");
     }
   };

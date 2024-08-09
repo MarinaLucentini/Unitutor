@@ -2,9 +2,24 @@ package marinalucentini.Unitutor.student.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import marinalucentini.Unitutor.course.Course;
+import marinalucentini.Unitutor.course.CourseStudentCard;
+import marinalucentini.Unitutor.course.repositories.CourseRepository;
 import marinalucentini.Unitutor.course.repositories.CourseStudentCardRepository;
+import marinalucentini.Unitutor.exam.Exam;
+import marinalucentini.Unitutor.exam.repository.ExamRepository;
 import marinalucentini.Unitutor.exception.BadRequestException;
 import marinalucentini.Unitutor.exception.NotFoundException;
+import marinalucentini.Unitutor.file.File;
+import marinalucentini.Unitutor.file.Keyword;
+import marinalucentini.Unitutor.file.Transcription;
+import marinalucentini.Unitutor.file.repository.FileRepository;
+import marinalucentini.Unitutor.file.repository.KeywordRepository;
+import marinalucentini.Unitutor.file.repository.TranscriptionRepository;
+import marinalucentini.Unitutor.lesson.Lesson;
+import marinalucentini.Unitutor.lesson.repository.LessonRepository;
+import marinalucentini.Unitutor.professor.Professor;
+import marinalucentini.Unitutor.professor.repositories.ProfessorRepository;
 import marinalucentini.Unitutor.role.Role;
 import marinalucentini.Unitutor.role.repository.RoleRepository;
 import marinalucentini.Unitutor.student.Student;
@@ -14,6 +29,8 @@ import marinalucentini.Unitutor.student.repositories.StudentRepository;
 import marinalucentini.Unitutor.student.studentCard.StudentCard;
 import marinalucentini.Unitutor.student.studentCard.repository.StudentCardRepository;
 import marinalucentini.Unitutor.student.studentCard.services.StudentCardService;
+import marinalucentini.Unitutor.subject.Subject;
+import marinalucentini.Unitutor.subject.repository.SubjectRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -42,6 +59,22 @@ public class StudentService {
     private StudentCardRepository studentCardRepository;
     @Autowired
     private CourseStudentCardRepository courseStudentCardRepository;
+    @Autowired
+    private CourseRepository courseRepository;
+    @Autowired
+    private SubjectRepository subjectRepository;
+    @Autowired
+    private ProfessorRepository professorRepository;
+    @Autowired
+    private TranscriptionRepository transcriptionRepository;
+    @Autowired
+    private FileRepository fileRepository;
+    @Autowired
+    private KeywordRepository keywordRepository;
+    @Autowired
+    private LessonRepository lessonRepository;
+    @Autowired
+    private ExamRepository examRepository;
 
     @Autowired
     private RoleRepository roleRepository;
@@ -110,11 +143,71 @@ StudentCard studentCardSaved = studentCardService.findById(studentCard.getId());
     @Transactional
     public String findByIdAndDelete(UUID id){
         Student student = findById(id);
-       StudentCard studentCard = studentCardService.findById(student.getStudentCard().getId());
-        courseStudentCardRepository.deleteByStudentCardId(studentCard.getId());
-       studentCardRepository.delete(studentCard);
+        StudentCard studentCard = studentCardService.findById(student.getStudentCard().getId());
+
+
+        for (CourseStudentCard courseStudentCard : studentCard.getCourseStudentCards()) {
+
+
+            for (Course course : courseStudentCard.getCourseList()) {
+
+
+                for (Subject subject : courseStudentCard.getSubjectList()) {
+
+
+
+
+                    for (Transcription transcription : subject.getTranscriptions()) {
+                        for (Keyword keyword : transcription.getKeywordList()) {
+                            keywordRepository.delete(keyword);
+                        }
+                        transcriptionRepository.delete(transcription);
+                    }
+
+
+                    for (Lesson lesson : subject.getLessonList()) {
+                        lessonRepository.delete(lesson);
+                    }
+
+
+                    for (File file : subject.getFileList()) {
+                        fileRepository.delete(file);
+                    }
+
+
+                    for (Professor professor : subject.getProfessorList()) {
+                        professorRepository.delete(professor);
+                    }
+
+
+                    for (Exam exam : subject.getExamList()) {
+                        examRepository.delete(exam);
+                    }
+
+
+                    subjectRepository.delete(subject);
+                }
+
+
+                boolean isCourseLinkedToOtherStudentCards = course.getCourseStudentCard().stream()
+                        .anyMatch(csc -> !csc.equals(courseStudentCard));
+
+                if (!isCourseLinkedToOtherStudentCards) {
+                 
+                    courseRepository.delete(course);
+                }
+            }
+
+
+            courseStudentCardRepository.delete(courseStudentCard);
+        }
+
+
+        studentCardRepository.delete(studentCard);
+
 
         studentRepository.delete(student);
+
         return "L'utente è stato cancellato correttamente";
     }
     public String uploadRegister(UUID id, String newRegister){
