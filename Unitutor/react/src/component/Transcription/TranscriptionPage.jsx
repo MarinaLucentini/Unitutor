@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Alert, Button, Col, Container, Form, Row } from "react-bootstrap";
+import { Alert, Button, Col, Container, Form, ProgressBar, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { resetTranscription, transcriptionNewFile } from "../../redux/actions/transcription";
 import { Link } from "react-router-dom";
@@ -10,9 +10,24 @@ const TransciptionPage = () => {
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
+  const [progressValue, setProgressValue] = useState(0);
   const dispatch = useDispatch();
   useEffect(() => {
+    if (loading) {
+      const interval = setInterval(() => {
+        setProgressValue((oldProgress) => {
+          const newProgress = oldProgress + 5;
+          return newProgress >= 90 ? 90 : newProgress;
+        });
+      }, 900);
+
+      return () => clearInterval(interval);
+    }
+  }, [loading]);
+
+  useEffect(() => {
     if (success) {
+      setProgressValue(100);
       setShowSuccessMessage(true);
       setTimeout(() => {
         dispatch(resetTranscription());
@@ -122,7 +137,12 @@ const TransciptionPage = () => {
         </Row>
         <Row className="my-3">
           <Col>
-            {loading && <Alert variant="primary">Stiamo sbobinnando il file un attimo di attesa....</Alert>}
+            {loading && (
+              <Alert variant="primary">
+                Stiamo sbobbinnando il file un attimo di attesa....
+                <ProgressBar now={progressValue} label={`${progressValue}%`} />
+              </Alert>
+            )}
             {showSuccessMessage && (
               <Alert variant="success">
                 Trascrizione avvenuta con successo!! Clicca questo <Link to={`/subject/${formData.subjectId}`}> link</Link> per visualizzarla o vai direttamente

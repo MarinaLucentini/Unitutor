@@ -1,5 +1,7 @@
 import { Col, Container, Row } from "react-bootstrap";
 import logo from "../../assets/g19.svg";
+import { Link } from "react-router-dom";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 const MyFooter = () => {
   return (
@@ -24,11 +26,21 @@ const MyFooter = () => {
               <p className="mb-1">Community sempre attiva</p>
             </Col>
             <Col md={3} lg={2} className="text-center">
-              <h5 className="mb-2 text-primary">Useful Links</h5>
-              <p className="mb-1">Il tuo profilo</p>
-              <p className="mb-1">Help</p>
-              <p className="mb-1">Privacy Policy</p>
-              <p className="mb-1">Terms of Service</p>
+              <h5 className="mb-2 text-primary">My Links</h5>
+              <div className="d-flex align-items-center justify-content-center">
+                <Link
+                  className="d-flex flex-column align-items-center link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                  to={"https://github.com/MarinaLucentini"}
+                >
+                  <FaGithub className="mx-3" size={24} />
+                </Link>
+                <Link
+                  className="d-flex flex-column align-items-center my-3 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
+                  to={"https://www.linkedin.com/in/marina-maria-lucentini-b9b49126a/"}
+                >
+                  <FaLinkedin className="mx-3" size={24} />
+                </Link>
+              </div>
             </Col>
           </Row>
           <Row>
