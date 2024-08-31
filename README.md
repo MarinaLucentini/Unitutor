@@ -1,6 +1,6 @@
 # Unitutor
 
-Questa è un'applicazione progettata per supportare studenti universitari nella gestione delle loro attività accademiche. L'app include funzionalità per la registrazione e autenticazione degli utenti, gestione dei registri universitari, registrazione delle lezioni e generazione di appunti, creazione di mappe concettuali, gestione degli orari delle lezioni, e funzioni di community e messaggistica.
+Questa è un'applicazione progettata per supportare studenti universitari nella gestione delle loro attività accademiche. L'app include funzionalità per la registrazione e autenticazione degli utenti, gestione dei registri universitari, registrazione delle lezioni e generazione di appunti, creazione di mappe concettuali, gestione degli orari delle lezioni, e funzioni di community
 
 ✨ Funzionalità
 🔐 Registrazione e Autenticazione dell'Utente
@@ -17,7 +17,7 @@ Questa è un'applicazione progettata per supportare studenti universitari nella 
 🗂️ Schema del Database: Tabelle per pianificazioni ed eventi accademici.
 📅 Interfaccia Utente: Visualizzazioni del calendario e pagine di gestione della pianificazione.
 🔧 Implementazione Backend: API per la gestione delle pianificazioni.
-🌐 Funzionalità di Community e Messaggistica
+🌐 Funzionalità di Community
 🗂️ Progettazione del Database: Tabelle per post e commenti della community.
 💬 Interfaccia Utente: Pagine per interazioni sociali tra gli utenti.
 🛠️ Tecnologie Utilizzate
