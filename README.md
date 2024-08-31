@@ -1,7 +1,5 @@
 # Unitutor
- 
-🎓 Pianificazione del Progetto e Configurazione Iniziale
-📄 Descrizione
+
 Questa è un'applicazione progettata per supportare studenti universitari nella gestione delle loro attività accademiche. L'app include funzionalità per la registrazione e autenticazione degli utenti, gestione dei registri universitari, registrazione delle lezioni e generazione di appunti, creazione di mappe concettuali, gestione degli orari delle lezioni, e funzioni di community e messaggistica.
 
 ✨ Funzionalità
