@@ -6,7 +6,7 @@ import { FaGithub, FaLinkedin } from "react-icons/fa";
 const MyFooter = () => {
   return (
     <>
-      <footer className="mt-5 d-none d-md-block">
+      <footer className="mt-5 d-none d-md-block fixed-bottom">
         <Container>
           <Row className="justify-content-evenly">
             <Col md={4} lg={4} xl={3} className="text-center ">
@@ -31,12 +31,14 @@ const MyFooter = () => {
                 <Link
                   className="d-flex flex-column align-items-center link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                   to={"https://github.com/MarinaLucentini"}
+                  target="_blank"
                 >
                   <FaGithub className="mx-3" size={24} />
                 </Link>
                 <Link
                   className="d-flex flex-column align-items-center my-3 link-offset-2 link-offset-3-hover link-underline link-underline-opacity-0 link-underline-opacity-75-hover"
                   to={"https://www.linkedin.com/in/marina-maria-lucentini-b9b49126a/"}
+                  target="_blank"
                 >
                   <FaLinkedin className="mx-3" size={24} />
                 </Link>
