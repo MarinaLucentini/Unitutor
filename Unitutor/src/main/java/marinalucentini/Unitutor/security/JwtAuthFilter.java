@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 @Component
-public class JwtAuthFilter extends OncePerRequestFilter {
+public class            JwtAuthFilter extends OncePerRequestFilter {
     @Autowired
     private JwtTool jwtTools;
     @Autowired

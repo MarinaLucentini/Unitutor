@@ -11836,4 +11836,17 @@ textarea.form-control-lg {
 .highlight-keyword-none {
   background-color: transparent;
   text-decoration: none;
+}
+
+.footer-hidden {
+  transform: translateY(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+.footer-visible {
+  transform: translateY(0);
+}
+
+.monnalisa {
+  height: 100px;
 }/*# sourceMappingURL=style.css.map */

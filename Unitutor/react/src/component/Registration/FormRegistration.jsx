@@ -76,7 +76,7 @@ const FormRegistration = () => {
             {loading && <Spinner animation="border" />}
             {error && <Alert variant="danger">{errorMsg}</Alert>}
             {success && <Alert variant="success">{"L'utente è stato correttamente registrato a breve verrai reindirizzato nella pagina di login"}</Alert>}
-            <img src={monnalisa} alt="" className=" monnalisa" />
+
             <Row>
               <Col>
                 <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formName">
@@ -139,43 +139,50 @@ const FormRegistration = () => {
               />
               <Form.Control.Feedback type="invalid">{errors.email}</Form.Control.Feedback>
             </Form.Group>
+            <Row>
+              <Col>
+                {" "}
+                <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <InputGroup>
+                    <Form.Control
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Password"
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      isInvalid={!!errors.password}
+                      required
+                    />
+                    <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
+                      {showPassword ? <PiEye /> : <PiEyeClosed />}
+                    </Button>
+                    <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
+                  </InputGroup>
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group className="mb-3 d-flex flex-column  align-items-center" controlId="formBasicPasswordConfirm">
+                  <Form.Label>Confirm password</Form.Label>
+                  <InputGroup>
+                    <Form.Control
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Conferma Password"
+                      name="confirmPassword"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      isInvalid={!!errors.confirmPassword}
+                      required
+                    />
+                    <Button variant="outline-secondary" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                      {showConfirmPassword ? <PiEye /> : <PiEyeClosed />}
+                    </Button>
+                    <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
+                  </InputGroup>
+                </Form.Group>
+              </Col>
+            </Row>
 
-            <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  type={showPassword ? "text" : "password"}
-                  placeholder="Password"
-                  name="password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  isInvalid={!!errors.password}
-                  required
-                />
-                <Button variant="outline-secondary" onClick={() => setShowPassword(!showPassword)}>
-                  {showPassword ? <PiEye /> : <PiEyeClosed />}
-                </Button>
-                <Form.Control.Feedback type="invalid">{errors.password}</Form.Control.Feedback>
-              </InputGroup>
-            </Form.Group>
-            <Form.Group className="mb-3 d-flex flex-column  align-items-center" controlId="formBasicPasswordConfirm">
-              <Form.Label>Confirm password</Form.Label>
-              <InputGroup>
-                <Form.Control
-                  type={showConfirmPassword ? "text" : "password"}
-                  placeholder="Conferma Password"
-                  name="confirmPassword"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
-                  isInvalid={!!errors.confirmPassword}
-                  required
-                />
-                <Button variant="outline-secondary" onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
-                  {showConfirmPassword ? <PiEye /> : <PiEyeClosed />}
-                </Button>
-                <Form.Control.Feedback type="invalid">{errors.confirmPassword}</Form.Control.Feedback>
-              </InputGroup>
-            </Form.Group>
             <Row className="justify-content-between">
               <Col xs={9}>
                 <Form.Group className="mb-3 d-flex flex-column align-items-center" controlId="formBasicCheckbox">

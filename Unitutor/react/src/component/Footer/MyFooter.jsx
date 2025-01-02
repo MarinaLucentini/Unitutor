@@ -2,11 +2,26 @@ import { Col, Container, Row } from "react-bootstrap";
 import logo from "../../assets/g19.svg";
 import { Link } from "react-router-dom";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
+import { useEffect, useState } from "react";
 
 const MyFooter = () => {
+  const [isVisible, setIsVisible] = useState(false);
+
+  const handleScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+      setIsVisible(true);
+    } else {
+      setIsVisible(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
   return (
     <>
-      <footer className="mt-5 d-none d-md-block fixed-bottom">
+      <footer className={`position-sticky bottom-0  d-none d-md-block ${isVisible ? "footer-visible" : "footer-hidden"}`}>
         <Container>
           <Row className="justify-content-evenly">
             <Col md={4} lg={4} xl={3} className="text-center ">
